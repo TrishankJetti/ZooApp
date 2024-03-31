@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ZooApp.data;
 using ZooApp.Models;
 
 namespace ZooApp.Controllers
@@ -55,7 +56,7 @@ namespace ZooApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EnclosureId,Name,Habitat,Capacity")] Enclosure enclosure)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(enclosure);
                 await _context.SaveChangesAsync();
@@ -92,7 +93,7 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {

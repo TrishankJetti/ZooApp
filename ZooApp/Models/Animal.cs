@@ -3,6 +3,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ZooApp.Models
 {
+    public enum Sex
+    {
+        Male,
+        Female,
+        Unidentified
+    }
+
+
+    public enum DietType
+    {
+    Carnivore,
+    Omnivore,
+    Herbivore,
+    Pescatarian
+    }
+
     public class Animal
     {
         [Key] public int AnimalId { get; set; }
@@ -13,9 +29,12 @@ namespace ZooApp.Models
 
         public int Age { get; set; }
 
-        public char Sex { get; set; }
+        public Sex Sex { get; set; }
+
 
         public DietType Diet { get; set; }
+
+
 
 
         public int EmployeeId { get; set; }
@@ -30,13 +49,5 @@ namespace ZooApp.Models
 
         public ICollection<AnimalEmployee> AnimalZooEmployees { get; set; }
 
-    }
-
-    public enum DietType
-    {
-        Carnivore,
-        Omnivore,
-        Herbivore,
-        Pescatarian
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using ZooApp.data;
 
 #nullable disable
 
@@ -59,7 +60,7 @@ namespace ZooApp.Migrations
 
                     b.HasIndex("EnclosureId");
 
-                    b.ToTable("Animal");
+                    b.ToTable("Animal", (string)null);
                 });
 
             modelBuilder.Entity("ZooApp.Models.AnimalEmployee", b =>
@@ -117,7 +118,7 @@ namespace ZooApp.Migrations
 
                     b.HasIndex("EnclosureId");
 
-                    b.ToTable("Employee");
+                    b.ToTable("Employee", (string)null);
                 });
 
             modelBuilder.Entity("ZooApp.Models.Enclosure", b =>
@@ -141,7 +142,7 @@ namespace ZooApp.Migrations
 
                     b.HasKey("EnclosureId");
 
-                    b.ToTable("Enclosure");
+                    b.ToTable("Enclosure", (string)null);
                 });
 
             modelBuilder.Entity("ZooApp.Models.Event", b =>
@@ -168,7 +169,7 @@ namespace ZooApp.Migrations
 
                     b.HasKey("EventId");
 
-                    b.ToTable("Event");
+                    b.ToTable("Event", (string)null);
                 });
 
             modelBuilder.Entity("ZooApp.Models.Ticket", b =>
@@ -232,7 +233,7 @@ namespace ZooApp.Migrations
 
                     b.HasKey("VisitorId");
 
-                    b.ToTable("Visitor");
+                    b.ToTable("Visitor", (string)null);
                 });
 
             modelBuilder.Entity("ZooApp.Models.VisitorEventAttendance", b =>

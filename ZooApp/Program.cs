@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using ZooApp.data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ZooAppContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ZooAppContext") ?? throw new InvalidOperationException("Connection string 'ZooAppContext' not found.")));

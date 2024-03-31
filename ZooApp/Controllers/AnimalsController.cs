@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ZooApp.data;
+using ZooApp.Migrations;
 using ZooApp.Models;
 
 namespace ZooApp.Controllers
@@ -60,7 +62,7 @@ namespace ZooApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId")] Animal animal)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
@@ -94,14 +96,14 @@ namespace ZooApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId")] Animal animal)
+        public async Task<IActionResult> Edit(int id, [Bind("AnimalId,Name,Species,Age,Sex,DietType,EmployeeId,EnclosureId")] Animal animal)
         {
             if (id != animal.AnimalId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
