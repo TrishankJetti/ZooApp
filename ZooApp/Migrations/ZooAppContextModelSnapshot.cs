@@ -46,9 +46,8 @@ namespace ZooApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Sex")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(1)");
+                    b.Property<int>("Sex")
+                        .HasColumnType("int");
 
                     b.Property<string>("Species")
                         .IsRequired()
