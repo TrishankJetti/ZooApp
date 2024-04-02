@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZooApp.data;
 
@@ -11,9 +12,11 @@ using ZooApp.data;
 namespace ZooApp.Migrations
 {
     [DbContext(typeof(ZooAppContext))]
-    partial class ZooAppContextModelSnapshot : ModelSnapshot
+    [Migration("20240402053409_updatedticekttable")]
+    partial class updatedticekttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,7 +85,7 @@ namespace ZooApp.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("AnimalEmployee", (string)null);
+                    b.ToTable("AnimalEmployee");
                 });
 
             modelBuilder.Entity("ZooApp.Models.Employee", b =>
@@ -198,7 +201,7 @@ namespace ZooApp.Migrations
 
                     b.HasIndex("VisitorId1");
 
-                    b.ToTable("Ticket", (string)null);
+                    b.ToTable("Ticket");
                 });
 
             modelBuilder.Entity("ZooApp.Models.Visitor", b =>
@@ -248,7 +251,7 @@ namespace ZooApp.Migrations
 
                     b.HasIndex("VisitorId1");
 
-                    b.ToTable("VisitorAttendance", (string)null);
+                    b.ToTable("VisitorEventAttendance");
                 });
 
             modelBuilder.Entity("ZooApp.Models.VisitorLog", b =>
@@ -273,7 +276,7 @@ namespace ZooApp.Migrations
 
                     b.HasIndex("VisitorId");
 
-                    b.ToTable("VisitorLog", (string)null);
+                    b.ToTable("VisitorLog");
                 });
 
             modelBuilder.Entity("ZooApp.Models.Animal", b =>

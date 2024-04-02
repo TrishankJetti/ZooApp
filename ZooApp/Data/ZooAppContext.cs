@@ -27,7 +27,15 @@ namespace ZooApp.data
 
         public DbSet<ZooApp.Models.Visitor> Visitor { get; set; } = default!;
 
-   
+        public DbSet<ZooApp.Models.Ticket> Ticket { get; set; } = default!;
+
+        public DbSet<ZooApp.Models.VisitorEventAttendance> VisitorAttendance { get; set; } = default!;
+
+        public DbSet<ZooApp.Models.VisitorLog> VisitorLogs { get; set; } = default!;
+
+        public DbSet<ZooApp.Models.AnimalEmployee> AnimalEmployee { get; set; } = default!;
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,8 +44,12 @@ namespace ZooApp.data
             modelBuilder.Entity<Employee>().ToTable("Employee");
             modelBuilder.Entity<Enclosure>().ToTable("Enclosure");
             modelBuilder.Entity<Visitor>().ToTable("Visitor");
-            
-    
+            modelBuilder.Entity<AnimalEmployee>().ToTable("AnimalEmployee");
+            modelBuilder.Entity<VisitorLog>().ToTable("VisitorLog");
+            modelBuilder.Entity<VisitorEventAttendance>().ToTable("VisitorAttendance");
+            modelBuilder.Entity<Ticket>().ToTable("Ticket");
+
+
         }
   }
 }

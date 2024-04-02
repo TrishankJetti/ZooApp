@@ -6,13 +6,9 @@ namespace ZooApp.Models
     {
         [Key] public int TicketId { get; set; }
 
-        public string VisitorId { get; set; }
-
-        public string TicketType { get; set; }
+        public int VisitorId { get; set; }
 
         public DateTime DateOfPurchase { get; set; }
-
-        public decimal Price { get; set; }
 
         public int EventId { get; set; }
 
