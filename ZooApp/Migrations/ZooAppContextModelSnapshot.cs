@@ -185,18 +185,14 @@ namespace ZooApp.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<string>("VisitorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("VisitorId1")
+                    b.Property<int>("VisitorId")
                         .HasColumnType("int");
 
                     b.HasKey("TicketId");
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("VisitorId1");
+                    b.HasIndex("VisitorId");
 
                     b.ToTable("Ticket", (string)null);
                 });
@@ -335,7 +331,7 @@ namespace ZooApp.Migrations
 
                     b.HasOne("ZooApp.Models.Visitor", "Visitor")
                         .WithMany("Tickets")
-                        .HasForeignKey("VisitorId1")
+                        .HasForeignKey("VisitorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
