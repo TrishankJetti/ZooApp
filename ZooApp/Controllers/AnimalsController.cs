@@ -21,10 +21,19 @@ namespace ZooApp.Controllers
         }
 
         // GET: Animals
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchString)
         {
+            ViewData["CurrentFilter"] = SearchString;
+
+            var animals = from a in _context.Animal select a;
+
+            if (!String.IsNullOrEmpty(SearchString))
+            {
+                animals = animals.Where(a => a.Name.Contains(SearchString));
+            }
+
             var zooAppContext = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure);
-            return View(await zooAppContext.ToListAsync());
+            return View(await animals.ToListAsync());
         }
 
         // GET: Animals/Details/5
