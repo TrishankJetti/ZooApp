@@ -55,7 +55,7 @@ namespace ZooApp.Controllers
         public IActionResult Create()
         {
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name");
-            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Habitat");
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name");
             return View();
         }
 
@@ -73,7 +73,7 @@ namespace ZooApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
-            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Habitat", animal.EnclosureId);
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
             return View(animal);
         }
 
@@ -91,7 +91,7 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
-            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Habitat", animal.EnclosureId);
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
             return View(animal);
         }
 
@@ -128,7 +128,7 @@ namespace ZooApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
-            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Habitat", animal.EnclosureId);
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
             return View(animal);
         }
 
