@@ -3,7 +3,27 @@
 @{
     ViewData["Title"] = "Create";
 }
+<head>
+    <style>
 
+        
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa;
+           
+        }
+
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
 <h1>Create</h1>
 
 <br />
@@ -40,15 +60,15 @@
                 <span asp-validation-for="Diet" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
+                <label asp-for="EmployeeId" class="control-label">Employee Name</label>
                 <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EnclosureId" class="control-label">Enclosure Name</label>  <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
+                <label asp-for="EnclosureId" class="control-label"> Enclosure Name</label>
+                <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
                 <span asp-validation-for="EnclosureId" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <input type="submit" value="Submit" class="btn btn-primary" />
             </div>
@@ -65,3 +85,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+</body>

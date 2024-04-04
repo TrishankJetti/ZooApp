@@ -75,8 +75,7 @@
                             <th>Sex</th>
                             <th>Diet</th>
                             <th>Employee</th>
-                            <th>Enclosure</th>
-                            <th>Actions</th>
+                           
                         </tr>
                     </theadv>
                     <tbody style="border-radius:unset;">
@@ -88,9 +87,9 @@
                                 <td>@Html.DisplayFor(modelItem => item.Age)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Sex)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Diet)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Employee.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Enclosure.Habitat)</td>
-                                <td class="action-links">
+                          
+
+                                <td class="action-links" >
                                     <a asp-action="Edit" asp-route-id="@item.AnimalId" class="btn btn-sm btn-primary">Edit</a>
                                     <a asp-action="Details" asp-route-id="@item.AnimalId" class="btn btn-sm btn-info">Details</a>
                                     <a asp-action="Delete" asp-route-id="@item.AnimalId" class="btn btn-sm btn-danger">Delete</a>

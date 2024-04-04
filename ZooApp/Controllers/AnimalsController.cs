@@ -28,7 +28,10 @@ namespace ZooApp.Controllers
          if (!String.IsNullOrEmpty(SearchString)) {
            animals = animals.Where(a => a.Name.Contains(SearchString)); 
           }
-         var zooAppContext = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure); return View(await animals.ToListAsync()); }
+         var zooAppContext = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure); return View(await animals.ToListAsync());
+
+
+        }
         
 
         // GET: Animals/Details/5

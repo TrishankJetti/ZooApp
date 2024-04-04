@@ -1,64 +1,94 @@
 ﻿@model ZooApp.Models.Animal
-
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa;
+        }
 
-<h4>Animal</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="AnimalId" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Species" class="control-label"></label>
-                <input asp-for="Species" class="form-control" />
-                <span asp-validation-for="Species" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Age" class="control-label"></label>
-                <input asp-for="Age" class="form-control" />
-                <span asp-validation-for="Age" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sex" class="control-label"></label>
-                <select asp-for="Sex" class="form-control" asp-items="Html.GetEnumSelectList<Sex>()"></select>
-                <span asp-validation-for="Sex" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Diet" class="control-label"></label>
-                <select asp-for="Diet" class="form-control" asp-items="Html.GetEnumSelectList<DietType>()"></select>
-                <span asp-validation-for="Diet" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
-                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
-                <span asp-validation-for="EmployeeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EnclosureId" class="control-label"></label>
-                <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
-                <span asp-validation-for="EnclosureId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .center-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="container center-form">
+        <div class="col-md-6">
+            <h1 class="text-center">Edit</h1>
+
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="AnimalId" />
+
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input asp-for="Name" class="form-control" id="name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="species">Species:</label>
+                    <input asp-for="Species" class="form-control" id="species" />
+                    <span asp-validation-for="Species" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input asp-for="Age" class="form-control" id="age" />
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="sex">Sex:</label>
+                    <select asp-for="Sex" class="form-control" id="sex" asp-items="Html.GetEnumSelectList<Sex>()">
+                       
+                    </select>
+                    <span asp-validation-for="Sex" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="diet">Diet:</label>
+                    <select asp-for="Diet" class="form-control" id="diet" asp-items="Html.GetEnumSelectList<DietType>()">
+                        
+                    </select>
+                    <span asp-validation-for="Diet" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="employee">Employee:</label>
+                    <select asp-for="EmployeeId" class="form-control" id="employee" asp-items="ViewBag.EmployeeId">
+                      
+                    </select>
+                    <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="enclosure">Enclosure Name:</label>
+                    <select asp-for="EnclosureId" class="form-control" id="enclosure" asp-items="ViewBag.EnclosureId">
+                       
+                    </select>
+                    <span asp-validation-for="EnclosureId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group text-center">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</body>
+</html>

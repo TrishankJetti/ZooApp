@@ -42,13 +42,17 @@ namespace ZooApp.Models
 
         [Required]
         public DietType? Diet { get; set; }
-
+        
+       
         public int EmployeeId { get; set; }
         [ForeignKey(nameof(EmployeeId))]
+        [Required(ErrorMessage = "You must select an Employee to create Animal.")]
         public Employee Employee { get; set; }
+
 
         public int EnclosureId { get; set; }
         [ForeignKey(nameof(EnclosureId))]
+        [Required(ErrorMessage = "You must select an Enclosure to assign Animal to.")]
         public Enclosure Enclosure { get; set; }
 
         public ICollection<AnimalEmployee> AnimalZooEmployees { get; set; }
