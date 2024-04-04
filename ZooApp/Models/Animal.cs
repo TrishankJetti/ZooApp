@@ -41,7 +41,7 @@ namespace ZooApp.Models
         public Sex Sex { get; set; }
 
         [Required]
-        public DietType Diet { get; set; }
+        public DietType? Diet { get; set; }
 
         public int EmployeeId { get; set; }
         [ForeignKey(nameof(EmployeeId))]

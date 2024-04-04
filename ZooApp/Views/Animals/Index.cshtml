@@ -1,21 +1,19 @@
 ﻿@model IEnumerable<ZooApp.Models.Animal>
 
-<h2>Animals</h2>
+@{
+    ViewData["Title"] = "Index";
+}
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
-
-<form asp-action="Index" method="get">
-    <div class="form-group">
-        <label for="SearchString">Search Name of Animal</label>
-        <input type="text" class="form-control" name="SearchString" value="@ViewData["CurrentFilter"]" />
-        <input type="submit" value="Search" class="btn btn-primary" />
+<h1>Index</h1>
+<form asp-action="Index" method="get"><div class="form-group"><label for="searchName">Search Name of Animal:</label>
+    <input type="text" class="form-control" id="searchName" name="SearchString" value="@ViewData["AnimalNameFilter"]" placeholder="Please type an Animal name to search" />
+    <button type="submit" class="btn btn-primary">Search</button>
     </div>
-</form>
-<a asp-action="Index">Back to List</a>
-<hr / />
-
+    </form>
+    <br / />
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -35,45 +33,44 @@
                 @Html.DisplayNameFor(model => model.Diet)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeId)
+                @Html.DisplayNameFor(model => model.Employee)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EnclosureId)
+                @Html.DisplayNameFor(model => model.Enclosure)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Species)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Age)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sex)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Diet)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmployeeId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EnclosureId)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.AnimalId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.AnimalId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.AnimalId">Delete</a>
-                </td>
-            </tr>
-        }
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Species)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Diet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enclosure.Habitat)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AnimalId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AnimalId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AnimalId">Delete</a>
+            </td>
+        </tr>
+}
     </tbody>
 </table>

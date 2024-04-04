@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ZooApp.data;
-using ZooApp.Migrations;
 using ZooApp.Models;
+using ZooApp.data;
 
 namespace ZooApp.Controllers
 {
@@ -21,20 +20,16 @@ namespace ZooApp.Controllers
         }
 
         // GET: Animals
-        public async Task<IActionResult> Index(string SearchString)
-        {
-            ViewData["CurrentFilter"] = SearchString;
-
-            var animals = from a in _context.Animal select a;
-
-            if (!String.IsNullOrEmpty(SearchString))
-            {
-                animals = animals.Where(a => a.Name.Contains(SearchString));
-            }
-
-            var zooAppContext = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure);
-            return View(await animals.ToListAsync());
-        }
+       
+         public async Task<IActionResult> Index(string SearchString)
+        { 
+            ViewData["AnimalNameFilter"] = SearchString; 
+         var animals = from a in _context.Animal select a; 
+         if (!String.IsNullOrEmpty(SearchString)) {
+           animals = animals.Where(a => a.Name.Contains(SearchString)); 
+          }
+         var zooAppContext = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure); return View(await animals.ToListAsync()); }
+        
 
         // GET: Animals/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -59,8 +54,8 @@ namespace ZooApp.Controllers
         // GET: Animals/Create
         public IActionResult Create()
         {
-            ViewData["EmployeeId"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "EmployeeId");
-            ViewData["EnclosureId"] = new SelectList(_context.Set<Enclosure>(), "EnclosureId", "EnclosureId");
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name");
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Habitat");
             return View();
         }
 
@@ -77,8 +72,8 @@ namespace ZooApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "EmployeeId", animal.EmployeeId);
-            ViewData["EnclosureId"] = new SelectList(_context.Set<Enclosure>(), "EnclosureId", "EnclosureId", animal.EnclosureId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Habitat", animal.EnclosureId);
             return View(animal);
         }
 
@@ -95,8 +90,8 @@ namespace ZooApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "EmployeeId", animal.EmployeeId);
-            ViewData["EnclosureId"] = new SelectList(_context.Set<Enclosure>(), "EnclosureId", "EnclosureId", animal.EnclosureId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Habitat", animal.EnclosureId);
             return View(animal);
         }
 
@@ -105,7 +100,7 @@ namespace ZooApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AnimalId,Name,Species,Age,Sex,DietType,EmployeeId,EnclosureId")] Animal animal)
+        public async Task<IActionResult> Edit(int id, [Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId")] Animal animal)
         {
             if (id != animal.AnimalId)
             {
@@ -132,8 +127,8 @@ namespace ZooApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "EmployeeId", animal.EmployeeId);
-            ViewData["EnclosureId"] = new SelectList(_context.Set<Enclosure>(), "EnclosureId", "EnclosureId", animal.EnclosureId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Habitat", animal.EnclosureId);
             return View(animal);
         }
 

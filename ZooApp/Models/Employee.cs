@@ -6,13 +6,22 @@ namespace ZooApp.Models
     {
         [Key] public int EmployeeId { get; set; }
 
+        [Required]
+        [StringLength(100)]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z]*$", ErrorMessage = "Employee Name has to begin with capital letter and must not include any special characters or numbers.")]
         public string Name { get; set; }
 
+        [Required]
+        [StringLength(100)]
         public RoleType Role { get; set; }
+
 
         public string Phone { get; set; }
 
+        [Required]
+        [Range(30000, 90000 , ErrorMessage = "Invalid Employee Salary.")]
         public decimal Salary { get; set; }
+
 
         public DateTime HireDate { get; set; }
 
