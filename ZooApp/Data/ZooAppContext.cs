@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ZooApp.Models;
 
 namespace ZooApp.data
 {
 
-    public class ZooAppContext : DbContext
+    public class ZooAppContext : IdentityDbContext<IdentityUser>
     {
 
         public ZooAppContext(DbContextOptions<ZooAppContext> options)
@@ -39,6 +41,13 @@ namespace ZooApp.data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<IdentityUserLogin<string>>(entity =>
+            {
+                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
+            });
+
             modelBuilder.Entity<Animal>().ToTable("Animal");
             modelBuilder.Entity<Event>().ToTable("Event");
             modelBuilder.Entity<Employee>().ToTable("Employee");
@@ -48,8 +57,7 @@ namespace ZooApp.data
             modelBuilder.Entity<VisitorLog>().ToTable("VisitorLog");
             modelBuilder.Entity<VisitorEventAttendance>().ToTable("VisitorAttendance");
             modelBuilder.Entity<Ticket>().ToTable("Ticket");
-
-
         }
-  }
+
+    }
 }
