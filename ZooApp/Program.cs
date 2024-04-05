@@ -6,7 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ZooAppContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ZooAppContext") ?? throw new InvalidOperationException("Connection string 'ZooAppContext' not found.")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ZooAppContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>().AddDefaultTokenProviders()
+    
+    .AddRoles<IdentityRole>()
+
+    .AddEntityFrameworkStores<ZooAppContext>();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -33,6 +38,6 @@ app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Animals}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

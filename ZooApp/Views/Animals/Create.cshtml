@@ -8,7 +8,7 @@
 
         
         body {
-            padding-top: 20px;
+            
             background-color: #f8f9fa;
            
         }
@@ -24,14 +24,12 @@
     </style>
 </head>
 <body>
-<h1>Create</h1>
+<h1>Create Animal</h1>
 
-<br />
-<h4>Animal</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-4 ">
+        <form asp-action="Edit" class="align-content-lg-center">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AnimalId" />
             <div class="form-group">
