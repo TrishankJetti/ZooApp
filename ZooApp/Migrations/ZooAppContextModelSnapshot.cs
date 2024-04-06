@@ -273,9 +273,9 @@ namespace ZooApp.Migrations
                             Diet = 0,
                             EmployeeId = 1,
                             EnclosureId = 1,
-                            Name = "Simba",
+                            Name = "Lion",
                             Sex = 0,
-                            Species = "Lion"
+                            Species = "Panthera leo"
                         },
                         new
                         {
@@ -284,9 +284,9 @@ namespace ZooApp.Migrations
                             Diet = 2,
                             EmployeeId = 2,
                             EnclosureId = 2,
-                            Name = "Dumbo",
-                            Sex = 0,
-                            Species = "Elephant"
+                            Name = "Elephant",
+                            Sex = 1,
+                            Species = "Loxodonta africana"
                         });
                 });
 
@@ -367,8 +367,8 @@ namespace ZooApp.Migrations
                         new
                         {
                             EmployeeId = 1,
-                            EnclosureId = 0,
-                            HireDate = new DateTime(2024, 4, 7, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5126),
+                            EnclosureId = 1,
+                            HireDate = new DateTime(2024, 3, 8, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(757),
                             Name = "John Doe",
                             Phone = "123-456-7890",
                             Role = 0,
@@ -377,8 +377,8 @@ namespace ZooApp.Migrations
                         new
                         {
                             EmployeeId = 2,
-                            EnclosureId = 0,
-                            HireDate = new DateTime(2024, 4, 7, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5129),
+                            EnclosureId = 2,
+                            HireDate = new DateTime(2024, 3, 18, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(768),
                             Name = "Jane Smith",
                             Phone = "987-654-3210",
                             Role = 1,
@@ -458,7 +458,7 @@ namespace ZooApp.Migrations
                         new
                         {
                             EventId = 1,
-                            Date = new DateTime(2024, 4, 14, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(4910),
+                            Date = new DateTime(2024, 4, 17, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(399),
                             Description = "Guided safari tour through the zoo",
                             Name = "Zoo Safari",
                             TicketPrice = 25m
@@ -466,7 +466,7 @@ namespace ZooApp.Migrations
                         new
                         {
                             EventId = 2,
-                            Date = new DateTime(2024, 4, 21, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(4963),
+                            Date = new DateTime(2024, 4, 24, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(484),
                             Description = "Educational talk on wildlife conservation",
                             Name = "Wildlife Conservation Talk",
                             TicketPrice = 10m
@@ -502,14 +502,14 @@ namespace ZooApp.Migrations
                         new
                         {
                             TicketId = 1,
-                            DateOfPurchase = new DateTime(2024, 4, 5, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5466),
+                            DateOfPurchase = new DateTime(2024, 4, 5, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(946),
                             EventId = 1,
                             VisitorId = 1
                         },
                         new
                         {
                             TicketId = 2,
-                            DateOfPurchase = new DateTime(2024, 4, 6, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5469),
+                            DateOfPurchase = new DateTime(2024, 4, 6, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(952),
                             EventId = 2,
                             VisitorId = 2
                         });
@@ -580,7 +580,7 @@ namespace ZooApp.Migrations
 
                     b.HasIndex("VisitorId");
 
-                    b.ToTable("VisitorAttendance", (string)null);
+                    b.ToTable("VisitorEventAttendance", (string)null);
 
                     b.HasData(
                         new
@@ -626,14 +626,14 @@ namespace ZooApp.Migrations
                         {
                             VisitorLogId = 1,
                             Comments = "Enjoyed the zoo!",
-                            DateVisited = new DateTime(2024, 4, 5, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5602),
+                            DateVisited = new DateTime(2024, 4, 5, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(1062),
                             VisitorId = 1
                         },
                         new
                         {
                             VisitorLogId = 2,
                             Comments = "Great experience!",
-                            DateVisited = new DateTime(2024, 4, 6, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5605),
+                            DateVisited = new DateTime(2024, 4, 6, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(1068),
                             VisitorId = 2
                         });
                 });
@@ -741,7 +741,7 @@ namespace ZooApp.Migrations
             modelBuilder.Entity("ZooApp.Models.Ticket", b =>
                 {
                     b.HasOne("ZooApp.Models.Event", "Event")
-                        .WithMany("Tickets")
+                        .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -760,7 +760,7 @@ namespace ZooApp.Migrations
             modelBuilder.Entity("ZooApp.Models.VisitorEventAttendance", b =>
                 {
                     b.HasOne("ZooApp.Models.Event", "Event")
-                        .WithMany("EventAttendances")
+                        .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -802,13 +802,6 @@ namespace ZooApp.Migrations
                     b.Navigation("Animals");
 
                     b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("ZooApp.Models.Event", b =>
-                {
-                    b.Navigation("EventAttendances");
-
-                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("ZooApp.Models.Visitor", b =>

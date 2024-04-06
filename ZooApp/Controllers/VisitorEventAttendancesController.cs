@@ -24,7 +24,7 @@ namespace ZooApp.Controllers
         [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Index()
         {
-            var zooAppContext = _context.VisitorAttendance.Include(v => v.Event).Include(v => v.Visitor);
+            var zooAppContext = _context.VisitorEventAttendances.Include(v => v.Event).Include(v => v.Visitor);
             return View(await zooAppContext.ToListAsync());
         }
 
@@ -37,7 +37,7 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            var visitorEventAttendance = await _context.VisitorAttendance
+            var visitorEventAttendance = await _context.VisitorEventAttendances
                 .Include(v => v.Event)
                 .Include(v => v.Visitor)
                 .FirstOrDefaultAsync(m => m.VisitorEventAttendanceId == id);
@@ -86,7 +86,7 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            var visitorEventAttendance = await _context.VisitorAttendance.FindAsync(id);
+            var visitorEventAttendance = await _context.VisitorEventAttendances.FindAsync(id);
             if (visitorEventAttendance == null)
             {
                 return NotFound();
@@ -143,7 +143,7 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            var visitorEventAttendance = await _context.VisitorAttendance
+            var visitorEventAttendance = await _context.VisitorEventAttendances
                 .Include(v => v.Event)
                 .Include(v => v.Visitor)
                 .FirstOrDefaultAsync(m => m.VisitorEventAttendanceId == id);
@@ -161,10 +161,10 @@ namespace ZooApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var visitorEventAttendance = await _context.VisitorAttendance.FindAsync(id);
+            var visitorEventAttendance = await _context.VisitorEventAttendances.FindAsync(id);
             if (visitorEventAttendance != null)
             {
-                _context.VisitorAttendance.Remove(visitorEventAttendance);
+                _context.VisitorEventAttendances.Remove(visitorEventAttendance);
             }
 
             await _context.SaveChangesAsync();
@@ -173,7 +173,7 @@ namespace ZooApp.Controllers
 
         private bool VisitorEventAttendanceExists(int id)
         {
-            return _context.VisitorAttendance.Any(e => e.VisitorEventAttendanceId == id);
+            return _context.VisitorEventAttendances.Any(e => e.VisitorEventAttendanceId == id);
         }
     }
 }

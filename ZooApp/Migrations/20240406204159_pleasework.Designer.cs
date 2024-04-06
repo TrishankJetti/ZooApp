@@ -12,8 +12,8 @@ using ZooApp.data;
 namespace ZooApp.Migrations
 {
     [DbContext(typeof(ZooAppContext))]
-    [Migration("20240405205657_identity")]
-    partial class identity
+    [Migration("20240406204159_pleasework")]
+    partial class pleasework
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -267,6 +267,30 @@ namespace ZooApp.Migrations
                     b.HasIndex("EnclosureId");
 
                     b.ToTable("Animal", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            AnimalId = 1,
+                            Age = 5,
+                            Diet = 0,
+                            EmployeeId = 1,
+                            EnclosureId = 1,
+                            Name = "Lion",
+                            Sex = 0,
+                            Species = "Panthera leo"
+                        },
+                        new
+                        {
+                            AnimalId = 2,
+                            Age = 10,
+                            Diet = 2,
+                            EmployeeId = 2,
+                            EnclosureId = 2,
+                            Name = "Elephant",
+                            Sex = 1,
+                            Species = "Loxodonta africana"
+                        });
                 });
 
             modelBuilder.Entity("ZooApp.Models.AnimalEmployee", b =>
@@ -290,6 +314,20 @@ namespace ZooApp.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("AnimalEmployee", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            AnimalEmployeeId = 1,
+                            AnimalId = 1,
+                            EmployeeId = 1
+                        },
+                        new
+                        {
+                            AnimalEmployeeId = 2,
+                            AnimalId = 2,
+                            EmployeeId = 2
+                        });
                 });
 
             modelBuilder.Entity("ZooApp.Models.Employee", b =>
@@ -327,6 +365,28 @@ namespace ZooApp.Migrations
                     b.HasIndex("EnclosureId");
 
                     b.ToTable("Employee", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            EmployeeId = 1,
+                            EnclosureId = 1,
+                            HireDate = new DateTime(2024, 3, 8, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(757),
+                            Name = "John Doe",
+                            Phone = "123-456-7890",
+                            Role = 0,
+                            Salary = 50000m
+                        },
+                        new
+                        {
+                            EmployeeId = 2,
+                            EnclosureId = 2,
+                            HireDate = new DateTime(2024, 3, 18, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(768),
+                            Name = "Jane Smith",
+                            Phone = "987-654-3210",
+                            Role = 1,
+                            Salary = 70000m
+                        });
                 });
 
             modelBuilder.Entity("ZooApp.Models.Enclosure", b =>
@@ -353,6 +413,22 @@ namespace ZooApp.Migrations
                     b.HasKey("EnclosureId");
 
                     b.ToTable("Enclosure", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            EnclosureId = 1,
+                            Capacity = 5,
+                            Habitat = "Savannah",
+                            Name = "Lion Enclosure"
+                        },
+                        new
+                        {
+                            EnclosureId = 2,
+                            Capacity = 10,
+                            Habitat = "Jungle",
+                            Name = "Elephant Enclosure"
+                        });
                 });
 
             modelBuilder.Entity("ZooApp.Models.Event", b =>
@@ -380,6 +456,24 @@ namespace ZooApp.Migrations
                     b.HasKey("EventId");
 
                     b.ToTable("Event", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            EventId = 1,
+                            Date = new DateTime(2024, 4, 17, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(399),
+                            Description = "Guided safari tour through the zoo",
+                            Name = "Zoo Safari",
+                            TicketPrice = 25m
+                        },
+                        new
+                        {
+                            EventId = 2,
+                            Date = new DateTime(2024, 4, 24, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(484),
+                            Description = "Educational talk on wildlife conservation",
+                            Name = "Wildlife Conservation Talk",
+                            TicketPrice = 10m
+                        });
                 });
 
             modelBuilder.Entity("ZooApp.Models.Ticket", b =>
@@ -406,6 +500,22 @@ namespace ZooApp.Migrations
                     b.HasIndex("VisitorId");
 
                     b.ToTable("Ticket", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            TicketId = 1,
+                            DateOfPurchase = new DateTime(2024, 4, 5, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(946),
+                            EventId = 1,
+                            VisitorId = 1
+                        },
+                        new
+                        {
+                            TicketId = 2,
+                            DateOfPurchase = new DateTime(2024, 4, 6, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(952),
+                            EventId = 2,
+                            VisitorId = 2
+                        });
                 });
 
             modelBuilder.Entity("ZooApp.Models.Visitor", b =>
@@ -433,29 +543,61 @@ namespace ZooApp.Migrations
                     b.HasKey("VisitorId");
 
                     b.ToTable("Visitor", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            VisitorId = 1,
+                            Address = "123 Main St",
+                            Email = "alice@example.com",
+                            Name = "Alice",
+                            Phone = "123-456-7890"
+                        },
+                        new
+                        {
+                            VisitorId = 2,
+                            Address = "456 Elm St",
+                            Email = "bob@example.com",
+                            Name = "Bob",
+                            Phone = "987-654-3210"
+                        });
                 });
 
             modelBuilder.Entity("ZooApp.Models.VisitorEventAttendance", b =>
                 {
-                    b.Property<int>("VisitorId")
+                    b.Property<int>("VisitorEventAttendanceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VisitorId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VisitorEventAttendanceId"));
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VisitorId1")
+                    b.Property<int>("VisitorId")
                         .HasColumnType("int");
 
-                    b.HasKey("VisitorId");
+                    b.HasKey("VisitorEventAttendanceId");
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("VisitorId1");
+                    b.HasIndex("VisitorId");
 
-                    b.ToTable("VisitorAttendance", (string)null);
+                    b.ToTable("VisitorEventAttendance", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            VisitorEventAttendanceId = 1,
+                            EventId = 1,
+                            VisitorId = 1
+                        },
+                        new
+                        {
+                            VisitorEventAttendanceId = 2,
+                            EventId = 2,
+                            VisitorId = 2
+                        });
                 });
 
             modelBuilder.Entity("ZooApp.Models.VisitorLog", b =>
@@ -481,6 +623,22 @@ namespace ZooApp.Migrations
                     b.HasIndex("VisitorId");
 
                     b.ToTable("VisitorLog", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            VisitorLogId = 1,
+                            Comments = "Enjoyed the zoo!",
+                            DateVisited = new DateTime(2024, 4, 5, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(1062),
+                            VisitorId = 1
+                        },
+                        new
+                        {
+                            VisitorLogId = 2,
+                            Comments = "Great experience!",
+                            DateVisited = new DateTime(2024, 4, 6, 8, 41, 58, 729, DateTimeKind.Local).AddTicks(1068),
+                            VisitorId = 2
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -586,7 +744,7 @@ namespace ZooApp.Migrations
             modelBuilder.Entity("ZooApp.Models.Ticket", b =>
                 {
                     b.HasOne("ZooApp.Models.Event", "Event")
-                        .WithMany("Tickets")
+                        .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -605,14 +763,14 @@ namespace ZooApp.Migrations
             modelBuilder.Entity("ZooApp.Models.VisitorEventAttendance", b =>
                 {
                     b.HasOne("ZooApp.Models.Event", "Event")
-                        .WithMany("EventAttendances")
+                        .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZooApp.Models.Visitor", "Visitor")
                         .WithMany("EventAttendances")
-                        .HasForeignKey("VisitorId1")
+                        .HasForeignKey("VisitorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -647,13 +805,6 @@ namespace ZooApp.Migrations
                     b.Navigation("Animals");
 
                     b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("ZooApp.Models.Event", b =>
-                {
-                    b.Navigation("EventAttendances");
-
-                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("ZooApp.Models.Visitor", b =>
