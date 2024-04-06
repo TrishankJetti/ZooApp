@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZooApp.data;
 
@@ -11,9 +12,11 @@ using ZooApp.data;
 namespace ZooApp.Migrations
 {
     [DbContext(typeof(ZooAppContext))]
-    partial class ZooAppContextModelSnapshot : ModelSnapshot
+    [Migration("20240406175629_sampledata")]
+    partial class sampledata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -368,7 +371,7 @@ namespace ZooApp.Migrations
                         {
                             EmployeeId = 1,
                             EnclosureId = 0,
-                            HireDate = new DateTime(2024, 4, 7, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5126),
+                            HireDate = new DateTime(2024, 4, 7, 5, 56, 27, 658, DateTimeKind.Local).AddTicks(8803),
                             Name = "John Doe",
                             Phone = "123-456-7890",
                             Role = 0,
@@ -378,7 +381,7 @@ namespace ZooApp.Migrations
                         {
                             EmployeeId = 2,
                             EnclosureId = 0,
-                            HireDate = new DateTime(2024, 4, 7, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5129),
+                            HireDate = new DateTime(2024, 4, 7, 5, 56, 27, 658, DateTimeKind.Local).AddTicks(8807),
                             Name = "Jane Smith",
                             Phone = "987-654-3210",
                             Role = 1,
@@ -458,7 +461,7 @@ namespace ZooApp.Migrations
                         new
                         {
                             EventId = 1,
-                            Date = new DateTime(2024, 4, 14, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(4910),
+                            Date = new DateTime(2024, 4, 14, 5, 56, 27, 658, DateTimeKind.Local).AddTicks(8674),
                             Description = "Guided safari tour through the zoo",
                             Name = "Zoo Safari",
                             TicketPrice = 25m
@@ -466,7 +469,7 @@ namespace ZooApp.Migrations
                         new
                         {
                             EventId = 2,
-                            Date = new DateTime(2024, 4, 21, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(4963),
+                            Date = new DateTime(2024, 4, 21, 5, 56, 27, 658, DateTimeKind.Local).AddTicks(8724),
                             Description = "Educational talk on wildlife conservation",
                             Name = "Wildlife Conservation Talk",
                             TicketPrice = 10m
@@ -502,14 +505,14 @@ namespace ZooApp.Migrations
                         new
                         {
                             TicketId = 1,
-                            DateOfPurchase = new DateTime(2024, 4, 5, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5466),
+                            DateOfPurchase = new DateTime(2024, 4, 5, 5, 56, 27, 658, DateTimeKind.Local).AddTicks(9460),
                             EventId = 1,
                             VisitorId = 1
                         },
                         new
                         {
                             TicketId = 2,
-                            DateOfPurchase = new DateTime(2024, 4, 6, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5469),
+                            DateOfPurchase = new DateTime(2024, 4, 6, 5, 56, 27, 658, DateTimeKind.Local).AddTicks(9469),
                             EventId = 2,
                             VisitorId = 2
                         });
@@ -626,14 +629,14 @@ namespace ZooApp.Migrations
                         {
                             VisitorLogId = 1,
                             Comments = "Enjoyed the zoo!",
-                            DateVisited = new DateTime(2024, 4, 5, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5602),
+                            DateVisited = new DateTime(2024, 4, 5, 5, 56, 27, 658, DateTimeKind.Local).AddTicks(9643),
                             VisitorId = 1
                         },
                         new
                         {
                             VisitorLogId = 2,
                             Comments = "Great experience!",
-                            DateVisited = new DateTime(2024, 4, 6, 6, 3, 56, 180, DateTimeKind.Local).AddTicks(5605),
+                            DateVisited = new DateTime(2024, 4, 6, 5, 56, 27, 658, DateTimeKind.Local).AddTicks(9646),
                             VisitorId = 2
                         });
                 });

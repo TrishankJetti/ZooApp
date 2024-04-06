@@ -25,16 +25,17 @@ namespace ZooApp.Models
 
         [Required]
         [StringLength(100)]
-        [RegularExpression(@"^[A-Z]+[a-zA-Z]*$", ErrorMessage ="Name has to begin with capital letter and must not include any special characters or numbers.")]
-        
+        [RegularExpression(@"^[A-Z][a-zA-Z\s]*$", ErrorMessage = "Name has to begin with a capital letter and must not include any special characters or numbers.")]
         public string Name { get; set; }
+
 
         [Required (ErrorMessage = "You must specify a Species type to submit.")]
         [StringLength(100 , ErrorMessage ="Please enter a valid Species name.")]
-        [RegularExpression(@"^[A-Z]+[a-zA-Z]*$", ErrorMessage = "Species has to begin with capital letter and must not include any special characters or numbers.")]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$", ErrorMessage = "Species has to begin with capital letter and must not include any special characters or numbers.")]
         public string Species { get; set; }
 
-        [Range(1, 300, ErrorMessage = "Please enter a valid age above 0.")]
+        [Required]
+        [Range(1, 100, ErrorMessage = "Please enter a valid age above 0, and less than 100")]
         public int Age { get; set; }
 
         [Required]

@@ -4,7 +4,11 @@ namespace ZooApp.Models
 {
     public class VisitorEventAttendance
     {
-        [Key] public int VisitorId { get; set; }
+        [Key]
+        public int VisitorEventAttendanceId { get; set; }
+
+
+        public int VisitorId { get; set; }
 
         public int EventId { get; set; }
 

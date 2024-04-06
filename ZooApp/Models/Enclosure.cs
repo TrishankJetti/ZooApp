@@ -19,6 +19,7 @@ namespace ZooApp.Models
 
         public int Capacity { get; set; }
 
+        
 
         public ICollection<Animal> Animals { get; set; }
 

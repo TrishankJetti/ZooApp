@@ -8,7 +8,7 @@ namespace ZooApp.Models
 
         [Required]
         [StringLength(100)]
-        [RegularExpression(@"^[A-Z]+[a-zA-Z]*$", ErrorMessage = "Employee Name has to begin with capital letter and must not include any special characters or numbers.")]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$", ErrorMessage = "Employee Name has to begin with capital letter and must not include any special characters or numbers.")]
         public string Name { get; set; }
 
         [Required]
@@ -36,7 +36,7 @@ namespace ZooApp.Models
     public enum RoleType
     {
         Zookeeper,
-        Veteranarian,
+        Veterinarian,
         Admin,
         Manager
 

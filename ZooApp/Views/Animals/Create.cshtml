@@ -21,13 +21,21 @@
         .form-group {
             margin-bottom: 20px;
         }
+
+
+        .center-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
     </style>
 </head>
 <body>
 <h1>Create Animal</h1>
 
 <hr />
-<div class="row">
+<div class="row center-form">
     <div class="col-md-4 ">
         <form asp-action="Edit" class="align-content-lg-center">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
