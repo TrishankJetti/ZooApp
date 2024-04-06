@@ -2,31 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ZooApp.data;
 using ZooApp.Models;
+using ZooApp.data;
 
 namespace ZooApp.Controllers
 {
-    public class VisitorsController : Controller
+    public class VisitorLogsController : Controller
     {
         private readonly ZooAppContext _context;
 
-        public VisitorsController(ZooAppContext context)
+        public VisitorLogsController(ZooAppContext context)
         {
             _context = context;
         }
 
-        // GET: Visitors
+        // GET: VisitorLogs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Visitor.ToListAsync());
+            var zooAppContext = _context.VisitorLogs.Include(v => v.Visitor);
+            return View(await zooAppContext.ToListAsync());
         }
 
-        // GET: Visitors/Details/5
+        // GET: VisitorLogs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +34,42 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            var visitor = await _context.Visitor
-                .FirstOrDefaultAsync(m => m.VisitorId == id);
-            if (visitor == null)
+            var visitorLog = await _context.VisitorLogs
+                .Include(v => v.Visitor)
+                .FirstOrDefaultAsync(m => m.VisitorLogId == id);
+            if (visitorLog == null)
             {
                 return NotFound();
             }
 
-            return View(visitor);
+            return View(visitorLog);
         }
 
-        // GET: Visitors/Create
+        // GET: VisitorLogs/Create
         public IActionResult Create()
         {
+            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "VisitorId");
             return View();
         }
 
-        // POST: Visitors/Create
+        // POST: VisitorLogs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VisitorId,Name,Email,Phone,Address")] Visitor visitor)
+        public async Task<IActionResult> Create([Bind("VisitorLogId,VisitorId,DateVisited,Comments")] VisitorLog visitorLog)
         {
             if (!ModelState.IsValid)
             {
-                _context.Add(visitor);
+                _context.Add(visitorLog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(visitor);
+            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "VisitorId", visitorLog.VisitorId);
+            return View(visitorLog);
         }
 
-        // GET: Visitors/Edit/5
+        // GET: VisitorLogs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,23 +77,23 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            var visitor = await _context.Visitor.FindAsync(id);
-            if (visitor == null)
+            var visitorLog = await _context.VisitorLogs.FindAsync(id);
+            if (visitorLog == null)
             {
                 return NotFound();
             }
-            return View(visitor);
+            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "VisitorId", visitorLog.VisitorId);
+            return View(visitorLog);
         }
 
-        // POST: Visitors/Edit/5
+        // POST: VisitorLogs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin , Employee")]
-        public async Task<IActionResult> Edit(int id, [Bind("VisitorId,Name,Email,Phone,Address")] Visitor visitor)
+        public async Task<IActionResult> Edit(int id, [Bind("VisitorLogId,VisitorId,DateVisited,Comments")] VisitorLog visitorLog)
         {
-            if (id != visitor.VisitorId)
+            if (id != visitorLog.VisitorLogId)
             {
                 return NotFound();
             }
@@ -99,12 +102,12 @@ namespace ZooApp.Controllers
             {
                 try
                 {
-                    _context.Update(visitor);
+                    _context.Update(visitorLog);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VisitorExists(visitor.VisitorId))
+                    if (!VisitorLogExists(visitorLog.VisitorLogId))
                     {
                         return NotFound();
                     }
@@ -115,11 +118,11 @@ namespace ZooApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(visitor);
+            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "VisitorId", visitorLog.VisitorId);
+            return View(visitorLog);
         }
 
-        // GET: Visitors/Delete/5
-        [Authorize(Roles = "Admin , Employee")]
+        // GET: VisitorLogs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -127,35 +130,35 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            var visitor = await _context.Visitor
-                .FirstOrDefaultAsync(m => m.VisitorId == id);
-            if (visitor == null)
+            var visitorLog = await _context.VisitorLogs
+                .Include(v => v.Visitor)
+                .FirstOrDefaultAsync(m => m.VisitorLogId == id);
+            if (visitorLog == null)
             {
                 return NotFound();
             }
 
-            return View(visitor);
+            return View(visitorLog);
         }
 
-        // POST: Visitors/Delete/5
-        [Authorize(Roles = "Admin , Employee")]
+        // POST: VisitorLogs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var visitor = await _context.Visitor.FindAsync(id);
-            if (visitor != null)
+            var visitorLog = await _context.VisitorLogs.FindAsync(id);
+            if (visitorLog != null)
             {
-                _context.Visitor.Remove(visitor);
+                _context.VisitorLogs.Remove(visitorLog);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool VisitorExists(int id)
+        private bool VisitorLogExists(int id)
         {
-            return _context.Visitor.Any(e => e.VisitorId == id);
+            return _context.VisitorLogs.Any(e => e.VisitorLogId == id);
         }
     }
 }

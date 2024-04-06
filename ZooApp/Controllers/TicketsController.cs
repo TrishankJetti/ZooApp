@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ZooApp.Models;
 using ZooApp.data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZooApp.Controllers
 {
@@ -47,6 +48,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: Tickets/Create
+        [Authorize(Roles = "Admin , Employee")]
         public IActionResult Create()
         {
             ViewData["EventId"] = new SelectList(_context.Event, "EventId", "EventId");
@@ -58,6 +60,7 @@ namespace ZooApp.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin , Employee")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TicketId,VisitorId,DateOfPurchase,EventId")] Ticket ticket)
         {
@@ -73,6 +76,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: Tickets/Edit/5
+        [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -95,6 +99,7 @@ namespace ZooApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Edit(int id, [Bind("TicketId,VisitorId,DateOfPurchase,EventId")] Ticket ticket)
         {
             if (id != ticket.TicketId)
@@ -128,6 +133,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: Tickets/Delete/5
+        [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -149,6 +155,7 @@ namespace ZooApp.Controllers
 
         // POST: Tickets/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin , Employee")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

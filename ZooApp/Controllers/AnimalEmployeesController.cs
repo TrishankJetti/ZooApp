@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ZooApp.Models;
 using ZooApp.data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZooApp.Controllers
 {
@@ -47,6 +48,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: AnimalEmployees/Create
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Create()
         {
             ViewData["AnimalId"] = new SelectList(_context.Animal, "AnimalId", "Name");
@@ -59,6 +61,7 @@ namespace ZooApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create([Bind("AnimalEmployeeId,EmployeeId,AnimalId")] AnimalEmployee animalEmployee)
         {
             if (ModelState.IsValid)
@@ -73,6 +76,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: AnimalEmployees/Edit/5
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -95,6 +99,7 @@ namespace ZooApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Edit(int id, [Bind("AnimalEmployeeId,EmployeeId,AnimalId")] AnimalEmployee animalEmployee)
         {
             if (id != animalEmployee.AnimalEmployeeId)
@@ -128,6 +133,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: AnimalEmployees/Delete/5
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -150,6 +156,7 @@ namespace ZooApp.Controllers
         // POST: AnimalEmployees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var animalEmployee = await _context.AnimalEmployee.FindAsync(id);

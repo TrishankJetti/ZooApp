@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: Enclosures/Create
+        [Authorize(Roles = "Admin , Employee")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +56,7 @@ namespace ZooApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Create([Bind("EnclosureId,Name,Habitat,Capacity")] Enclosure enclosure)
         {
             if (!ModelState.IsValid)
@@ -66,6 +69,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: Enclosures/Edit/5
+        [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +90,7 @@ namespace ZooApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Edit(int id, [Bind("EnclosureId,Name,Habitat,Capacity")] Enclosure enclosure)
         {
             if (id != enclosure.EnclosureId)
@@ -117,6 +122,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: Enclosures/Delete/5
+        [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,6 +142,7 @@ namespace ZooApp.Controllers
 
         // POST: Enclosures/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin , Employee")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
