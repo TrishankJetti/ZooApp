@@ -11,6 +11,7 @@ using ZooApp.Models;
 
 namespace ZooApp.Controllers
 {
+    [Authorize]
     public class VisitorsController : Controller
     {
         private readonly ZooAppContext _context;
@@ -21,10 +22,20 @@ namespace ZooApp.Controllers
         }
 
         // GET: Visitors
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Visitor.ToListAsync());
+            ViewData["VisitorNameFilter"] = searchString;
+
+            var visitors = _context.Visitor.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                visitors = visitors.Where(v => v.Name.Contains(searchString) || v.Email.Contains(searchString));
+            }
+
+            return View(await visitors.ToListAsync());
         }
+
 
         // GET: Visitors/Details/5
         public async Task<IActionResult> Details(int? id)

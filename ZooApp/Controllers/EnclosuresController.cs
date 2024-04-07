@@ -21,10 +21,20 @@ namespace ZooApp.Controllers
         }
 
         // GET: Enclosures
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Enclosure.ToListAsync());
+            ViewData["EnclosureNameFilter"] = searchString;
+            var enclosures = from e in _context.Enclosure.Include(e => e.Employees)
+                            select e;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                enclosures = enclosures.Where(e => e.Name.Contains(searchString));
+            }
+
+            return View(await enclosures.ToListAsync());
         }
+
 
         // GET: Enclosures/Details/5
         public async Task<IActionResult> Details(int? id)

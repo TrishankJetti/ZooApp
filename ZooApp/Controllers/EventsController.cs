@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ZooApp.data;
 using ZooApp.Models;
 
@@ -21,10 +22,33 @@ namespace ZooApp.Controllers
         }
 
         // GET: Events
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, decimal? minPrice, decimal? maxPrice)
         {
-            return View(await _context.Event.ToListAsync());
+            ViewData["EventNameFilter"] = searchString;
+            ViewData["MinPrice"] = minPrice;
+            ViewData["MaxPrice"] = maxPrice;
+
+            var events = _context.Event.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                events = events.Where(e => e.Name.Contains(searchString));
+            }
+
+            if (minPrice != null)
+            {
+                events = events.Where(e => e.TicketPrice >= minPrice);
+            }
+
+            if (maxPrice != null)
+            {
+                events = events.Where(e => e.TicketPrice <= maxPrice);
+            }
+
+            return View(await events.ToListAsync());
         }
+
+
 
         // GET: Events/Details/5
         public async Task<IActionResult> Details(int? id)

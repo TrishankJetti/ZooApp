@@ -5,7 +5,17 @@
 }
 
 <h1>Index</h1>
+<form asp-action="Index" method="get" class="mb-3">
+    <div class="input-group">
+        <input type="text" class="form-control" name="searchString" placeholder="Search by name or email" aria-label="Search" aria-describedby="searchButton" value="@ViewData["VisitorNameFilter"]">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit" id="searchButton">Search</button>
+        </div>
+    </div>
+</form>
 
+<a asp-action="Index">Back to original List</a>
+<hr />
 <p>
     <a asp-action="Create">Create New</a>
 </p>

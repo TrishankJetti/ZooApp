@@ -12,7 +12,6 @@ namespace ZooApp.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100)]
         public RoleType Role { get; set; }
 
 

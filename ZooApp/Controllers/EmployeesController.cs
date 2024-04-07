@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ZooApp.data;
 using ZooApp.Models;
+using ZooApp.data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZooApp.Controllers
 {
+    
     public class EmployeesController : Controller
     {
         private readonly ZooAppContext _context;
@@ -23,6 +24,7 @@ namespace ZooApp.Controllers
         // GET: Employees
         public async Task<IActionResult> Index(string searchString)
         {
+            ViewData["EmployeeNameFilter"] = searchString;
             var employees = from e in _context.Employee.Include(e => e.Enclosure)
                             select e;
 
@@ -34,8 +36,8 @@ namespace ZooApp.Controllers
             return View(await employees.ToListAsync());
         }
 
-
         // GET: Employees/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -58,31 +60,27 @@ namespace ZooApp.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["EnclosureId"] = new SelectList(_context.Set<Enclosure>(), "EnclosureId", "EnclosureId");
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name");
             return View();
         }
 
         // POST: Employees/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        // POST: Employees/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EmployeeId,Name,Role,Phone,Salary,HireDate,EnclosureId")] Employee employee)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnclosureId"] = new SelectList(_context.Set<Enclosure>(), "EnclosureId", "EnclosureId", employee.EnclosureId);
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", employee.EnclosureId);
             return View(employee);
         }
-
 
         // GET: Employees/Edit/5
         [Authorize(Roles = "Admin")]
@@ -98,7 +96,7 @@ namespace ZooApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["EnclosureId"] = new SelectList(_context.Set<Enclosure>(), "EnclosureId", "EnclosureId", employee.EnclosureId);
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", employee.EnclosureId);
             return View(employee);
         }
 
@@ -106,8 +104,8 @@ namespace ZooApp.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Name,Role,Phone,Salary,HireDate,EnclosureId")] Employee employee)
         {
             if (id != employee.EmployeeId)
@@ -135,7 +133,7 @@ namespace ZooApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnclosureId"] = new SelectList(_context.Set<Enclosure>(), "EnclosureId", "EnclosureId", employee.EnclosureId);
+            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", employee.EnclosureId);
             return View(employee);
         }
 
@@ -160,8 +158,8 @@ namespace ZooApp.Controllers
         }
 
         // POST: Employees/Delete/5
-        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

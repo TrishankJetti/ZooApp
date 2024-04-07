@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ZooApp.Models;
 using ZooApp.data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZooApp.Controllers
 {
+    [Authorize]
     public class VisitorLogsController : Controller
     {
         private readonly ZooAppContext _context;

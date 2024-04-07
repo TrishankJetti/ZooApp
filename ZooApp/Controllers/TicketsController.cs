@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ZooApp.Controllers
 {
+    [Authorize]
     public class TicketsController : Controller
     {
         private readonly ZooAppContext _context;
