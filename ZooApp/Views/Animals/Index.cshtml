@@ -97,10 +97,10 @@
                             <th>Age</th>
                             <th>Sex</th>
                             <th>Diet</th>
-                            <th>Employee</th>
+                            <th>Actions</th>
                            
                         </tr>
-                    </theadv>
+                    </thead>
                     <tbody style="border-radius:unset;">
                         @foreach (var item in Model)
                         {
@@ -111,9 +111,7 @@
                                 <td>@Html.DisplayFor(modelItem => item.Age)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Sex)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Diet)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Employee)</td>
-                          
-
+                              
                                 <td class="action-links" >
                                     <a asp-action="Edit" asp-route-id="@item.AnimalId" class="btn btn-sm btn-primary">
 

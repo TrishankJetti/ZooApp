@@ -21,11 +21,19 @@ namespace ZooApp.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var zooAppContext = _context.Employee.Include(e => e.Enclosure);
-            return View(await zooAppContext.ToListAsync());
+            var employees = from e in _context.Employee.Include(e => e.Enclosure)
+                            select e;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                employees = employees.Where(e => e.Name.Contains(searchString));
+            }
+
+            return View(await employees.ToListAsync());
         }
+
 
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -57,12 +65,15 @@ namespace ZooApp.Controllers
         // POST: Employees/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Employees/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("EmployeeId,Name,Role,Phone,Salary,HireDate,EnclosureId")] Employee employee)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
@@ -71,6 +82,7 @@ namespace ZooApp.Controllers
             ViewData["EnclosureId"] = new SelectList(_context.Set<Enclosure>(), "EnclosureId", "EnclosureId", employee.EnclosureId);
             return View(employee);
         }
+
 
         // GET: Employees/Edit/5
         [Authorize(Roles = "Admin")]
