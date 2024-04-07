@@ -15,7 +15,7 @@ namespace ZooApp.Models
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string? Email { get; set; }
 
-        [RegularExpression(@"^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$", ErrorMessage = "Invalid phone number format")]
+        [RegularExpression(@"^(\+?64|0) ?[2-9]\d{7,9}$", ErrorMessage = "Invalid phone number format. Please enter a")]
         public string? Phone { get; set; }
 
         [Required(ErrorMessage = "Address is required")]
