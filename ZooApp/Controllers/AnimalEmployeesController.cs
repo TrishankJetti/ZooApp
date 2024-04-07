@@ -64,7 +64,7 @@ namespace ZooApp.Controllers
         [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create([Bind("AnimalEmployeeId,EmployeeId,AnimalId")] AnimalEmployee animalEmployee)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(animalEmployee);
                 await _context.SaveChangesAsync();
@@ -107,7 +107,7 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
