@@ -16,13 +16,15 @@ namespace ZooApp.Models
         public RoleType Role { get; set; }
 
 
+        [RegularExpression(@"^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$", ErrorMessage = "Invalid phone number format")]
         public string Phone { get; set; }
+
 
         [Required]
         [Range(30000, 90000 , ErrorMessage = "Invalid Employee Salary.")]
         public decimal Salary { get; set; }
 
-
+        [Required(ErrorMessage = "Please enter a date pelase.")]
         public DateTime HireDate { get; set; }
 
 
