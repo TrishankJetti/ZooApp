@@ -4,11 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 >Employees</h1>
     <form asp-action="Index" method="get">
             <div class="form-group">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="searchName" name="SearchString" value="@ViewData["EmployeeNameFilter"]" placeholder="Please type an Employee name to search" style="width: 50px;" />
+                    <input type="text" class="form-control" id="searchName" name="SearchString" value="@ViewData["EmployeeNameFilter"]" placeholder="Please type an Event name to search" style="width:10px;" />
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -23,9 +23,12 @@
         <a asp-action="Index">Back to original List</a>
 
         <hr />
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="row">
+    <div class="col">
+        <a asp-action="Create" class="btn btn-success">Create New</a>
+    </div>
+
+</div>
 <table class="table">
     <thead style = "background-color:lightslategray;" >
         <tr>

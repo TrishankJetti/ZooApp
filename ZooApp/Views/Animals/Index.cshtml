@@ -97,6 +97,7 @@
                             <th>Age</th>
                             <th>Sex</th>
                             <th>Diet</th>
+                            
                             <th>Actions</th>
                            
                         </tr>
@@ -111,6 +112,7 @@
                                 <td>@Html.DisplayFor(modelItem => item.Age)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Sex)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Diet)</td>
+                              
                               
                                 <td class="action-links" >
                                     <a asp-action="Edit" asp-route-id="@item.AnimalId" class="btn btn-sm btn-primary">
