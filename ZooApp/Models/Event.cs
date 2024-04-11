@@ -18,6 +18,7 @@ namespace ZooApp.Models
         public DateTime Date { get; set; }
 
         [Required(ErrorMessage = "Description is required")]
+        [RegularExpression(@"^[A-Z][a-zA-Z\s]*$", ErrorMessage = "Name has to begin with a capital letter and must not include any special characters or numbers.")]
         [MaxLength(500, ErrorMessage = "Description must be less than 500 characters")]
         public string Description { get; set; }
 
