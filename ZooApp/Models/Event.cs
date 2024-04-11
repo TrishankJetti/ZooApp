@@ -22,7 +22,7 @@ namespace ZooApp.Models
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Ticket price is required")]
-        [Range(0, double.MaxValue, ErrorMessage = "Ticket price must be a positive number")]
+        [Range(5, double.MaxValue, ErrorMessage = "Ticket price must be above $5.")]
         public decimal TicketPrice { get; set; }
     }
 
