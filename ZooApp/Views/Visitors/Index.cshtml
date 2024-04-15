@@ -5,11 +5,17 @@
 }
 
 <h1 style="text-align:center">Visitors</h1>
-<form asp-action="Index" method="get" class="mb-3">
+<form asp-action="Index" method="get">
     <div class="form-group">
-        <input type="text" class="form-control" name="searchString" placeholder="Search by name or email" aria-label="Search" aria-describedby="searchButton" value="@ViewData["VisitorNameFilter"]">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="submit" id="searchButton">Search</button>
+        <div class="input-group">
+            <input type="text" class="form-control" id="searchName" name="SearchString" value="@ViewData["VisitorNameFilter"]" placeholder="Please type a Visitor name to search" style="width:10px;" />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 </form>
