@@ -71,12 +71,12 @@ namespace ZooApp.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-
+            [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Employee Name has to begin with capital letter and must not include any special characters or numbers.")]
             [DataType(DataType.Text)]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
-
+            [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Employee Name has to begin with capital letter and must not include any special characters or numbers.")]
             [DataType(DataType.Text)]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
