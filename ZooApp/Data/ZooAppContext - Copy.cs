@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ZooApp.Data;
 using ZooApp.Models;
 
 namespace ZooApp.data
@@ -47,6 +48,8 @@ namespace ZooApp.data
                 entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
             });
 
+
+
             modelBuilder.Entity<Animal>().ToTable("Animal");
             modelBuilder.Entity<Event>().ToTable("Event");
             modelBuilder.Entity<Employee>().ToTable("Employee");
@@ -56,6 +59,8 @@ namespace ZooApp.data
             modelBuilder.Entity<VisitorLog>().ToTable("VisitorLog");
             modelBuilder.Entity<VisitorEventAttendance>().ToTable("VisitorEventAttendance");
             modelBuilder.Entity<Ticket>().ToTable("Ticket");
+
+          
 
             // Seeding data for the Event table
             modelBuilder.Entity<Event>().HasData(
