@@ -2,16 +2,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ZooApp.data;
 using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddDbContext<ZooAppContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ZooAppContext") ?? throw new InvalidOperationException("Connection string 'ZooAppContext' not found.")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>().AddDefaultTokenProviders()
-    
-    .AddRoles<IdentityRole>()
-
-    .AddEntityFrameworkStores<ZooAppContext>();
-
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+})
+.AddDefaultTokenProviders()
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ZooAppContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -38,6 +41,6 @@ app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Animals}/{action=Index}/{id?}");
 
 app.Run();
