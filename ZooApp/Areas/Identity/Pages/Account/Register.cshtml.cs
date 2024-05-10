@@ -72,12 +72,16 @@ namespace ZooApp.Areas.Identity.Pages.Account
         {
 
             [DataType(DataType.Text)]
+            [Required]
             [Display(Name = "First Name")]
+            [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = " Name has to begin with capital letter and must not include any special characters or numbers.")]
             public string FirstName { get; set; }
 
 
             [DataType(DataType.Text)]
             [Display(Name = "Last Name")]
+            [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = " Name has to begin with capital letter and must not include any special characters or numbers.")]
+            [Required]
             public string LastName { get; set; }
 
             /// <summary>

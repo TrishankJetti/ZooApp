@@ -12,9 +12,11 @@ namespace ZooApp.Models
         [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Name must contain only letters and spaces")]
         public string Name { get; set; }
 
+        [Required]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string? Email { get; set; }
 
+        
         [RegularExpression(@"^(\+?64|0) ?[2-9]\d{7,9}$", ErrorMessage = "Invalid phone number format. Please enter a")]
         public string? Phone { get; set; }
 
