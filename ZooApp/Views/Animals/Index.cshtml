@@ -94,8 +94,11 @@
                 <table class="table table-striped" style="border:thin;">
                     <thead style="background-color:lightslategray;">
                         <tr >
-                            <th>Animal Id</th>
-                            <th >Name</th>
+                            <th>
+                                Animal Id
+                                
+                            </th>
+                            <th > <a asp-action="Index" asp-route-sortOrder="@ViewData["AnimalNameSort"]"> Name</a></th>
                             <th>Species</th>
                             <th>Age</th>
                             <th>Sex</th>
@@ -109,7 +112,9 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@Html.DisplayFor(modelItem => item.AnimalId)</td>
+                                <td>
+                                   @Html.DisplayFor(modelItem => item.AnimalId)
+                                </td>
                                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Species)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Age)</td>

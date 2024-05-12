@@ -27,14 +27,35 @@ namespace ZooApp.Controllers
         {
             ViewData["AnimalNameFilter"] = searchString;
             ViewData["AnimalIdFilter"] = searchId;
+            ViewData["AnimalNameSort"] = String.IsNullOrEmpty(SortOrder) ? "name_desc" : "";
+            //This creates a View for the Data, called AnimalNameSort. Which then uses the method IsNullOrEmpty to make sure that string isn't 
+            //null and then runs the SortOrder Switch case which then runs the case: name_desc and then the default case would just leave the sorting on default keeping it ascending order.
+            ViewData["AnimalAgeSort"] = String.IsNullOrEmpty(AgeSortOrder) ? "age_desc" : "";
 
             var animals = from a in _context.Animal select a;
 
+            //This is the sorting for the Name field where if clicked, it sorts name in descending order.
+           //I used a Switch instead of an If , else statement as this will sue specific values rather than ranges hence I am using a Switch statement.
+            switch (SortOrder)
+            {
+                case "name_desc":
+                    animals = animals.OrderByDescending(a => a.Name);
+                    break;
+
+                default:
+                    animals = animals.OrderBy(a => a.Name);
+                    break;
+            }
+
+
+            //This code over here will then Check if the provided string by the user is not NULL
+            //And will return Animals with the exact name that user enters or Animals with for example: "a" in their name.
             if (!String.IsNullOrEmpty(searchString))
             {
                 animals = animals.Where(a => a.Name.Contains(searchString));
             }
-
+            
+            //This code will return animals with a certain AnimalID that the user enters. 
             if (searchId.HasValue)
             {
                 animals = animals.Where(a => a.AnimalId == searchId.Value);
