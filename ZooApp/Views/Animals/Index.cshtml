@@ -54,9 +54,10 @@
                 </div>
             </div>
         </form>
-
-        <form asp-action="Index" method="get">
-            <div class="form-group">
+        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+        {
+            <form asp-action="Index" method="get">
+                <div class="form-group">
                 <div class="input-group">
                     <input type="text" class="form-control" id="searchId" name="SearchId" value="@ViewData["AnimalIdFilter"]" placeholder="Please type an Animal ID to search" style="width: 50px;" />
                     <div class="input-group-append">
@@ -69,6 +70,7 @@
                 </div>
             </div>
         </form>
+        }
 
 
        
@@ -94,10 +96,13 @@
                 <table class="table table-striped" style="border:thin;">
                     <thead style="background-color:lightslategray;">
                         <tr >
+                            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                                    {
                             <th>
                                 Animal Id
                                 
                             </th>
+                                    }
                             <th > <a asp-action="Index" asp-route-sortOrder="@ViewData["AnimalNameSort"]"> Name</a></th>
                             <th>Species</th>
                             <th>Age</th>
@@ -112,9 +117,12 @@
                         @foreach (var item in Model)
                         {
                             <tr>
+                                @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                                {
                                 <td>
                                    @Html.DisplayFor(modelItem => item.AnimalId)
                                 </td>
+                                }
                                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Species)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Age)</td>

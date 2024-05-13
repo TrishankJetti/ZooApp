@@ -30,7 +30,7 @@ namespace ZooApp.Controllers
             ViewData["AnimalNameSort"] = String.IsNullOrEmpty(SortOrder) ? "name_desc" : "";
             //This creates a View for the Data, called AnimalNameSort. Which then uses the method IsNullOrEmpty to make sure that string isn't 
             //null and then runs the SortOrder Switch case which then runs the case: name_desc and then the default case would just leave the sorting on default keeping it ascending order.
-            ViewData["AnimalAgeSort"] = String.IsNullOrEmpty(AgeSortOrder) ? "age_desc" : "";
+          
 
             var animals = from a in _context.Animal select a;
 
