@@ -23,10 +23,11 @@ namespace ZooApp.Controllers
 
         // GET: Animals
 
-        public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder)
+        public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder , String dietType)
         {
             ViewData["AnimalNameFilter"] = searchString;
             ViewData["AnimalIdFilter"] = searchId;
+            ViewData["DietTypeFilter"] = dietType;
             ViewData["AnimalNameSort"] = String.IsNullOrEmpty(SortOrder) ? "name_desc" : "";
             //This creates a View for the Data, called AnimalNameSort. Which then uses the method IsNullOrEmpty to make sure that string isn't 
             //null and then runs the SortOrder Switch case which then runs the case: name_desc and then the default case would just leave the sorting on default keeping it ascending order.
@@ -61,7 +62,12 @@ namespace ZooApp.Controllers
                 animals = animals.Where(a => a.AnimalId == searchId.Value);
             }
 
-         
+            if (!String.IsNullOrEmpty(dietType))
+            {
+                animals = animals.Where(a => a.Diet == Enum.Parse<DietType>(dietType));
+            }
+
+
             var zooAppContext = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure);
             return View(await animals.ToListAsync());
         }
