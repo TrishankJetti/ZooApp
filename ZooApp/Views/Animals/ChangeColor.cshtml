@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Change Animal Color</title>
+    <style>
+        .animal-svg {
+            width: 150px;
+            height: 150px;
+            margin: 20px;
+        }
+
+        .color-picker {
+            margin: 20px;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Change Animal Color</h1>
+        <div>
+            <label>Select an Animal:</label>
+            <select id="animalSelector" class="form-control" style="display: inline-block; width: auto;">
+                <option value="lion">Lion</option>
+                <option value="elephant">Elephant</option>
+                <option value="fish">Fish</option>
+            </select>
+        </div>
+        <div id="animalDisplay" class="animal-svg">
+            <object id="animalSvg" data="lion.svg" type="image/svg+xml"></object>
+        </div>
+        <div class="color-picker">
+            <label for="colorPicker">Pick a Color:</label>
+            <input type="color" id="colorPicker" name="colorPicker" value="#FFA500">
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("animalSelector").addEventListener("change", function () {
+            var animalSvg = document.getElementById("animalSvg");
+            var selectedAnimal = this.value;
+
+            if (selectedAnimal === "lion") {
+                animalSvg.data = "lion.svg";
+            } else if (selectedAnimal === "elephant") {
+                animalSvg.data = "elephant.svg";
+            } else if (selectedAnimal === "fish") {
+                animalSvg.data = "fish.svg";
+            }
+        });
+
+        document.getElementById("colorPicker").addEventListener("input", function () {
+            document.getElementById("animalPath").setAttribute("fill", this.value);
+        });
+    </script>
+</body>
+</html>

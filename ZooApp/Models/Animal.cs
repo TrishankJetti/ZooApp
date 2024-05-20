@@ -39,7 +39,7 @@ namespace ZooApp.Models
         public string Species { get; set; }
 
         //The Age is required field, and can span from 0 to 100 years.
-        [Required]
+        [Required(ErrorMessage ="Please provide an age.")]
         [Range(1, 100, ErrorMessage = "Please enter a valid age above 0, and less than 100")]
         public int Age { get; set; }
 

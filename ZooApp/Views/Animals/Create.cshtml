@@ -1,6 +1,6 @@
 ﻿@model ZooApp.Models.Animal
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create Animal";
 }
 
 <!DOCTYPE html>
@@ -23,6 +23,19 @@
             align-items: center;
             height: 100vh;
         }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
     </style>
 </head>
 <body>
@@ -35,46 +48,42 @@
                 <input type="hidden" asp-for="AnimalId" />
 
                 <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input asp-for="Name" class="form-control" id="name" />
+                    <label asp-for="Name" class="control-label">Name:</label>
+                    <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="species">Species:</label>
-                    <input asp-for="Species" class="form-control" id="species" />
+                    <label asp-for="Species" class="control-label">Species:</label>
+                    <input asp-for="Species" class="form-control" />
                     <span asp-validation-for="Species" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="age">Age:</label>
-                    <input asp-for="Age" class="form-control" id="age" />
+                    <label asp-for="Age" class="control-label">Age:</label>
+                    <input asp-for="Age" class="form-control" />
                     <span asp-validation-for="Age" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="sex">Sex:</label>
-                    <select asp-for="Sex" class="form-control" id="sex" asp-items="Html.GetEnumSelectList<Sex>()">
-                    </select>
+                    <label asp-for="Sex" class="control-label">Sex:</label>
+                    <select asp-for="Sex" class="form-control" asp-items="Html.GetEnumSelectList<Sex>()"></select>
                     <span asp-validation-for="Sex" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="diet">Diet:</label>
-                    <select asp-for="Diet" class="form-control" id="diet" asp-items="Html.GetEnumSelectList<DietType>()">
-                    </select>
+                    <label asp-for="Diet" class="control-label">Diet:</label>
+                    <select asp-for="Diet" class="form-control" asp-items="Html.GetEnumSelectList<DietType>()"></select>
                     <span asp-validation-for="Diet" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="employee">Employee:</label>
-                    <select asp-for="EmployeeId" class="form-control" id="employee" asp-items="ViewBag.EmployeeId">
-                    </select>
+                    <label asp-for="EmployeeId" class="control-label">Employee:</label>
+                    <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
                     <span asp-validation-for="EmployeeId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="enclosure">Enclosure Name:</label>
-                    <select asp-for="EnclosureId" class="form-control" id="enclosure" asp-items="ViewBag.EnclosureId">
-                    </select>
+                    <label asp-for="EnclosureId" class="control-label">Enclosure Name:</label>
+                    <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
                     <span asp-validation-for="EnclosureId" class="text-danger"></span>
                 </div>
 
-                <br/>
+                <br />
                 <div class="form-group text-center">
                     <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
@@ -85,5 +94,7 @@
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
+
+    <partial name="_ValidationScriptsPartial" />
 </body>
 </html>

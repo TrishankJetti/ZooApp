@@ -19,7 +19,7 @@
                 <label asp-for="Role" class="control-label"></label>
                 <div class="input-group">
                     <select asp-for="Role" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
-                        <option value="" style="color:grey">Select from dropdown below</option>
+                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select from dropdown below</option>
                         <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
                             then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
                         -->
@@ -61,10 +61,19 @@
                 <input asp-for="HireDate" class="form-control" />
                 <span asp-validation-for="HireDate" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="EnclosureId" class="control-label"></label>
-                <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
+                <div class="input-group">
+                    <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId">
+                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select from dropdown below</option>
+                        <!-- Add options dynamically here if needed -->
+                    </select>
+                </div>
+                <span asp-validation-for="EnclosureId" class="text-danger"></span>
             </div>
+
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

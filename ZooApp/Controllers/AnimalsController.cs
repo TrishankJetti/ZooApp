@@ -22,6 +22,10 @@ namespace ZooApp.Controllers
         }
 
         // GET: Animals
+        public IActionResult ChangeColor()
+        {
+            return View();
+        }
 
         public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder , String dietType)
         {
@@ -112,7 +116,7 @@ namespace ZooApp.Controllers
         [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create([Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId")] Animal animal)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
