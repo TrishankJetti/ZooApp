@@ -26,16 +26,7 @@
             margin-bottom: 20px;
         }
 
-        .card {
-            margin-bottom: 20px;
-            border: 1px solid #007bff;
-            border-radius: 23
-        }
-
-        .card-header {
-            background-color: #007bff;
-            color: #fff;
-        }
+        
 
         .card-body {
             background-color: #f2f2f2;
@@ -43,6 +34,26 @@
 
         .btn-primary {
             margin-right: 10px;
+        }
+
+        .card-header.carnivore {
+            background-color: #ff4500; /* Red for Carnivore, to symbolize Meat or flesh. Typically what Carnivores consume. */
+            color: #fff;
+        }
+
+        .card-header.herbivore {
+            background-color: #32cd32; /* A Green for Herbivore, which symbolizes greeness of nature and vegetation. */
+            color: #fff;
+        }
+
+        .card-header.omnivore {
+            background-color: #ffa500; /* Orange for Omnivore, to symbolize that these creatures with the Diet type are neither Meat eaters nor Vegetarian.*/
+            color: #fff;
+        }
+
+        .card-header.pescatarian {
+            background-color: cornflowerblue; /* Blue for Pescatarian, I chose a blue colours to symbolize, the ocean which is a typicla palce where you would find fish and etc.*/
+            color: #fff;
         }
     </style>
 </head>
@@ -66,9 +77,7 @@
                 <button type="submit" name="SortOrder" value="name_asc" class="btn btn-primary">Sort by Name Ascending</button>
                 <button type="submit" name="SortOrder" value="name_desc" class="btn btn-primary">Sort by Name Descending</button>
             </div>
-            <!-- I have created a drop down form that will filter the animals based on what the user picks in the drop - down. This can either be Carnivore,Herbivore,Omnivore and Pascatarian.
-                The website will display all the animals that have the particular diet.
-            -->
+            <!-- Drop down form for diet-based filtering -->
             <div class="form-group">
                 <label for="dietType">Filter by Diet:</label>
                 <select class="form-control" id="dietType" name="DietType">
@@ -114,13 +123,21 @@
         <div class="row">
             @foreach (var item in Model)
             {
+                var dietClass = item.Diet.ToString().ToLower(); // This code over here creates a variable named dietClass, which holds the name of animal's diet in lowercase.
                 <div class="col-md-4">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header @dietClass">
+                           <!-- 
+                               This code above makes sure to append the animal's diet-type to end of the "card-header" class, to use the seperate classes that I have created
+                               for each animal based on their Diet. The @ 
+                               For example an Animal with the Herbivore diet would have the class, "card-header.herbivore". The herbivore is lowercase since we converted it to lowercase above<a href="#"></a>
+                               Then based on the particular class that is assigned to the particular animal based on it's diet type, a distinct colour will appear Ranging from Red for Carnivores,
+                               Green for Herbivores, Orangish-Yellow for Omnivores and fianlly a light blue colour for the Pescitarians.
+                           -->
                             @Html.DisplayFor(modelItem => item.Name)
                         </div>
                         <div class="card-body">
-                            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                            @if (User.IsInRole("Admin") || User.IsInRole("Employee")) // Makes sure that only Users who have the Admin and EMployee role can view the AnimalID field on the webpage.
                             {
                                 <p><strong>Animal Id:</strong> @Html.DisplayFor(modelItem => item.AnimalId)</p>
                             }
@@ -154,7 +171,9 @@
                         </div>
                     </div>
                 </div>
+                
             }
+            <br />
         </div>
     </div>
 </body>

@@ -16,15 +16,14 @@ namespace ZooApp.Controllers
     {
         private readonly ZooAppContext _context;
 
-        public AnimalsController(ZooAppContext context)
-        {
-            _context = context;
-        }
-
+        
         // GET: Animals
 
         public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder , String dietType)
         {
+
+            
+
             ViewData["AnimalNameFilter"] = searchString;
             ViewData["AnimalIdFilter"] = searchId;
             ViewData["DietTypeFilter"] = dietType;
@@ -94,6 +93,10 @@ namespace ZooApp.Controllers
             return View(animal);
         }
 
+        public IActionResult ChangeColor()
+        {
+            return View();
+        }
         // GET: Animals/Create
 
         [Authorize(Roles = "Admin,Employee")]
