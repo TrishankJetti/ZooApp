@@ -27,15 +27,17 @@ namespace ZooApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder , String dietType)
+        public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder , String dietType , int? Age)
         {
             ViewData["AnimalNameFilter"] = searchString;
             ViewData["AnimalIdFilter"] = searchId;
             ViewData["DietTypeFilter"] = dietType;
+            ViewData["AnimalAgeSorter"] = SortOrder == "Age" ? "age_desc" : "Age";
             ViewData["AnimalNameSort"] = String.IsNullOrEmpty(SortOrder) ? "name_desc" : "";
             //This creates a View for the Data, called AnimalNameSort. Which then uses the method IsNullOrEmpty to make sure that string isn't 
             //null and then runs the SortOrder Switch case which then runs the case: name_desc and then the default case would just leave the sorting on default keeping it ascending order.
           
+
 
             var animals = from a in _context.Animal select a;
 
@@ -47,10 +49,21 @@ namespace ZooApp.Controllers
                     animals = animals.OrderByDescending(a => a.Name);
                     break;
 
+                   
+                case "age_desc":
+                    animals = animals.OrderByDescending(a => a.Age);
+                    break;
+
+                case "age-asc":
+                    animals = animals.OrderBy(animals => animals.Age);
+                    break;
+
                 default:
                     animals = animals.OrderBy(a => a.Name);
                     break;
             }
+            
+
 
 
             //This code over here will then Check if the provided string by the user is not NULL
@@ -70,6 +83,8 @@ namespace ZooApp.Controllers
             {
                 animals = animals.Where(a => a.Diet == Enum.Parse<DietType>(dietType));
             }
+
+
 
 
             var zooAppContext = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure);
