@@ -54,7 +54,7 @@ namespace ZooApp.Controllers
                     animals = animals.OrderByDescending(a => a.Age);
                     break;
 
-                case "age-asc":
+                case "Age":
                     animals = animals.OrderBy(animals => animals.Age);
                     break;
 

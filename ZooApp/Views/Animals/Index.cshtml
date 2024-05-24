@@ -9,7 +9,7 @@
 <head>
     <title>@ViewData["Title"]</title>
 
-    <style>
+      <style>
         /* Custom Styles */
         body {
             color: black;
@@ -26,10 +26,15 @@
             margin-bottom: 20px;
         }
 
-        
-
         .card-body {
             background-color: #f2f2f2;
+            font-size: 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .card-body:hover {
+            background-color: lightgray;
+            transform: scale(1.02);
         }
 
         .btn-primary {
@@ -39,22 +44,35 @@
         .card-header.carnivore {
             background-color: #ff4500; /* Red for Carnivore, to symbolize Meat or flesh. Typically what Carnivores consume. */
             color: #fff;
+            font-size: 35px;
         }
 
         .card-header.herbivore {
             background-color: #32cd32; /* A Green for Herbivore, which symbolizes greeness of nature and vegetation. */
             color: #fff;
+            font-size: 35px;
         }
 
         .card-header.omnivore {
-            background-color: #ffa500; /* Orange for Omnivore, to symbolize that these creatures with the Diet type are neither Meat eaters nor Vegetarian.*/
+            background-color: #ffa500; /* Orange for Omnivore, to symbolize that these creatures with the Diet type are neither Meat eaters nor Vegetarian. */
             color: #fff;
+            font-size: 35px;
         }
 
         .card-header.pescatarian {
-            background-color: cornflowerblue; /* Blue for Pescatarian, I chose a blue colours to symbolize, the ocean which is a typicla palce where you would find fish and etc.*/
+            background-color: cornflowerblue; /* Blue for Pescatarian, I chose a blue colours to symbolize, the ocean which is a typicla palce where you would find fish and etc. */
             color: #fff;
+            font-size: 35px;
         }
+ 
+
+            .card-header-hover :hover {
+                background-color: lightgray;
+            transform: scale(1.0);
+            }
+
+
+        
     </style>
 </head>
 <body>
@@ -73,15 +91,13 @@
                     </div>
                 </div>
             </div>
-                <p> Quick actions:</p>
-            <div class="form-group">
-                  
-                       <button type="submit" name="SortOrder" value="name_asc" class="btn btn-primary">Name ↑</button> 
-                     <button type="submit" name="SortOrder" value="name_desc" class="btn btn-primary">Name ↓</button>
-                     <button type="submit" name="SortOrder" value="age_desc" class="btn btn-primary">Age ↓</button>
-                     <button type="submit" name="SortOrder" value="age_asc" class="btn btn-primary">Age ↑</button>
-                
-            </div>
+         <p id="toggle-button">Quick actions:</p>
+    <div class="form-group" id="action-buttons">
+        <button type="submit" name="SortOrder" value="name_asc" class="btn btn-primary">Name ↑</button>
+        <button type="submit" name="SortOrder" value="name_desc" class="btn btn-primary">Name ↓</button>
+        <button type="submit" name="SortOrder" value="age_desc" class="btn btn-primary">Age ↓</button>
+        <button type="submit" name="SortOrder" value="Age" class="btn btn-primary">Age ↑</button>
+    </div>
          
 
             <!-- Drop down form for diet-based filtering -->
@@ -133,7 +149,7 @@
                 var dietClass = item.Diet.ToString().ToLower(); // This code over here creates a variable named dietClass, which holds the name of animal's diet in lowercase.
                 <div class="col-md-4">
                     <div class="card">
-                        <div class="card-header @dietClass">
+                        <div class="card-header @dietClass , card-header-hover">
                            <!-- 
                                This code above makes sure to append the animal's diet-type to end of the "card-header" class, to use the seperate classes that I have created
                                for each animal based on their Diet. 

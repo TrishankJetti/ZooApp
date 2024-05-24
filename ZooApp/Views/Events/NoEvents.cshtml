@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "No Results";
+}
+
+<div class="container text-center">
+    <h1 style="color:red;">No Results Found <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="black" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+    </svg></h1>
+    <p>Sorry, we couldn't find any events matching your search criteria. Try searching for something else.</p>
+
+    <a href="@Url.Action("Index", "Events")" class="btn btn-primary">Back to Events</a>
+</div>
+
+<style>
+    /* Custom Styles */
+    h1 {
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+</style>

@@ -45,6 +45,16 @@ namespace ZooApp.Controllers
                 events = events.Where(e => e.TicketPrice <= maxPrice);
             }
 
+            //This code makes sure that if the event exists, that the suer enters in they will show the results, else if there isnt any results the page called NoResults will show up.
+            if (events.Any())
+            {
+                return View(events);
+            }
+            else
+            {
+                return View("NoEvents");
+            }
+
             return View(await events.ToListAsync());
         }
 
