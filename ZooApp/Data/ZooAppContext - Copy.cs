@@ -60,7 +60,7 @@ namespace ZooApp.data
             modelBuilder.Entity<VisitorEventAttendance>().ToTable("VisitorEventAttendance");
             modelBuilder.Entity<Ticket>().ToTable("Ticket");
 
-          
+
 
             // Seeding data for the Event table
             modelBuilder.Entity<Event>().HasData(

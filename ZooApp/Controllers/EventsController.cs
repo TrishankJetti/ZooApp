@@ -15,10 +15,12 @@ namespace ZooApp.Controllers
     public class EventsController : Controller
     {
         private readonly ZooAppContext _context;
+       
 
-        public EventsController(ZooAppContext context)
+        public EventsController(ZooAppContext context )
         {
             _context = context;
+          
         }
 
         // GET: Events
@@ -91,10 +93,12 @@ namespace ZooApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin , Employee")]
-        public async Task<IActionResult> Create([Bind("EventId,Name,Date,Description,TicketPrice")] Event @event)
+        public async Task<IActionResult> Create([Bind("EventId,Date,Name,Description,TicketPrice,ImageFile")] Event @event)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                
+
                 _context.Add(@event);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

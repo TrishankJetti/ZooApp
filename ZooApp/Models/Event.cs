@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZooApp.Models
 {
@@ -24,6 +25,7 @@ namespace ZooApp.Models
         [Required(ErrorMessage = "Ticket price is required")]
         [Range(5, double.MaxValue, ErrorMessage = "Ticket price must be above $5.")]
         public decimal TicketPrice { get; set; }
+
 
         
     }
