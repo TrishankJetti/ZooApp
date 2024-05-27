@@ -5,34 +5,31 @@
 
 <!DOCTYPE html>
 <html>
+ 
+
 <head>
     <title>@ViewData["Title"]</title>
     <style>
         body {
             background-color: #f8f9fa;
         }
-
         h1 {
             color: #007bff;
             margin-bottom: 20px;
         }
-
         .center-form {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
-
         .form-group {
             margin-bottom: 15px;
         }
-
         .btn-primary {
             background-color: #007bff;
             border-color: #007bff;
         }
-
         .text-danger {
             color: #dc3545;
         }
@@ -43,53 +40,52 @@
         <div class="col-md-6">
             <h1 class="text-center">Create Animal</h1>
 
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="AnimalId" />
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="AnimalId" />
 
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label">Name:</label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Species" class="control-label">Species:</label>
-                    <input asp-for="Species" class="form-control" />
-                    <span asp-validation-for="Species" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Age" class="control-label">Age:</label>
-                    <input asp-for="Age" class="form-control" />
-                    <span asp-validation-for="Age" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Sex" class="control-label">Sex:</label>
-                    <select asp-for="Sex" class="form-control" asp-items="Html.GetEnumSelectList<Sex>()"></select>
-                    <span asp-validation-for="Sex" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Diet" class="control-label">Diet:</label>
-                    <select asp-for="Diet" class="form-control" asp-items="Html.GetEnumSelectList<DietType>()"></select>
-                    <span asp-validation-for="Diet" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="EmployeeId" class="control-label">Employee:</label>
-                    <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
-                    <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="EnclosureId" class="control-label">Enclosure Name:</label>
-                    <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
-                    <span asp-validation-for="EnclosureId" class="text-danger"></span>
-                </div>
-
-                <br />
-                <div class="form-group text-center">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label">Name:</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="Species" class="control-label">Species:</label>
+        <input asp-for="Species" class="form-control" />
+        <span asp-validation-for="Species" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Age" class="control-label">Age:</label>
+        <input asp-for="Age" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Sex" class="control-label">Sex:</label>
+        <select asp-for="Sex" class="form-control" asp-items="Html.GetEnumSelectList<Sex>()"></select>
+        <span asp-validation-for="Sex" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Diet" class="control-label">Diet:</label>
+        <select asp-for="Diet" class="form-control" asp-items="Html.GetEnumSelectList<DietType>()"></select>
+        <span asp-validation-for="Diet" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmployeeId" class="control-label">Employee:</label>
+        <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+        <span asp-validation-for="EmployeeId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EnclosureId" class="control-label">Enclosure Name:</label>
+        <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
+        <span asp-validation-for="EnclosureId" class="text-danger"></span>
+    </div>
+
+    <br />
+    <div class="form-group text-center">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
 
     <div>
         <a asp-action="Index">Back to List</a>
@@ -98,3 +94,9 @@
     <partial name="_ValidationScriptsPartial" />
 </body>
 </html>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

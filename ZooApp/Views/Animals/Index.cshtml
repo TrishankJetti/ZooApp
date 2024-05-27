@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<ZooApp.Models.Animal>
-
 @{
     ViewData["Title"] = "Animal Index";
 }
@@ -34,7 +33,7 @@
 
         .card-body:hover {
             background-color: lightgray;
-            transform: scale(1.02);
+           
         }
 
         .btn-primary {
@@ -71,7 +70,12 @@
             transform: scale(1.0);
             }
 
+        #action-buttons {
+            display: none;
+            margin-top: 10px;
+        }
 
+      
         
     </style>
 </head>
@@ -91,14 +95,31 @@
                     </div>
                 </div>
             </div>
-         <p id="toggle-button">Quick actions:</p>
-    <div class="form-group" id="action-buttons">
-        <button type="submit" name="SortOrder" value="name_asc" class="btn btn-primary">Name ↑</button>
-        <button type="submit" name="SortOrder" value="name_desc" class="btn btn-primary">Name ↓</button>
-        <button type="submit" name="SortOrder" value="age_desc" class="btn btn-primary">Age ↓</button>
-        <button type="submit" name="SortOrder" value="Age" class="btn btn-primary">Age ↑</button>
-    </div>
+            <div class="container">
+                <div id="quick-actions">
+                    <p id="toggle-button" class="btn btn-secondary">Quick actions:</p>
+                    <div class="form-group" id="action-buttons">
+                        <form id="action-form" method="POST" action="your-server-endpoint">
+                            <button type="submit" name="SortOrder" value="name_asc" class="btn btn-primary">Name ↑</button>
+                            <button type="submit" name="SortOrder" value="name_desc" class="btn btn-primary">Name ↓</button>
+                            <button type="submit" name="SortOrder" value="age_desc" class="btn btn-primary">Age ↓</button>
+                            <button type="submit" name="SortOrder" value="Age" class="btn btn-primary">Age ↑</button>
+                        </form>
+                    </div>
+                </div>
+
+            <script>
+                document.getElementById('toggle-button').addEventListener('click', function () {
+                    const actionButtons = document.getElementById('action-buttons');
+                    if (actionButtons.style.display === 'none' || actionButtons.style.display === '') {
+                        actionButtons.style.display = 'block';
+                    } else {
+                        actionButtons.style.display = 'none';
+                    }
+                });
+            </script>
          
+
 
             <!-- Drop down form for diet-based filtering -->
             <div class="form-group">
@@ -157,7 +178,7 @@
                                Then based on the particular class that is assigned to the particular animal based on it's diet type, a distinct colour will appear Ranging from Red for Carnivores,
                                Green for Herbivores, Orangish-Yellow for Omnivores and fianlly a light blue colour for the Pescitarians.
                            -->
-                            @Html.DisplayFor(modelItem => item.Name)
+                            <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
                         </div>
                         <div class="card-body">
                             @if (User.IsInRole("Admin") || User.IsInRole("Employee")) // Makes sure that only Users who have the Admin and EMployee role can view the AnimalID field on the webpage.
@@ -191,13 +212,16 @@
                                     </a>
                                 }
                             </div>
+                           
                         </div>
                     </div>
                 </div>
                 
             }
             <br />
+
         </div>
     </div>
 </body>
+
 </html>

@@ -27,9 +27,9 @@ namespace ZooApp.Models
 
         //Name field of the Animal string length can around 100 characters long, can't have numbers
         //or special characters and required field.
-        [Required]
         [StringLength(100)]
         [RegularExpression(@"^[A-Z][a-zA-Z\s]*$", ErrorMessage = "Name has to begin with a capital letter and must not include any special characters or numbers.")]
+        [Required(ErrorMessage = "The Name field is required.")]
         public string Name { get; set; }
 
         //Species is a required field, with the maxiumum of 100 characters length. CAn't have special characters or numbers.

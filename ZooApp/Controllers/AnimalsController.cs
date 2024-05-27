@@ -9,6 +9,7 @@ using ZooApp.Models;
 using ZooApp.data;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
+using ZooApp;
 
 namespace ZooApp.Controllers
 {
@@ -27,17 +28,19 @@ namespace ZooApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder , String dietType , int? Age)
+        public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder , String dietType , int? Age , string[] gender , string currentFilter)
         {
             ViewData["AnimalNameFilter"] = searchString;
+            ViewData["CurrentSort"] = SortOrder;
+
             ViewData["AnimalIdFilter"] = searchId;
             ViewData["DietTypeFilter"] = dietType;
             ViewData["AnimalAgeSorter"] = SortOrder == "Age" ? "age_desc" : "Age";
             ViewData["AnimalNameSort"] = String.IsNullOrEmpty(SortOrder) ? "name_desc" : "";
             //This creates a View for the Data, called AnimalNameSort. Which then uses the method IsNullOrEmpty to make sure that string isn't 
             //null and then runs the SortOrder Switch case which then runs the case: name_desc and then the default case would just leave the sorting on default keeping it ascending order.
-          
 
+            
 
             var animals = from a in _context.Animal select a;
 
@@ -60,6 +63,13 @@ namespace ZooApp.Controllers
 
                 default:
                     animals = animals.OrderBy(a => a.Name);
+                    break;
+
+                case "sex_asc":
+                    animals = animals.OrderBy(a => a.Sex);
+                    break;
+                case "sex_desc":
+                    animals = animals.OrderByDescending(a => a.Sex);
                     break;
             }
             
@@ -85,7 +95,8 @@ namespace ZooApp.Controllers
             }
 
 
-
+            
+            
 
             var zooAppContext = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure);
             return View(await animals.ToListAsync());
@@ -116,31 +127,34 @@ namespace ZooApp.Controllers
         // GET: Animals/Create
 
         [Authorize(Roles = "Admin,Employee")]
-          public IActionResult Create()
+        public IActionResult Create()
         {
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name");
             ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name");
             return View();
         }
 
+
         // POST: Animals/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create([Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId")] Animal animal)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid)  // Ensure this condition is correct
             {
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // If model state is not valid, reload the form with validation errors
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
             ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
             return View(animal);
         }
+
+
 
         // GET: Animals/Edit/5
         [Authorize(Roles = "Admin,Employee")]
@@ -162,8 +176,6 @@ namespace ZooApp.Controllers
         }
 
         // POST: Animals/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Employee")]
@@ -198,6 +210,7 @@ namespace ZooApp.Controllers
             ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
             return View(animal);
         }
+
 
         // GET: Animals/Delete/5
         [Authorize(Roles = "Admin,Employee")]
