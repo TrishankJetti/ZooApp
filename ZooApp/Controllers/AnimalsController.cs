@@ -28,19 +28,27 @@ namespace ZooApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder , String dietType , int? Age , string[] gender , string currentFilter)
+        public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder , String dietType , int? Age, int? pageNumber, string currentFilter, string currentDietType)
         {
             ViewData["AnimalNameFilter"] = searchString;
             ViewData["CurrentSort"] = SortOrder;
 
             ViewData["AnimalIdFilter"] = searchId;
-            ViewData["DietTypeFilter"] = dietType;
+            ViewData["DietTypeFilter"] = string.IsNullOrEmpty(dietType) ? currentDietType : dietType; // Maintain current diet type if dietType is null or empty
             ViewData["AnimalAgeSorter"] = SortOrder == "Age" ? "age_desc" : "Age";
             ViewData["AnimalNameSort"] = String.IsNullOrEmpty(SortOrder) ? "name_desc" : "";
             //This creates a View for the Data, called AnimalNameSort. Which then uses the method IsNullOrEmpty to make sure that string isn't 
             //null and then runs the SortOrder Switch case which then runs the case: name_desc and then the default case would just leave the sorting on default keeping it ascending order.
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+                
+            }
 
-            
 
             var animals = from a in _context.Animal select a;
 
@@ -65,12 +73,7 @@ namespace ZooApp.Controllers
                     animals = animals.OrderBy(a => a.Name);
                     break;
 
-                case "sex_asc":
-                    animals = animals.OrderBy(a => a.Sex);
-                    break;
-                case "sex_desc":
-                    animals = animals.OrderByDescending(a => a.Sex);
-                    break;
+             
             }
             
 
@@ -99,7 +102,8 @@ namespace ZooApp.Controllers
             
 
             var zooAppContext = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure);
-            return View(await animals.ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Animal>.CreateAsync(animals.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
 

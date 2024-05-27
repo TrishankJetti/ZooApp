@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ZooApp.Models.Animal>
+﻿@model PaginatedList<ZooApp.Models.Animal>
 @{
     ViewData["Title"] = "Animal Index";
 }
@@ -65,10 +65,7 @@
         }
  
 
-            .card-header-hover :hover {
-                background-color: lightgray;
-            transform: scale(1.0);
-            }
+           
 
         #action-buttons {
             display: none;
@@ -164,6 +161,29 @@
             </div>
         </div>
         <br />
+        @{
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        }
+
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           asp-route-dietType="@ViewData["DietTypeFilter"]"
+           class="btn btn-primary @prevDisabled">
+            Previous
+        </a>
+        <span class="page-text">Page @(Model.PageIndex) out of @(Model.TotalPages)</span>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           asp-route-dietType="@ViewData["DietTypeFilter"]"
+           class="btn btn-primary @nextDisabled">
+            Next
+        </a>
+
         <div class="row">
             @foreach (var item in Model)
             {
@@ -218,8 +238,9 @@
                 </div>
                 
             }
-            <br />
 
+            <br />
+           
         </div>
     </div>
 </body>
