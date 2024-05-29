@@ -95,9 +95,21 @@ namespace ZooApp.Controllers
         [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Create([Bind("EventId,Date,Name,Description,TicketPrice,ImageFile")] Event @event)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                
+                if (@event.ImageFile != null)
+                {
+                    // Save the image to the server
+                    var fileName = Path.GetFileNameWithoutExtension(@event.ImageFile.FileName);
+                    var extension = Path.GetExtension(@event.ImageFile.FileName);
+                    @event.ImageFileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", @event.ImageFileName);
+
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await @event.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
 
                 _context.Add(@event);
                 await _context.SaveChangesAsync();
@@ -129,7 +141,7 @@ namespace ZooApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin , Employee")]
-        public async Task<IActionResult> Edit(int id, [Bind("EventId,Name,Date,Description,TicketPrice")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("EventId,Name,Date,Description,TicketPrice,ImageFile,ImageFileName")] Event @event)
         {
             if (id != @event.EventId)
             {
@@ -140,6 +152,20 @@ namespace ZooApp.Controllers
             {
                 try
                 {
+                    if (@event.ImageFile != null)
+                    {
+                        // Save the new image to the server
+                        var fileName = Path.GetFileNameWithoutExtension(@event.ImageFile.FileName);
+                        var extension = Path.GetExtension(@event.ImageFile.FileName);
+                        @event.ImageFileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", @event.ImageFileName);
+
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await @event.ImageFile.CopyToAsync(fileStream);
+                        }
+                    }
+
                     _context.Update(@event);
                     await _context.SaveChangesAsync();
                 }
@@ -158,6 +184,7 @@ namespace ZooApp.Controllers
             }
             return View(@event);
         }
+
 
         // GET: Events/Delete/5
         [Authorize(Roles = "Admin , Employee")]

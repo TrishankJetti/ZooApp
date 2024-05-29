@@ -64,11 +64,11 @@ namespace ZooApp.data
 
             // Seeding data for the Event table
             modelBuilder.Entity<Event>().HasData(
-                new Event { EventId = 1, Name = "Zoo Safari", Date = DateTime.Now.AddDays(10), Description = "Guided safari tour through the zoo", TicketPrice = 25m },
-               new Event { EventId = 2, Name = "Wildlife Conservation Talk", Date = DateTime.Now.AddDays(17), Description = "Educational talk on wildlife conservation", TicketPrice = 10m },
-              new Event { EventId = 3, Name = "Night at the Zoo", Date = DateTime.Now.AddDays(25), Description = "Experience the zoo after dark with special activities and tours", TicketPrice = 30m },
-             new Event { EventId = 4, Name = "Bird Watching Tour", Date = DateTime.Now.AddDays(30), Description = "Guided tour focusing on observing various bird species in the zoo", TicketPrice = 15m },
-                new Event { EventId = 5, Name = "Animal Feeding Demonstration", Date = DateTime.Now.AddDays(40), Description = "Learn about animal diets and behavior during feeding time", TicketPrice = 20m }
+               new Event { EventId = 1, Name = "Zoo Safari", Date = DateTime.Now.AddDays(10), Description = "Guided safari tour through the zoo", TicketPrice = 25m, ImageFileName = "HI" },
+        new Event { EventId = 2, Name = "Wildlife Conservation Talk", Date = DateTime.Now.AddDays(17), Description = "Educational talk on wildlife conservation", TicketPrice = 10m, ImageFileName = "HI" },
+        new Event { EventId = 3, Name = "Night at the Zoo", Date = DateTime.Now.AddDays(25), Description = "Experience the zoo after dark with special activities and tours", TicketPrice = 30m, ImageFileName = "HI"},
+        new Event { EventId = 4, Name = "Bird Watching Tour", Date = DateTime.Now.AddDays(30), Description = "Guided tour focusing on observing various bird species in the zoo", TicketPrice = 15m, ImageFileName = "HI" },
+        new Event { EventId = 5, Name = "Animal Feeding Demonstration", Date = DateTime.Now.AddDays(40), Description = "Learn about animal diets and behavior during feeding time", TicketPrice = 20m, ImageFileName = "HI" }
 
 
                );

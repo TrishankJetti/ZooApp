@@ -26,7 +26,14 @@ namespace ZooApp.Models
         [Range(5, double.MaxValue, ErrorMessage = "Ticket price must be above $5.")]
         public decimal TicketPrice { get; set; }
 
+        // Property to store the file name
+        public string ImageFileName { get; set; }
 
-        
+        // Property to store the uploaded file (not mapped to the database)
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
+
+
+
     }
 }
