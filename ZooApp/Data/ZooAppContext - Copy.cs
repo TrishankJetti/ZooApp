@@ -14,11 +14,14 @@ namespace ZooApp.data
     public class ZooAppContext : IdentityDbContext<IdentityUser>
     {
 
-        public ZooAppContext(DbContextOptions<ZooAppContext> options)
-            : base(options)
+        public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         {
+            public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+                : base(options)
+            {
+            }
         }
- 
+
 
         public DbSet<ZooApp.Models.Event> Event { get; set; } = default!;
 
@@ -62,13 +65,62 @@ namespace ZooApp.data
 
 
 
+            // Define ApplicationUser properties
+            modelBuilder.Entity<ApplicationUser>(entity =>
+            {
+                entity.Property(e => e.FirstName).HasMaxLength(100);
+                entity.Property(e => e.LastName).HasMaxLength(100);
+            });
+
+            // Seed roles
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole { Id = "1", Name = "Employee", NormalizedName = "EMPLOYEE" },
+                new IdentityRole { Id = "2", Name = "Admin", NormalizedName = "ADMIN" }
+            );
+
+            // Seed users
+            var hasher = new PasswordHasher<ApplicationUser>();
+            modelBuilder.Entity<ApplicationUser>().HasData(
+                new ApplicationUser
+                {
+                    Id = "1",
+                    UserName = "employee1@example.com",
+                    NormalizedUserName = "EMPLOYEE1@EXAMPLE.COM",
+                    Email = "employee1@example.com",
+                    NormalizedEmail = "EMPLOYEE1@EXAMPLE.COM",
+                    EmailConfirmed = true,
+                    FirstName = "John",
+                    LastName = "Doe",
+                    PasswordHash = hasher.HashPassword(null, "EmployeePassword123")
+                },
+                new ApplicationUser
+                {
+                    Id = "2",
+                    UserName = "admin1@example.com",
+                    NormalizedUserName = "ADMIN1@EXAMPLE.COM",
+                    Email = "admin1@example.com",
+                    NormalizedEmail = "ADMIN1@EXAMPLE.COM",
+                    EmailConfirmed = true,
+                    FirstName = "Jane",
+                    LastName = "Smith",
+                    PasswordHash = hasher.HashPassword(null, "AdminPassword123")
+                }
+            );
+
+            // Seed user roles
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string> { RoleId = "1", UserId = "1" },
+                new IdentityUserRole<string> { RoleId = "2", UserId = "2" }
+            );
+
+
             // Seeding data for the Event table
             modelBuilder.Entity<Event>().HasData(
-                new Event { EventId = 1, Name = "Zoo Safari", Date = DateTime.Now.AddDays(10), Description = "Guided safari tour through the zoo", TicketPrice = 25m },
-               new Event { EventId = 2, Name = "Wildlife Conservation Talk", Date = DateTime.Now.AddDays(17), Description = "Educational talk on wildlife conservation", TicketPrice = 10m },
-              new Event { EventId = 3, Name = "Night at the Zoo", Date = DateTime.Now.AddDays(25), Description = "Experience the zoo after dark with special activities and tours", TicketPrice = 30m },
-             new Event { EventId = 4, Name = "Bird Watching Tour", Date = DateTime.Now.AddDays(30), Description = "Guided tour focusing on observing various bird species in the zoo", TicketPrice = 15m },
-                new Event { EventId = 5, Name = "Animal Feeding Demonstration", Date = DateTime.Now.AddDays(40), Description = "Learn about animal diets and behavior during feeding time", TicketPrice = 20m }
+                new Event { EventId = 1, Name = "Zoo Safari", Date = DateTime.Now.AddDays(10), Description = "Guided safari tour through the zoo", TicketPrice = 25m , ImageFileName="HI" },
+               new Event { EventId = 2, Name = "Wildlife Conservation Talk", Date = DateTime.Now.AddDays(17), Description = "Educational talk on wildlife conservation", TicketPrice = 10m , ImageFileName = "HI" },
+              new Event { EventId = 3, Name = "Night at the Zoo", Date = DateTime.Now.AddDays(25), Description = "Experience the zoo after dark with special activities and tours", TicketPrice = 30m, ImageFileName = "HI" },
+             new Event { EventId = 4, Name = "Bird Watching Tour", Date = DateTime.Now.AddDays(30), Description = "Guided tour focusing on observing various bird species in the zoo", TicketPrice = 15m, ImageFileName = "HI" },
+                new Event { EventId = 5, Name = "Animal Feeding Demonstration", Date = DateTime.Now.AddDays(40), Description = "Learn about animal diets and behavior during feeding time", TicketPrice = 20m, ImageFileName="HI" }
 
 
                );

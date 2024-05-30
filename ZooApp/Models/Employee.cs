@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZooApp.Models
 {
@@ -31,6 +32,8 @@ namespace ZooApp.Models
         public Enclosure? Enclosure { get; set; }
 
         public ICollection<AnimalEmployee> AnimalEmployees { get; set; }
+
+       
 
     }
 

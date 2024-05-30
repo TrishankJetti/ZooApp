@@ -4,35 +4,54 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit Event</h1>
 
 <h4>Event</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="EventId" />
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <input asp-for="Description" class="form-control"></input>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="TicketPrice" class="control-label"></label>
                 <input asp-for="TicketPrice" class="form-control" />
                 <span asp-validation-for="TicketPrice" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="ImageFileName" class="control-label">Current Image</label>
+                @if (Model.ImageFileName != null)
+                {
+                    <img src="~/images/@Model.ImageFileName" alt="@Model.Name" class="img-thumbnail" style="max-width: 100px; height: 100px;" />
+                }
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label">Change Image</label>
+                <input type="file" asp-for="ImageFile" class="form-control" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -45,5 +64,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

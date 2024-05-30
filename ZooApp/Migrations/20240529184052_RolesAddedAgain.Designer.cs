@@ -12,8 +12,8 @@ using ZooApp.data;
 namespace ZooApp.Migrations
 {
     [DbContext(typeof(ZooAppContext))]
-    [Migration("20240509230550_identity")]
-    partial class identity
+    [Migration("20240529184052_RolesAddedAgain")]
+    partial class RolesAddedAgain
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,20 @@ namespace ZooApp.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -88,6 +102,11 @@ namespace ZooApp.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -140,6 +159,10 @@ namespace ZooApp.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -204,6 +227,18 @@ namespace ZooApp.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "1",
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            UserId = "2",
+                            RoleId = "2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -608,7 +643,7 @@ namespace ZooApp.Migrations
                         {
                             EmployeeId = 1,
                             EnclosureId = 1,
-                            HireDate = new DateTime(2024, 4, 10, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3495),
+                            HireDate = new DateTime(2024, 4, 30, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6229),
                             Name = "John Doe",
                             Phone = "123-456-7890",
                             Role = 0,
@@ -618,7 +653,7 @@ namespace ZooApp.Migrations
                         {
                             EmployeeId = 2,
                             EnclosureId = 2,
-                            HireDate = new DateTime(2024, 4, 20, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3505),
+                            HireDate = new DateTime(2024, 5, 10, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6232),
                             Name = "Jane Smith",
                             Phone = "987-654-3210",
                             Role = 1,
@@ -628,7 +663,7 @@ namespace ZooApp.Migrations
                         {
                             EmployeeId = 3,
                             EnclosureId = 3,
-                            HireDate = new DateTime(2024, 4, 15, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3510),
+                            HireDate = new DateTime(2024, 5, 5, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6235),
                             Name = "Michael Johnson",
                             Phone = "111-222-3333",
                             Role = 0,
@@ -638,7 +673,7 @@ namespace ZooApp.Migrations
                         {
                             EmployeeId = 4,
                             EnclosureId = 4,
-                            HireDate = new DateTime(2024, 4, 25, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3514),
+                            HireDate = new DateTime(2024, 5, 15, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6237),
                             Name = "Emily Wilson",
                             Phone = "444-555-6666",
                             Role = 1,
@@ -648,7 +683,7 @@ namespace ZooApp.Migrations
                         {
                             EmployeeId = 5,
                             EnclosureId = 5,
-                            HireDate = new DateTime(2024, 4, 12, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3519),
+                            HireDate = new DateTime(2024, 5, 2, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6239),
                             Name = "Christopher Lee",
                             Phone = "777-888-9999",
                             Role = 0,
@@ -658,7 +693,7 @@ namespace ZooApp.Migrations
                         {
                             EmployeeId = 6,
                             EnclosureId = 6,
-                            HireDate = new DateTime(2024, 4, 30, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3524),
+                            HireDate = new DateTime(2024, 5, 20, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6241),
                             Name = "Jessica Brown",
                             Phone = "999-888-7777",
                             Role = 1,
@@ -752,6 +787,10 @@ namespace ZooApp.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("ImageFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -767,40 +806,45 @@ namespace ZooApp.Migrations
                         new
                         {
                             EventId = 1,
-                            Date = new DateTime(2024, 5, 20, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3125),
+                            Date = new DateTime(2024, 6, 9, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6124),
                             Description = "Guided safari tour through the zoo",
+                            ImageFileName = "HI",
                             Name = "Zoo Safari",
                             TicketPrice = 25m
                         },
                         new
                         {
                             EventId = 2,
-                            Date = new DateTime(2024, 5, 27, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3205),
+                            Date = new DateTime(2024, 6, 16, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6183),
                             Description = "Educational talk on wildlife conservation",
+                            ImageFileName = "HI",
                             Name = "Wildlife Conservation Talk",
                             TicketPrice = 10m
                         },
                         new
                         {
                             EventId = 3,
-                            Date = new DateTime(2024, 6, 4, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3211),
+                            Date = new DateTime(2024, 6, 24, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6186),
                             Description = "Experience the zoo after dark with special activities and tours",
+                            ImageFileName = "HI",
                             Name = "Night at the Zoo",
                             TicketPrice = 30m
                         },
                         new
                         {
                             EventId = 4,
-                            Date = new DateTime(2024, 6, 9, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3216),
+                            Date = new DateTime(2024, 6, 29, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6188),
                             Description = "Guided tour focusing on observing various bird species in the zoo",
+                            ImageFileName = "HI",
                             Name = "Bird Watching Tour",
                             TicketPrice = 15m
                         },
                         new
                         {
                             EventId = 5,
-                            Date = new DateTime(2024, 6, 19, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3221),
+                            Date = new DateTime(2024, 7, 9, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6190),
                             Description = "Learn about animal diets and behavior during feeding time",
+                            ImageFileName = "HI",
                             Name = "Animal Feeding Demonstration",
                             TicketPrice = 20m
                         });
@@ -835,119 +879,119 @@ namespace ZooApp.Migrations
                         new
                         {
                             TicketId = 1,
-                            DateOfPurchase = new DateTime(2024, 5, 8, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3831),
+                            DateOfPurchase = new DateTime(2024, 5, 28, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6459),
                             EventId = 1,
                             VisitorId = 1
                         },
                         new
                         {
                             TicketId = 2,
-                            DateOfPurchase = new DateTime(2024, 5, 9, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3837),
+                            DateOfPurchase = new DateTime(2024, 5, 29, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6461),
                             EventId = 2,
                             VisitorId = 2
                         },
                         new
                         {
                             TicketId = 3,
-                            DateOfPurchase = new DateTime(2024, 5, 7, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3842),
+                            DateOfPurchase = new DateTime(2024, 5, 27, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6463),
                             EventId = 1,
                             VisitorId = 3
                         },
                         new
                         {
                             TicketId = 4,
-                            DateOfPurchase = new DateTime(2024, 5, 6, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3846),
+                            DateOfPurchase = new DateTime(2024, 5, 26, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6464),
                             EventId = 2,
                             VisitorId = 4
                         },
                         new
                         {
                             TicketId = 5,
-                            DateOfPurchase = new DateTime(2024, 5, 5, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3851),
+                            DateOfPurchase = new DateTime(2024, 5, 25, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6466),
                             EventId = 1,
                             VisitorId = 5
                         },
                         new
                         {
                             TicketId = 6,
-                            DateOfPurchase = new DateTime(2024, 5, 4, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3854),
+                            DateOfPurchase = new DateTime(2024, 5, 24, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6467),
                             EventId = 2,
                             VisitorId = 6
                         },
                         new
                         {
                             TicketId = 7,
-                            DateOfPurchase = new DateTime(2024, 5, 3, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3858),
+                            DateOfPurchase = new DateTime(2024, 5, 23, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6469),
                             EventId = 1,
                             VisitorId = 7
                         },
                         new
                         {
                             TicketId = 8,
-                            DateOfPurchase = new DateTime(2024, 5, 2, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3862),
+                            DateOfPurchase = new DateTime(2024, 5, 22, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6471),
                             EventId = 2,
                             VisitorId = 8
                         },
                         new
                         {
                             TicketId = 9,
-                            DateOfPurchase = new DateTime(2024, 5, 1, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3866),
+                            DateOfPurchase = new DateTime(2024, 5, 21, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6473),
                             EventId = 1,
                             VisitorId = 9
                         },
                         new
                         {
                             TicketId = 10,
-                            DateOfPurchase = new DateTime(2024, 4, 30, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3869),
+                            DateOfPurchase = new DateTime(2024, 5, 20, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6475),
                             EventId = 2,
                             VisitorId = 10
                         },
                         new
                         {
                             TicketId = 11,
-                            DateOfPurchase = new DateTime(2024, 4, 29, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3872),
+                            DateOfPurchase = new DateTime(2024, 5, 19, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6476),
                             EventId = 1,
                             VisitorId = 11
                         },
                         new
                         {
                             TicketId = 12,
-                            DateOfPurchase = new DateTime(2024, 4, 28, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3876),
+                            DateOfPurchase = new DateTime(2024, 5, 18, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6478),
                             EventId = 2,
                             VisitorId = 12
                         },
                         new
                         {
                             TicketId = 13,
-                            DateOfPurchase = new DateTime(2024, 4, 27, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3879),
+                            DateOfPurchase = new DateTime(2024, 5, 17, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6479),
                             EventId = 1,
                             VisitorId = 13
                         },
                         new
                         {
                             TicketId = 14,
-                            DateOfPurchase = new DateTime(2024, 4, 26, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3883),
+                            DateOfPurchase = new DateTime(2024, 5, 16, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6481),
                             EventId = 2,
                             VisitorId = 14
                         },
                         new
                         {
                             TicketId = 15,
-                            DateOfPurchase = new DateTime(2024, 4, 25, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3886),
+                            DateOfPurchase = new DateTime(2024, 5, 15, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6482),
                             EventId = 1,
                             VisitorId = 15
                         },
                         new
                         {
                             TicketId = 16,
-                            DateOfPurchase = new DateTime(2024, 4, 24, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3889),
+                            DateOfPurchase = new DateTime(2024, 5, 14, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6484),
                             EventId = 2,
                             VisitorId = 16
                         },
                         new
                         {
                             TicketId = 17,
-                            DateOfPurchase = new DateTime(2024, 4, 23, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(3893),
+                            DateOfPurchase = new DateTime(2024, 5, 13, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6485),
                             EventId = 1,
                             VisitorId = 17
                         });
@@ -966,6 +1010,7 @@ namespace ZooApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -1275,71 +1320,126 @@ namespace ZooApp.Migrations
                         {
                             VisitorLogId = 1,
                             Comments = "Enjoyed the zoo!",
-                            DateVisited = new DateTime(2024, 5, 8, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(4119),
+                            DateVisited = new DateTime(2024, 5, 28, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6631),
                             VisitorId = 1
                         },
                         new
                         {
                             VisitorLogId = 2,
                             Comments = "Great experience!",
-                            DateVisited = new DateTime(2024, 5, 9, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(4126),
+                            DateVisited = new DateTime(2024, 5, 29, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6633),
                             VisitorId = 2
                         },
                         new
                         {
                             VisitorLogId = 3,
                             Comments = "Had a wonderful time with family!",
-                            DateVisited = new DateTime(2024, 5, 7, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(4131),
+                            DateVisited = new DateTime(2024, 5, 27, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6635),
                             VisitorId = 3
                         },
                         new
                         {
                             VisitorLogId = 4,
                             Comments = "Educational and fun!",
-                            DateVisited = new DateTime(2024, 5, 6, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(4135),
+                            DateVisited = new DateTime(2024, 5, 26, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6637),
                             VisitorId = 4
                         },
                         new
                         {
                             VisitorLogId = 5,
                             Comments = "Loved the animal exhibits!",
-                            DateVisited = new DateTime(2024, 5, 5, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(4138),
+                            DateVisited = new DateTime(2024, 5, 25, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6639),
                             VisitorId = 5
                         },
                         new
                         {
                             VisitorLogId = 6,
                             Comments = "Amazing zoo experience!",
-                            DateVisited = new DateTime(2024, 5, 4, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(4142),
+                            DateVisited = new DateTime(2024, 5, 24, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6640),
                             VisitorId = 6
                         },
                         new
                         {
                             VisitorLogId = 7,
                             Comments = "Fantastic day out!",
-                            DateVisited = new DateTime(2024, 5, 3, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(4146),
+                            DateVisited = new DateTime(2024, 5, 23, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6642),
                             VisitorId = 7
                         },
                         new
                         {
                             VisitorLogId = 8,
                             Comments = "Will visit again soon!",
-                            DateVisited = new DateTime(2024, 5, 2, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(4149),
+                            DateVisited = new DateTime(2024, 5, 22, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6644),
                             VisitorId = 8
                         },
                         new
                         {
                             VisitorLogId = 9,
                             Comments = "Kids loved the animals!",
-                            DateVisited = new DateTime(2024, 5, 1, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(4153),
+                            DateVisited = new DateTime(2024, 5, 21, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6645),
                             VisitorId = 9
                         },
                         new
                         {
                             VisitorLogId = 10,
                             Comments = "Highly recommended!",
-                            DateVisited = new DateTime(2024, 4, 30, 11, 5, 48, 794, DateTimeKind.Local).AddTicks(4157),
+                            DateVisited = new DateTime(2024, 5, 20, 6, 40, 51, 776, DateTimeKind.Local).AddTicks(6647),
                             VisitorId = 10
+                        });
+                });
+
+            modelBuilder.Entity("ZooApp.Data.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "4e307af7-afe2-43cb-b13b-d99291cc195f",
+                            Email = "employee1@example.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "EMPLOYEE1@EXAMPLE.COM",
+                            NormalizedUserName = "EMPLOYEE1@EXAMPLE.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJCV1ywVPg3VgQknLs1mS/E8/0S2H/vE0OneBx6shSSNWkuf+hD7wq3xKH8mlX7vRg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "983f5ef9-a746-4326-857e-ba281f54f772",
+                            TwoFactorEnabled = false,
+                            UserName = "employee1@example.com",
+                            FirstName = "John",
+                            LastName = "Doe"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "8a0802cb-72fb-492a-8349-4a999f46e925",
+                            Email = "admin1@example.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN1@EXAMPLE.COM",
+                            NormalizedUserName = "ADMIN1@EXAMPLE.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMMqKVYk6OBnXOs27/lt/WwAmWe8pNxjXP4UG9j6nsxoHXFGgiv9jLOZZ6txo96cQg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "fcd62f42-bbd1-4cfe-9e68-64412169f622",
+                            TwoFactorEnabled = false,
+                            UserName = "admin1@example.com",
+                            FirstName = "Jane",
+                            LastName = "Smith"
                         });
                 });
 

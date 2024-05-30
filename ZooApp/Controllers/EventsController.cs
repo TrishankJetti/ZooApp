@@ -15,12 +15,12 @@ namespace ZooApp.Controllers
     public class EventsController : Controller
     {
         private readonly ZooAppContext _context;
-       
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public EventsController(ZooAppContext context )
+        public EventsController(ZooAppContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
-          
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Events
@@ -86,18 +86,26 @@ namespace ZooApp.Controllers
         {
             return View();
         }
-
         // POST: Events/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Create([Bind("EventId,Date,Name,Description,TicketPrice,ImageFile")] Event @event)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                
+                // Handle file upload
+                if (@event.ImageFile != null)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(@event.ImageFile.FileName);
+                    string extension = Path.GetExtension(@event.ImageFile.FileName);
+                    @event.ImageFileName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    string path = Path.Combine(_hostEnvironment.WebRootPath, "images", fileName);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await @event.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
 
                 _context.Add(@event);
                 await _context.SaveChangesAsync();
@@ -105,7 +113,6 @@ namespace ZooApp.Controllers
             }
             return View(@event);
         }
-
         // GET: Events/Edit/5
         [Authorize(Roles = "Admin , Employee")]
         public async Task<IActionResult> Edit(int? id)
@@ -124,12 +131,10 @@ namespace ZooApp.Controllers
         }
 
         // POST: Events/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin , Employee")]
-        public async Task<IActionResult> Edit(int id, [Bind("EventId,Name,Date,Description,TicketPrice")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("EventId,Name,Date,Description,TicketPrice,ImageFileName,ImageFile")] Event @event)
         {
             if (id != @event.EventId)
             {
@@ -140,6 +145,19 @@ namespace ZooApp.Controllers
             {
                 try
                 {
+                    // Handle file upload
+                    if (@event.ImageFile != null)
+                    {
+                        string fileName = Path.GetFileNameWithoutExtension(@event.ImageFile.FileName);
+                        string extension = Path.GetExtension(@event.ImageFile.FileName);
+                        @event.ImageFileName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                        string path = Path.Combine(_hostEnvironment.WebRootPath, "images", fileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await @event.ImageFile.CopyToAsync(fileStream);
+                        }
+                    }
+
                     _context.Update(@event);
                     await _context.SaveChangesAsync();
                 }
@@ -158,6 +176,7 @@ namespace ZooApp.Controllers
             }
             return View(@event);
         }
+
 
         // GET: Events/Delete/5
         [Authorize(Roles = "Admin , Employee")]
