@@ -171,6 +171,7 @@
            asp-route-pageNumber="@(Model.PageIndex - 1)"
            asp-route-currentFilter="@ViewData["CurrentFilter"]"
            asp-route-dietType="@ViewData["DietTypeFilter"]"
+           
            class="btn btn-primary @prevDisabled">
             Previous
         </a>
@@ -180,10 +181,11 @@
            asp-route-pageNumber="@(Model.PageIndex + 1)"
            asp-route-currentFilter="@ViewData["CurrentFilter"]"
            asp-route-dietType="@ViewData["DietTypeFilter"]"
+         
            class="btn btn-primary @nextDisabled">
             Next
         </a>
-
+        
         <div class="row">
             @foreach (var item in Model)
             {
@@ -209,6 +211,8 @@
                             <p><strong>Age:</strong> @Html.DisplayFor(modelItem => item.Age)</p>
                             <p><strong>Sex:</strong> @Html.DisplayFor(modelItem => item.Sex)</p>
                             <p><strong>Diet:</strong> @Html.DisplayFor(modelItem => item.Diet)</p>
+                            <p><strong>Employee:</strong> @(item.Employee != null ? item.Employee.Name : "No employee assigned")</p>
+
                             <div class="action-links">
                                 @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                                 {
@@ -239,10 +243,19 @@
                 
             }
 
-            <br />
+          
            
         </div>
     </div>
 </body>
+<br/>
+<br />
+<br/>
+<footer>
+    <div class="container">
+        <br />
+        
+    </div>
+</footer>
 
 </html>

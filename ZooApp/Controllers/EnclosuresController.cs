@@ -19,6 +19,10 @@ namespace ZooApp.Controllers
         {
             _context = context;
         }
+        private bool EnclosureExists(int id)
+        {
+            return _context.Enclosure.Any(e => e.EnclosureId == id);
+        }
 
         // GET: Enclosures
         public async Task<IActionResult> Index(string searchString)
@@ -157,18 +161,19 @@ namespace ZooApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var enclosure = await _context.Enclosure.FindAsync(id);
-            if (enclosure != null)
+            if (enclosure == null)
             {
-                _context.Enclosure.Remove(enclosure);
+                return NotFound();
             }
 
+            // Remove related animals
+            var relatedAnimals = _context.Animal.Where(a => a.EnclosureId == id);
+            _context.Animal.RemoveRange(relatedAnimals);
+
+            _context.Enclosure.Remove(enclosure);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EnclosureExists(int id)
-        {
-            return _context.Enclosure.Any(e => e.EnclosureId == id);
-        }
     }
 }

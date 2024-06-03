@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ZooApp.Models;
-using ZooApp.data;
-using Microsoft.Data.SqlClient;
+using ZooApp.Data;
 using Microsoft.AspNetCore.Authorization;
-using ZooApp;
+using ZooApp.data;
 
 namespace ZooApp.Controllers
 {
@@ -20,25 +19,20 @@ namespace ZooApp.Controllers
         public AnimalsController(ZooAppContext context)
         {
             _context = context;
+            
         }
 
         // GET: Animals
-        public IActionResult ChangeColor()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> Index(string searchString, int? searchId , String SortOrder , String dietType , int? Age, int? pageNumber, string currentFilter, string currentDietType)
+        public async Task<IActionResult> Index(string searchString, int? searchId, string sortOrder, string dietType, int? age, int? pageNumber, string currentFilter, string currentDietType)
         {
             ViewData["AnimalNameFilter"] = searchString;
-            ViewData["CurrentSort"] = SortOrder;
+            ViewData["CurrentSort"] = sortOrder;
 
             ViewData["AnimalIdFilter"] = searchId;
-            ViewData["DietTypeFilter"] = string.IsNullOrEmpty(dietType) ? currentDietType : dietType; // Maintain current diet type if dietType is null or empty
-            ViewData["AnimalAgeSorter"] = SortOrder == "Age" ? "age_desc" : "Age";
-            ViewData["AnimalNameSort"] = String.IsNullOrEmpty(SortOrder) ? "name_desc" : "";
-            //This creates a View for the Data, called AnimalNameSort. Which then uses the method IsNullOrEmpty to make sure that string isn't 
-            //null and then runs the SortOrder Switch case which then runs the case: name_desc and then the default case would just leave the sorting on default keeping it ascending order.
+            ViewData["DietTypeFilter"] = string.IsNullOrEmpty(dietType) ? currentDietType : dietType;
+            ViewData["AnimalAgeSorter"] = sortOrder == "Age" ? "age_desc" : "Age";
+            ViewData["AnimalNameSort"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -46,67 +40,45 @@ namespace ZooApp.Controllers
             else
             {
                 searchString = currentFilter;
-                
             }
 
+            var animals = from a in _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure) select a;
 
-            var animals = from a in _context.Animal select a;
 
-            //This is the sorting for the Name field where if clicked, it sorts name in descending order.
-           //I used a Switch instead of an If , else statement as this will sue specific values rather than ranges hence I am using a Switch statement.
-            switch (SortOrder)
+            switch (sortOrder)
             {
                 case "name_desc":
                     animals = animals.OrderByDescending(a => a.Name);
                     break;
-
-                   
                 case "age_desc":
                     animals = animals.OrderByDescending(a => a.Age);
                     break;
-
                 case "Age":
-                    animals = animals.OrderBy(animals => animals.Age);
+                    animals = animals.OrderBy(a => a.Age);
                     break;
-
                 default:
                     animals = animals.OrderBy(a => a.Name);
                     break;
-
-             
             }
-            
 
-
-
-            //This code over here will then Check if the provided string by the user is not NULL
-            //And will return Animals with the exact name that user enters or Animals with for example: "a" in their name.
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 animals = animals.Where(a => a.Name.Contains(searchString));
             }
-            
-            //This code will return animals with a certain AnimalID that the user enters. 
+
             if (searchId.HasValue)
             {
                 animals = animals.Where(a => a.AnimalId == searchId.Value);
             }
 
-            if (!String.IsNullOrEmpty(dietType))
+            if (!string.IsNullOrEmpty(dietType))
             {
                 animals = animals.Where(a => a.Diet == Enum.Parse<DietType>(dietType));
             }
 
-
-            
-            
-
-            var zooAppContext = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure);
             int pageSize = 3;
             return View(await PaginatedList<Animal>.CreateAsync(animals.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-
-
 
         // GET: Animals/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -129,7 +101,6 @@ namespace ZooApp.Controllers
         }
 
         // GET: Animals/Create
-
         [Authorize(Roles = "Admin,Employee")]
         public IActionResult Create()
         {
@@ -138,31 +109,27 @@ namespace ZooApp.Controllers
             return View();
         }
 
-
         // POST: Animals/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create([Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId")] Animal animal)
         {
-            if (!ModelState.IsValid)  // Ensure this condition is correct
+            if (!ModelState.IsValid)
             {
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            // If model state is not valid, reload the form with validation errors
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
             ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
             return View(animal);
         }
 
-
-
         // GET: Animals/Edit/5
         [Authorize(Roles = "Admin,Employee")]
-           public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -215,10 +182,9 @@ namespace ZooApp.Controllers
             return View(animal);
         }
 
-
         // GET: Animals/Delete/5
         [Authorize(Roles = "Admin,Employee")]
-         public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -238,9 +204,9 @@ namespace ZooApp.Controllers
         }
 
         // POST: Animals/Delete/5
-        [Authorize(Roles = "Admin,Employee")]
-         [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var animal = await _context.Animal.FindAsync(id);
@@ -257,8 +223,5 @@ namespace ZooApp.Controllers
         {
             return _context.Animal.Any(e => e.AnimalId == id);
         }
-
-        
-
     }
 }

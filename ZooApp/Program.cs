@@ -1,31 +1,36 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using ZooApp.data;
+using ZooApp.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using System.Security.Claims;
+using ZooApp.data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ZooAppContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ZooAppContext") ?? throw new InvalidOperationException("Connection string 'ZooAppContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ZooAppContext")
+    ?? throw new InvalidOperationException("Connection string 'ZooAppContext' not found.")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedAccount = false; // USers do not have to confrima registration with this "false" in place.
 })
 .AddDefaultTokenProviders()
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ZooAppContext>();
 
-// Add services to the container.
+
+
+// Add services to the container 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -34,10 +39,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); // Ensure authentication is used
 app.UseAuthorization();
 
 app.MapRazorPages();
-
 
 app.MapControllerRoute(
     name: "default",

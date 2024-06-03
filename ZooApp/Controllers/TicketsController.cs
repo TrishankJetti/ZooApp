@@ -52,27 +52,25 @@ namespace ZooApp.Controllers
         [Authorize(Roles = "Admin , Employee")]
         public IActionResult Create()
         {
-            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "EventId");
-            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "VisitorId");
+            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name"); // Use Event Name
+            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "Name"); // Use Visitor Name
             return View();
         }
 
         // POST: Tickets/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize(Roles = "Admin , Employee")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TicketId,VisitorId,DateOfPurchase,EventId")] Ticket ticket)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "EventId", ticket.EventId);
-            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "VisitorId", ticket.VisitorId);
+            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name", ticket.EventId); // Use Event Name
+            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "Name", ticket.VisitorId); // Use Visitor Name
             return View(ticket);
         }
 
@@ -90,14 +88,12 @@ namespace ZooApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "EventId", ticket.EventId);
-            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "VisitorId", ticket.VisitorId);
+            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name", ticket.EventId); // Use Event Name
+            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "Name", ticket.VisitorId); // Use Visitor Name
             return View(ticket);
         }
 
         // POST: Tickets/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin , Employee")]
@@ -108,7 +104,7 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -128,8 +124,8 @@ namespace ZooApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "EventId", ticket.EventId);
-            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "VisitorId", ticket.VisitorId);
+            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name", ticket.EventId); // Use Event Name
+            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "Name", ticket.VisitorId); // Use Visitor Name
             return View(ticket);
         }
 

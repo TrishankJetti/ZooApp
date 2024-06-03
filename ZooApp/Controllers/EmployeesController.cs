@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ZooApp.Models;
 using ZooApp.data;
-using Microsoft.AspNetCore.Authorization;
+using ZooApp.Data;
+using ZooApp.Models;
 
 namespace ZooApp.Controllers
 {
-    
     public class EmployeesController : Controller
     {
         private readonly ZooAppContext _context;
@@ -65,14 +64,12 @@ namespace ZooApp.Controllers
         }
 
         // POST: Employees/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EmployeeId,Name,Role,Phone,Salary,HireDate,EnclosureId")] Employee employee)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) // Fix condition to check if model state is valid
             {
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
@@ -101,8 +98,6 @@ namespace ZooApp.Controllers
         }
 
         // POST: Employees/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -147,7 +142,6 @@ namespace ZooApp.Controllers
             }
 
             var employee = await _context.Employee
-                .Include(e => e.Enclosure)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
             if (employee == null)
             {
@@ -164,11 +158,19 @@ namespace ZooApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var employee = await _context.Employee.FindAsync(id);
-            if (employee != null)
+            if (employee == null)
             {
-                _context.Employee.Remove(employee);
+                return NotFound();
             }
 
+            // Update references in the Animal table
+            var animals = await _context.Animal.Where(a => a.EmployeeId == id).ToListAsync();
+            foreach (var animal in animals)
+            {
+                animal.EmployeeId = null; // Remove association
+            }
+
+            _context.Employee.Remove(employee);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

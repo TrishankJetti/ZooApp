@@ -1,45 +1,58 @@
 ﻿@model ZooApp.Models.Ticket
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Ticket";
 }
 <link rel="stylesheet" href="~/css/site.css" />
-<h1>Create</h1>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-SZXxX4whJ79/gErwcOYfzME0L7mUlj6UeS8eZ8BcDq3jtDY/LUuvwhU8b1eij3M" crossorigin="anonymous">
 
-<h4>Ticket</h4>
-
-
-
+<h1 class="text-center">Create a New Ticket</h1>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="VisitorId" class="control-label"></label>
-                <select asp-for="VisitorId" class ="form-control" asp-items="ViewBag.VisitorId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateOfPurchase" class="control-label"></label>
-                <input asp-for="DateOfPurchase" class="form-control" />
-                <span asp-validation-for="DateOfPurchase" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EventId" class="control-label"></label>
-                <select asp-for="EventId" class ="form-control" asp-items="ViewBag.EventId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="form-group">
+                    <label asp-for="VisitorId" class="control-label"><i class="fas fa-user"></i> Visitor</label>
+                    <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DateOfPurchase" class="control-label"><i class="fas fa-calendar-alt"></i> Date of Purchase</label>
+                    <input asp-for="DateOfPurchase" class="form-control" placeholder="yyyy-mm-dd" />
+                    <span asp-validation-for="DateOfPurchase" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EventId" class="control-label"><i class="fas fa-calendar-check"></i> Event</label>
+                    <select asp-for="EventId" class="form-control" asp-items="ViewBag.EventId"></select>
+                </div>
+                <div class="form-group text-center">
+                    <input type="submit" value="Create Ticket" class="btn btn-primary btn-lg" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-6 text-center">
+            <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <!-- Optional: Include the date picker library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            flatpickr("input[asp-for='DateOfPurchase']", {
+                dateFormat: "Y-m-d",
+            });
+        });
+    </script>
 }

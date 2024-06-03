@@ -10,53 +10,54 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 navbar-Background">
+        <nav class="navbar navbar-expand-sm navbar-light bg-dark mb-3">
             <div class="container-fluid">
-
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <a class="nav-link text-light home-icon" href="@Url.Action("Index", "Home")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                        <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
+                    </svg>
+                </a>
+                <a class="nav-link text-light privacy-icon" asp-area="" asp-controller="Home" asp-action="Privacy">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-shield-fill-check" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793z" />
+                    </svg>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size:35px">
                         <li class="nav-item">
-                            <a class="nav-link text-white home-icon" asp-area="" asp-controller="Home" asp-action="Index">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
-                                    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
-                                </svg>
-                            </a>
+                            <a class="nav-link text-light" href="@Url.Action("Index", "Animals")">Animals</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-shield-fill-check other-icon" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793z" />
-                                </svg>
-                            </a>
+                            <a class="nav-link text-light" href="@Url.Action("Index", "Employees")">Our Staff</a>
                         </li>
-
-                        <li>
-                            <a class="nav-link text-light" asp-area="" asp-controller="Animals" asp-action="Index">Animals</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("Index", "Visitors")">Visitors</a>
                         </li>
-
-                        <li>
-                            <a class="nav-link text-light" asp-area="" asp-controller="Employees" asp-action="Index">Our Staff</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("Index", "Tickets")">Tickets</a>
                         </li>
-
-                        <li>
-                            <a class="nav-link text-light" asp-area="" asp-controller="Visitors" asp-action="Index">Visitors</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("Index", "Events")">Events</a>
                         </li>
-                        <li>
-                            <a class="nav-link text-light" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("Index", "VisitorLogs")">Comments</a>
                         </li>
-                        <li>
-                            <a class="nav-link text-light" asp-area="" asp-controller="Events" asp-action="Index">Events</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("Index", "Enclosures")">Enclosures</a>
                         </li>
-                        <li>
-                            <a class="nav-link text-light" asp-area="" asp-controller="VisitorLogs" asp-action="Index">Comments</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-light" asp-area="" asp-controller="Enclosures" asp-action="Index">Enclosures</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("Quiz")">Quizes</a>
                         </li>
                     </ul>
-                    <partial name="_LoginPartial.cshtml" />
+                       
+                   
                 </div>
+                 <div>
+                            <partial name="_LoginPartial" />
+                        </div>
             </div>
         </nav>
     </header>
@@ -66,9 +67,9 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted mt-5">
-        <div class="container text-center">
-            &copy; 2024 - ZooApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer bg-dark text-muted mt-5">
+        <div class="container text-center py-3">
+            &copy; 2024 - ZooApp - <a class="text-light" href="@Url.Action("Privacy", "Home")">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -76,30 +77,46 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 <style>
     .navbar-Background {
         background-color: darkgrey;
     }
 
     .nav-item {
-        font-size: 1.25rem; /* Increased text size */
+        font-size:19px; /* Increased text size */
     }
 
     .nav-link {
-        font-size: 1.25rem; /* Increased text size */
+        transition: font-size 0.3s ease, color 0.3s ease; /* Smooth transition for font size and color */
+        font-size: 19px;
+        color: lightgrey;
     }
+
+        .nav-link:hover {
+            font-size: 25px; /* Increased text size */
+            color: grey; /* Corrected 'color' spelling */
+        }
 
     .home-icon svg,
-    .other-icon svg {
+    .privacy-icon svg {
         width: 35px; /* Increased icon size */
         height: 35px; /* Increased icon size */
+        transition: transform 0.3s ease, fill 0.3s ease; /* Smooth transition for transform and fill */
     }
 
-    .home-icon:hover,
-    .other-icon:hover {
-        transform: scale(1.1);
+    .home-icon:hover svg,
+    .privacy-icon:hover svg {
+        transform: scale(1.2); /* Enlarges icon on hover */
+        fill: lightgrey; /* Changes icon color on hover */
     }
+
+    .footer {
+        padding: 12px 0;
+    }
+
+        .footer a {
+            color: inherit;
+            text-decoration: underline;
+        }
 </style>
-
 </html>

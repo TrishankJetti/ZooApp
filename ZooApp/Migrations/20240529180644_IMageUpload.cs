@@ -326,13 +326,13 @@ namespace ZooApp.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employee",
                         principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Animal_Enclosure_EnclosureId",
                         column: x => x.EnclosureId,
                         principalTable: "Enclosure",
                         principalColumn: "EnclosureId",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

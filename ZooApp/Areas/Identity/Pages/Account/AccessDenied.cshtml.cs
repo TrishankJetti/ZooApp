@@ -3,6 +3,7 @@
 #nullable disable
 
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ZooApp.Data;
 
 namespace ZooApp.Areas.Identity.Pages.Account
 {
