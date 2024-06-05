@@ -33,7 +33,14 @@ namespace ZooApp.Models
 
         public ICollection<AnimalEmployee> AnimalEmployees { get; set; }
 
-       
+        // Property to store the file name
+        public string ImageFileName { get; set; }
+
+        // Property to store the uploaded file (not mapped to the database)
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
+
+
 
     }
 

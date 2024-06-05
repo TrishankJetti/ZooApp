@@ -147,12 +147,12 @@ namespace ZooApp.data
 
             // Seeding data for the Employee table
             modelBuilder.Entity<Employee>().HasData(
-                  new Employee { EmployeeId = 1, Name = "John Doe", Role = RoleType.Zookeeper, Phone = "123-456-7890", Salary = 50000m, HireDate = DateTime.Now.AddDays(-30), EnclosureId = 1 }, 
-                new Employee { EmployeeId = 2, Name = "Jane Smith", Role = RoleType.Veterinarian, Phone = "987-654-3210", Salary = 70000m, HireDate = DateTime.Now.AddDays(-20), EnclosureId = 2 }, 
-                new Employee { EmployeeId = 3, Name = "Michael Johnson", Role = RoleType.Zookeeper, Phone = "111-222-3333", Salary = 55000m, HireDate = DateTime.Now.AddDays(-25), EnclosureId = 3 }, 
-                new Employee { EmployeeId = 4, Name = "Emily Wilson", Role = RoleType.Veterinarian, Phone = "444-555-6666", Salary = 72000m, HireDate = DateTime.Now.AddDays(-15), EnclosureId = 4 }, 
-                new Employee { EmployeeId = 5, Name = "Christopher Lee", Role = RoleType.Zookeeper, Phone = "777-888-9999", Salary = 52000m, HireDate = DateTime.Now.AddDays(-28), EnclosureId = 5 }, 
-                new Employee { EmployeeId = 6, Name = "Jessica Brown", Role = RoleType.Veterinarian, Phone = "999-888-7777", Salary = 73000m, HireDate = DateTime.Now.AddDays(-10), EnclosureId = 6 }
+                  new Employee { EmployeeId = 1, Name = "John Doe", Role = RoleType.Zookeeper, Phone = "123-456-7890", Salary = 50000m, HireDate = DateTime.Now.AddDays(-30), EnclosureId = 1, ImageFileName="Rob.jpg"}, 
+                new Employee { EmployeeId = 2, Name = "Jane Smith", Role = RoleType.Veterinarian, Phone = "987-654-3210", Salary = 70000m, HireDate = DateTime.Now.AddDays(-20), EnclosureId = 2, ImageFileName = "Rob.jpg" }, 
+                new Employee { EmployeeId = 3, Name = "Michael Johnson", Role = RoleType.Zookeeper, Phone = "111-222-3333", Salary = 55000m, HireDate = DateTime.Now.AddDays(-25), EnclosureId = 3, ImageFileName = "Rob.jpg" }, 
+                new Employee { EmployeeId = 4, Name = "Emily Wilson", Role = RoleType.Veterinarian, Phone = "444-555-6666", Salary = 72000m, HireDate = DateTime.Now.AddDays(-15), EnclosureId = 4, ImageFileName = "Rob.jpg" }, 
+                new Employee { EmployeeId = 5, Name = "Christopher Lee", Role = RoleType.Zookeeper, Phone = "777-888-9999", Salary = 52000m, HireDate = DateTime.Now.AddDays(-28), EnclosureId = 5, ImageFileName = "Rob.jpg" }, 
+                new Employee { EmployeeId = 6, Name = "Jessica Brown", Role = RoleType.Veterinarian, Phone = "999-888-7777", Salary = 73000m, HireDate = DateTime.Now.AddDays(-10), EnclosureId = 6, ImageFileName = "Rob.jpg" }
 
 
             );

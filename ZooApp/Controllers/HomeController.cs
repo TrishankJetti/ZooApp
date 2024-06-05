@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using ZooApp.Models;
 
@@ -6,6 +7,13 @@ namespace ZooApp.Controllers
 {
     public class HomeController : Controller
     {
+        public async Task<IActionResult> Quiz()
+        {
+
+
+            return View();
+        }
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)

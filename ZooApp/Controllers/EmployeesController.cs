@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using ZooApp.data;
 using ZooApp.Data;
 using ZooApp.Models;
@@ -14,10 +15,12 @@ namespace ZooApp.Controllers
     public class EmployeesController : Controller
     {
         private readonly ZooAppContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public EmployeesController(ZooAppContext context)
+        public EmployeesController(ZooAppContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Employees
@@ -71,6 +74,18 @@ namespace ZooApp.Controllers
         {
             if (!ModelState.IsValid) // Fix condition to check if model state is valid
             {
+                // Handle file upload
+                if (@employee.ImageFile != null)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(@employee.ImageFile.FileName);
+                    string extension = Path.GetExtension(@employee.ImageFile.FileName);
+                    employee.ImageFileName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    string path = Path.Combine(_hostEnvironment.WebRootPath, "images", fileName);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await @employee.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
