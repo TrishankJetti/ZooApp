@@ -211,7 +211,7 @@
                             <p><strong>Age:</strong> @Html.DisplayFor(modelItem => item.Age)</p>
                             <p><strong>Sex:</strong> @Html.DisplayFor(modelItem => item.Sex)</p>
                             <p><strong>Diet:</strong> @Html.DisplayFor(modelItem => item.Diet)</p>
-                            <p><strong>Employee:</strong> @(item.Employee != null ? item.Employee.Name : "No employee assigned")</p>
+                            <p><strong>Employee:</strong> @Html.DisplayFor(modelItem => item.Employee.Name) </p>
 
                             <div class="action-links">
                                 @if (User.IsInRole("Admin") || User.IsInRole("Employee"))

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
 using ZooApp.Data;
-using ZooApp.Migrations;
+
 namespace ZooApp.Areas.Identity.Pages.Account
 {
     public class LogoutModel : PageModel

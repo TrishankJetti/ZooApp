@@ -1,13 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using ZooApp.data;
-using ZooApp.Data;
 using ZooApp.Models;
 
 namespace ZooApp.Controllers
@@ -24,22 +25,13 @@ namespace ZooApp.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index()
         {
-            ViewData["EmployeeNameFilter"] = searchString;
-            var employees = from e in _context.Employee.Include(e => e.Enclosure)
-                            select e;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                employees = employees.Where(e => e.Name.Contains(searchString));
-            }
-
+            var employees = _context.Employee.Include(e => e.Enclosure);
             return View(await employees.ToListAsync());
         }
 
         // GET: Employees/Details/5
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -70,22 +62,23 @@ namespace ZooApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,Name,Role,Phone,Salary,HireDate,EnclosureId")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeId,Name,Role,Phone,Salary,HireDate,EnclosureId,ImageFile")] Employee employee)
         {
-            if (!ModelState.IsValid) // Fix condition to check if model state is valid
+            if (!ModelState.IsValid)
             {
                 // Handle file upload
-                if (@employee.ImageFile != null)
+                if (employee.ImageFile != null)
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(@employee.ImageFile.FileName);
-                    string extension = Path.GetExtension(@employee.ImageFile.FileName);
-                    employee.ImageFileName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-                    string path = Path.Combine(_hostEnvironment.WebRootPath, "images", fileName);
+                    string fileName = Path.GetFileNameWithoutExtension(employee.ImageFile.FileName);
+                    string extension = Path.GetExtension(employee.ImageFile.FileName);
+                    employee.ImageFileName = $"{fileName}_{DateTime.Now:yyyyMMddHHmmssfff}{extension}";
+                    string path = Path.Combine(_hostEnvironment.WebRootPath, "images", employee.ImageFileName);
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
-                        await @employee.ImageFile.CopyToAsync(fileStream);
+                        await employee.ImageFile.CopyToAsync(fileStream);
                     }
                 }
+
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -116,7 +109,7 @@ namespace ZooApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Name,Role,Phone,Salary,HireDate,EnclosureId")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Name,Role,Phone,Salary,HireDate,EnclosureId,ImageFileName,ImageFile")] Employee employee)
         {
             if (id != employee.EmployeeId)
             {
@@ -127,6 +120,19 @@ namespace ZooApp.Controllers
             {
                 try
                 {
+                    // Handle file upload
+                    if (employee.ImageFile != null)
+                    {
+                        string fileName = Path.GetFileNameWithoutExtension(employee.ImageFile.FileName);
+                        string extension = Path.GetExtension(employee.ImageFile.FileName);
+                        employee.ImageFileName = $"{fileName}_{DateTime.Now:yyyyMMddHHmmssfff}{extension}";
+                        string path = Path.Combine(_hostEnvironment.WebRootPath, "images", employee.ImageFileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await employee.ImageFile.CopyToAsync(fileStream);
+                        }
+                    }
+
                     _context.Update(employee);
                     await _context.SaveChangesAsync();
                 }
@@ -157,6 +163,7 @@ namespace ZooApp.Controllers
             }
 
             var employee = await _context.Employee
+                .Include(e => e.Enclosure)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
             if (employee == null)
             {
@@ -173,19 +180,11 @@ namespace ZooApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var employee = await _context.Employee.FindAsync(id);
-            if (employee == null)
+            if (employee != null)
             {
-                return NotFound();
+                _context.Employee.Remove(employee);
             }
 
-            // Update references in the Animal table
-            var animals = await _context.Animal.Where(a => a.EmployeeId == id).ToListAsync();
-            foreach (var animal in animals)
-            {
-                animal.EmployeeId = null; // Remove association
-            }
-
-            _context.Employee.Remove(employee);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

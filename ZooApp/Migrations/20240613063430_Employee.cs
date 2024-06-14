@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZooApp.Migrations
 {
     /// <inheritdoc />
-    public partial class IMageUpload : Migration
+    public partial class Employee : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,9 @@ namespace ZooApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -217,7 +220,8 @@ namespace ZooApp.Migrations
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     HireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EnclosureId = table.Column<int>(type: "int", nullable: false)
+                    EnclosureId = table.Column<int>(type: "int", nullable: false),
+                    ImageFileName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -326,13 +330,13 @@ namespace ZooApp.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employee",
                         principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Animal_Enclosure_EnclosureId",
                         column: x => x.EnclosureId,
                         principalTable: "Enclosure",
                         principalColumn: "EnclosureId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -362,6 +366,25 @@ namespace ZooApp.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "1", null, "Employee", "EMPLOYEE" },
+                    { "2", null, "Admin", "ADMIN" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "Age", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "1", 0, 67, "ab87e87b-68c1-4864-8ae8-0e4c0325dd3e", "employee1@example.com", true, "John", "Doe", false, null, "EMPLOYEE1@EXAMPLE.COM", "EMPLOYEE1@EXAMPLE.COM", "AQAAAAIAAYagAAAAEMuZbzTqj/CQPz1EuctsVBV+DMTHuKSPdoWfp/CunGmHi9fkhgUI+14kA7/QUzx6vg==", null, false, "e55b89e3-3ede-4291-9750-b6ab6794f163", false, "employee1@example.com" },
+                    { "2", 0, 50, "1db28e58-80a6-4969-9e53-2a2ecafa9b6c", "admin1@example.com", true, "Jane", "Smith", false, null, "ADMIN1@EXAMPLE.COM", "ADMIN1@EXAMPLE.COM", "AQAAAAIAAYagAAAAEAWgfA7XdVFDWNvtgWeM5qoVwDUibfJvZk22/hl5WBqaUeKGU+kYbW+10sq4EWkJ3Q==", null, false, "6daecf11-854c-4363-a01b-599a3515e09a", false, "admin1@example.com" },
+                    { "3", 0, 34, "7e8eef38-9639-448e-a516-9084f4140271", "employee2@example.com", true, "Christopher", "Lee", false, null, "EMPLOYEE2@EXAMPLE.COM", "employee2@EXAMPLE.COM", "AQAAAAIAAYagAAAAEDVLiuopefEAHL/vZOfjzH6gZQ2yAvAhemi1tc8xoJf65sG7kLZvBQqNhqJxKelJDQ==", null, false, "417e56b0-f7bf-4961-9674-fcebb6d93a16", false, "employee2@example.com" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Enclosure",
                 columns: new[] { "EnclosureId", "Capacity", "Habitat", "Name" },
                 values: new object[,]
@@ -379,11 +402,11 @@ namespace ZooApp.Migrations
                 columns: new[] { "EventId", "Date", "Description", "ImageFileName", "Name", "TicketPrice" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 6, 9, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7041), "Guided safari tour through the zoo", "HI", "Zoo Safari", 25m },
-                    { 2, new DateTime(2024, 6, 16, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7089), "Educational talk on wildlife conservation", "HI", "Wildlife Conservation Talk", 10m },
-                    { 3, new DateTime(2024, 6, 24, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7095), "Experience the zoo after dark with special activities and tours", "HI", "Night at the Zoo", 30m },
-                    { 4, new DateTime(2024, 6, 29, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7098), "Guided tour focusing on observing various bird species in the zoo", "HI", "Bird Watching Tour", 15m },
-                    { 5, new DateTime(2024, 7, 9, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7100), "Learn about animal diets and behavior during feeding time", "HI", "Animal Feeding Demonstration", 20m }
+                    { 1, new DateTime(2024, 6, 23, 18, 34, 28, 902, DateTimeKind.Local).AddTicks(9903), "Guided safari tour through the zoo", "Guide.jpg", "Zoo Safari", 25m },
+                    { 2, new DateTime(2024, 6, 30, 18, 34, 28, 902, DateTimeKind.Local).AddTicks(9961), "Educational talk on wildlife conservation", "EducationalTalk.jpg", "Wildlife Conservation Talk", 10m },
+                    { 3, new DateTime(2024, 7, 8, 18, 34, 28, 902, DateTimeKind.Local).AddTicks(9964), "Experience the zoo after dark with special activities and tours", "ZooAfterDark.jpg", "Night at the Zoo", 30m },
+                    { 4, new DateTime(2024, 7, 13, 18, 34, 28, 902, DateTimeKind.Local).AddTicks(9966), "Guided tour focusing on observing various bird species in the zoo", "BirdTour.jpg", "Bird Watching Tour", 15m },
+                    { 5, new DateTime(2024, 7, 23, 18, 34, 28, 902, DateTimeKind.Local).AddTicks(9968), "Learn about animal diets and behavior during feeding time", "AnimalDiet.jpg", "Animal Feeding Demonstration", 20m }
                 });
 
             migrationBuilder.InsertData(
@@ -411,16 +434,26 @@ namespace ZooApp.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Employee",
-                columns: new[] { "EmployeeId", "EnclosureId", "HireDate", "Name", "Phone", "Role", "Salary" },
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 4, 30, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7210), "John Doe", "123-456-7890", 0, 50000m },
-                    { 2, 2, new DateTime(2024, 5, 10, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7213), "Jane Smith", "987-654-3210", 1, 70000m },
-                    { 3, 3, new DateTime(2024, 5, 5, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7216), "Michael Johnson", "111-222-3333", 0, 55000m },
-                    { 4, 4, new DateTime(2024, 5, 15, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7218), "Emily Wilson", "444-555-6666", 1, 72000m },
-                    { 5, 5, new DateTime(2024, 5, 2, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7220), "Christopher Lee", "777-888-9999", 0, 52000m },
-                    { 6, 6, new DateTime(2024, 5, 20, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7222), "Jessica Brown", "999-888-7777", 1, 73000m }
+                    { "1", "1" },
+                    { "2", "2" },
+                    { "1", "3" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Employee",
+                columns: new[] { "EmployeeId", "EnclosureId", "HireDate", "ImageFileName", "Name", "Phone", "Role", "Salary" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2024, 5, 14, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(3), "Rob.jpg", "John Doe", "123-456-7890", 0, 50000m },
+                    { 2, 2, new DateTime(2024, 5, 24, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(7), "Rob.jpg", "Jane Smith", "987-654-3210", 1, 70000m },
+                    { 3, 3, new DateTime(2024, 5, 19, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(9), "Rob.jpg", "Michael Johnson", "111-222-3333", 0, 55000m },
+                    { 4, 4, new DateTime(2024, 5, 29, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(12), "Rob.jpg", "Emily Wilson", "444-555-6666", 1, 72000m },
+                    { 5, 5, new DateTime(2024, 5, 16, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(14), "Rob.jpg", "Christopher Lee", "777-888-9999", 0, 52000m },
+                    { 6, 6, new DateTime(2024, 6, 3, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(17), "Rob.jpg", "Jessica Brown", "999-888-7777", 1, 73000m }
                 });
 
             migrationBuilder.InsertData(
@@ -428,23 +461,23 @@ namespace ZooApp.Migrations
                 columns: new[] { "TicketId", "DateOfPurchase", "EventId", "VisitorId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 5, 28, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7369), 1, 1 },
-                    { 2, new DateTime(2024, 5, 29, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7371), 2, 2 },
-                    { 3, new DateTime(2024, 5, 27, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7373), 1, 3 },
-                    { 4, new DateTime(2024, 5, 26, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7375), 2, 4 },
-                    { 5, new DateTime(2024, 5, 25, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7376), 1, 5 },
-                    { 6, new DateTime(2024, 5, 24, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7378), 2, 6 },
-                    { 7, new DateTime(2024, 5, 23, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7380), 1, 7 },
-                    { 8, new DateTime(2024, 5, 22, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7381), 2, 8 },
-                    { 9, new DateTime(2024, 5, 21, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7383), 1, 9 },
-                    { 10, new DateTime(2024, 5, 20, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7384), 2, 10 },
-                    { 11, new DateTime(2024, 5, 19, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7386), 1, 11 },
-                    { 12, new DateTime(2024, 5, 18, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7387), 2, 12 },
-                    { 13, new DateTime(2024, 5, 17, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7389), 1, 13 },
-                    { 14, new DateTime(2024, 5, 16, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7390), 2, 14 },
-                    { 15, new DateTime(2024, 5, 15, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7392), 1, 15 },
-                    { 16, new DateTime(2024, 5, 14, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7393), 2, 16 },
-                    { 17, new DateTime(2024, 5, 13, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7395), 1, 17 }
+                    { 1, new DateTime(2024, 6, 11, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(242), 1, 1 },
+                    { 2, new DateTime(2024, 6, 12, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(244), 2, 2 },
+                    { 3, new DateTime(2024, 6, 10, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(247), 1, 3 },
+                    { 4, new DateTime(2024, 6, 9, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(249), 2, 4 },
+                    { 5, new DateTime(2024, 6, 8, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(251), 1, 5 },
+                    { 6, new DateTime(2024, 6, 7, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(252), 2, 6 },
+                    { 7, new DateTime(2024, 6, 6, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(254), 1, 7 },
+                    { 8, new DateTime(2024, 6, 5, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(257), 2, 8 },
+                    { 9, new DateTime(2024, 6, 4, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(259), 1, 9 },
+                    { 10, new DateTime(2024, 6, 3, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(260), 2, 10 },
+                    { 11, new DateTime(2024, 6, 2, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(262), 1, 11 },
+                    { 12, new DateTime(2024, 6, 1, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(264), 2, 12 },
+                    { 13, new DateTime(2024, 5, 31, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(266), 1, 13 },
+                    { 14, new DateTime(2024, 5, 30, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(267), 2, 14 },
+                    { 15, new DateTime(2024, 5, 29, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(269), 1, 15 },
+                    { 16, new DateTime(2024, 5, 28, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(271), 2, 16 },
+                    { 17, new DateTime(2024, 5, 27, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(273), 1, 17 }
                 });
 
             migrationBuilder.InsertData(
@@ -476,16 +509,16 @@ namespace ZooApp.Migrations
                 columns: new[] { "VisitorLogId", "Comments", "DateVisited", "VisitorId" },
                 values: new object[,]
                 {
-                    { 1, "Enjoyed the zoo!", new DateTime(2024, 5, 28, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7478), 1 },
-                    { 2, "Great experience!", new DateTime(2024, 5, 29, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7480), 2 },
-                    { 3, "Had a wonderful time with family!", new DateTime(2024, 5, 27, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7482), 3 },
-                    { 4, "Educational and fun!", new DateTime(2024, 5, 26, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7484), 4 },
-                    { 5, "Loved the animal exhibits!", new DateTime(2024, 5, 25, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7485), 5 },
-                    { 6, "Amazing zoo experience!", new DateTime(2024, 5, 24, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7487), 6 },
-                    { 7, "Fantastic day out!", new DateTime(2024, 5, 23, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7488), 7 },
-                    { 8, "Will visit again soon!", new DateTime(2024, 5, 22, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7490), 8 },
-                    { 9, "Kids loved the animals!", new DateTime(2024, 5, 21, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7492), 9 },
-                    { 10, "Highly recommended!", new DateTime(2024, 5, 20, 6, 6, 43, 878, DateTimeKind.Local).AddTicks(7493), 10 }
+                    { 1, "Enjoyed the zoo!", new DateTime(2024, 6, 11, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(381), 1 },
+                    { 2, "Great experience!", new DateTime(2024, 6, 12, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(384), 2 },
+                    { 3, "Had a wonderful time with family!", new DateTime(2024, 6, 10, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(386), 3 },
+                    { 4, "Educational and fun!", new DateTime(2024, 6, 9, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(387), 4 },
+                    { 5, "Loved the animal exhibits!", new DateTime(2024, 6, 8, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(389), 5 },
+                    { 6, "Amazing zoo experience!", new DateTime(2024, 6, 7, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(391), 6 },
+                    { 7, "Fantastic day out!", new DateTime(2024, 6, 6, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(393), 7 },
+                    { 8, "Will visit again soon!", new DateTime(2024, 6, 5, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(395), 8 },
+                    { 9, "Kids loved the animals!", new DateTime(2024, 6, 4, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(397), 9 },
+                    { 10, "Highly recommended!", new DateTime(2024, 6, 3, 18, 34, 28, 903, DateTimeKind.Local).AddTicks(399), 10 }
                 });
 
             migrationBuilder.InsertData(

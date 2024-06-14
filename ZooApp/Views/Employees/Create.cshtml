@@ -1,113 +1,56 @@
 ﻿@model ZooApp.Models.Employee
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Employee";
 }
 
-<h1 style="text-align:center">Create Employee</h1>
-`<hr/>
-<div class="row center-form">
-    <div class="col-md-4">
-        <form asp-action="Create" class="employee-form">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <div class="input-group">
-                    <select asp-for="Role" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
-                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select from dropdown below</option>
-                        <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
-                            then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
-                        -->
-                    </select>
-                </div>
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
+<h1>Create Employee</h1>
 
-            <style>
-                .form-group:hover .input-group::after {
-                    content: "▼"; /* Arrow symbol that respresents a dropdown typically used in web-design.*/
+<form asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                    /*This is the positioning of the arrow that appears when the user hovers over the dropdown field.*/
-                    position: absolute;
-                    right: 10px;
-                    top: 5px;
-                    font-size: 20px;
-
-                    pointer-events: none;
-                    /* This makes sure that whenever the user clicks on the drop down button, 
-                    that the dropdown will drop down and show all the roles instead of not doing 
-                    anything and restricting the action.*/
-                }
-            </style>
-
-
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Salary" class="control-label"></label>
-                <input asp-for="Salary" class="form-control" />
-                <span asp-validation-for="Salary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HireDate" class="control-label"></label>
-                <input asp-for="HireDate" class="form-control" />
-                <span asp-validation-for="HireDate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="EnclosureId" class="control-label"></label>
-                <div class="input-group">
-                    <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId">
-                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select from dropdown below</option>
-                        <!-- Add options dynamically here if needed -->
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="ImageFile" class="control-label"></label>
-                    <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
-                    <span asp-validation-for="ImageFile" class="text-danger"></span>
-                </div>
-                <span asp-validation-for="EnclosureId" class="text-danger"></span>
-            </div>
-
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-</div>
-
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-
-    h1 {
-        color: #007bff;
-        margin-bottom: 20px;
-    }
-
-    .center-form {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-</style>
-
-<div>
-    <a asp-action="Index">Exit</a>
-</div>
+    <div class="form-group">
+        <label asp-for="Role" class="control-label"></label>
+        <select asp-for="Role" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
+            <option value="" disabled selected>Select Role</option>
+        </select>
+        <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone" class="control-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Salary" class="control-label"></label>
+        <input asp-for="Salary" class="form-control" />
+        <span asp-validation-for="Salary" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HireDate" class="control-label"></label>
+        <input asp-for="HireDate" class="form-control" />
+        <span asp-validation-for="HireDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EnclosureId" class="control-label"></label>
+        <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
+        <span asp-validation-for="EnclosureId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ImageFile" class="control-label"></label>
+        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
 
 @section Scripts {
     @{

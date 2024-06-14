@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="EmployeeId" />
             <div class="form-group">
@@ -65,6 +65,20 @@
                 <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
                 <span asp-validation-for="EnclosureId" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="ImageFileName" class="control-label">Current Image</label>
+                @if (Model.ImageFileName != null)
+                {
+                    <img src="~/images/@Model.ImageFileName" alt="@Model.Name" class="img-thumbnail" style="max-width: 100px; height: 100px;" />
+                }
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label">Change Image</label>
+                <input type="file" asp-for="ImageFile" class="form-control" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
             <br />
             
             <div class="form-group">
