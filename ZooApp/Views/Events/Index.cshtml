@@ -4,16 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="container" style="background-color: #f8f9fa;">
+<div class="container" style="background-color: #fff4e6; border-radius: 15px; padding: 20px;">
     <div class="row">
         <div class="col-md-3">
-            <h1 style="text-align:center; color: #007bff;">Events</h1>
+            <h1 style="text-align:center; color: #d2691e;">Events</h1>
             <form asp-action="Index" method="get">
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="text" class="form-control" id="searchName" name="SearchString" value="@ViewData["EventNameFilter"]" placeholder="Search by Event name" style="background-color: #fff; color: #495057;" />
+                        <input type="text" class="form-control" id="searchName" name="SearchString" value="@ViewData["EventNameFilter"]" placeholder="Search by Event name" />
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary" style="background-color: #007bff;">
+                            <button type="submit" class="btn btn-primary" style="background-color: #d2691e; border-color: #d2691e;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
                                 </svg>
@@ -23,36 +23,37 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="minPrice" style="color: #007bff;">Min Price:</label>
-                    <input type="number" class="form-control" id="minPrice" name="MinPrice" value="@ViewData["MinPrice"]" placeholder="Enter Min Price" style="background-color: #fff; color: #495057;" />
+                    <label for="minPrice" style="color: #d2691e;">Min Price:</label>
+                    <input type="number" class="form-control" id="minPrice" name="MinPrice" value="@ViewData["MinPrice"]" placeholder="Enter Min Price" />
                 </div>
 
                 <div class="form-group">
-                    <label for="maxPrice" style="color: #007bff;">Max Price:</label>
-                    <input type="number" class="form-control" id="maxPrice" name="MaxPrice" value="@ViewData["MaxPrice"]" placeholder="Enter Max Price" style="background-color: #fff; color: #495057;" />
+                    <label for="maxPrice" style="color: #d2691e;">Max Price:</label>
+                    <input type="number" class="form-control" id="maxPrice" name="MaxPrice" value="@ViewData["MaxPrice"]" placeholder="Enter Max Price" />
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="background-color: #007bff;">Apply</button>
+                <button type="submit" class="btn btn-primary" style="background-color: #d2691e; border-color: #d2691e;">Apply</button>
             </form>
         </div>
         <div class="col-md-9">
-            <a asp-action="Index" style="color: #007bff;">Back to original List</a>
+            <a asp-action="Index" style="color: #d2691e;">Back to original List</a>
             <hr />
 
             <div class="row">
                 <div class="col">
-                    <a asp-action="Create" class="btn btn-success" style="background-color: #28a745;">Create New</a>
+                    <a asp-action="Create" class="btn btn-success" style="background-color: #20c997; border-color: #20c997;">Create New</a>
                 </div>
             </div>
-            <br/>
+            
+            <br />
             <div class="row">
                 @foreach (var item in Model)
                 {
                     <div class="col-md-4 mb-4">
                         <a asp-action="Details" asp-route-id="@item.EventId" class="card-link">
-                            <div class="card" style="background-color: #f8f9fa;">
+                            <div class="card" style="background-color: #fefae0; border-color: #d2691e;">
                                 <div class="card-body">
-                                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                                    <h5 class="card-title" style="color: #d2691e;">@Html.DisplayFor(modelItem => item.Name)</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">@Html.DisplayFor(modelItem => item.Date)</h6>
                                     <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
                                     <p class="card-text">Price: $@Html.DisplayFor(modelItem => item.TicketPrice)</p>
@@ -64,12 +65,12 @@
                                     @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                                     {
                                         <div class="mt-2">
-                                            <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-primary" style="background-color: #007bff;">
+                                            <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-primary" >
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brush-fill" viewBox="0 0 16 16">
                                                     <path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.1 6.1 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.1 8.1 0 0 1-3.078.132 4 4 0 0 1-.562-.135 1.4 1.4 0 0 1-.466-.247.7.7 0 0 1-.204-.288.62.62 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896q.19.012.348.048c.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04" />
                                                 </svg>
                                             </a>
-                                            <a asp-action="Delete" asp-route-id="@item.EventId" class="btn btn-sm btn-danger" style="background-color: #dc3545;">
+                                            <a asp-action="Delete" asp-route-id="@item.EventId" class="btn btn-sm btn-danger" >
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
                                                 </svg>
@@ -85,36 +86,37 @@
         </div>
     </div>
 </div>
-<br/>
+<br />
 
 <style>
     /* Custom Styles */
     body {
         color: #495057;
-        font-family: Arial, sans-serif; /* Set a consistent font family */
-        font-size: 16px; /* Set a base font size */
-        line-height: 1.5; /* Set a comfortable line height */
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        background-color: #f8f4e3; /* Light beige background */
     }
 
     .form-group {
         margin-bottom: 20px;
     }
 
+    .form-control {
+        background-color: #fff; /* White background for input fields */
+        color: #495057; /* Dark gray text color for input fields */
+    }
+
     th {
-        background-color: #007bff;
-        color: #fff;
+        background-color: #d2691e; /* Dark orange for table headers */
+        color: #fff; /* White text for table headers */
     }
-
-    tr {
-        text-decoration-color: black;
-    }
-
-   
 
     .card {
-        border-radius: 2.25rem;
+        border-radius: 15px; /* Larger border radius for a modern look */
         transition: transform 0.2s;
-        padding: 4px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for cards */
+        border: 1px solid #d2691e; /* Border color matching the theme */
     }
 
         .card:hover {
@@ -122,11 +124,14 @@
         }
 
     .card-link {
-        text-decoration:indigo;
-        color:inherit;
+        text-decoration: none; /* No underline for links */
+        color: inherit; /* Inherit text color */
     }
 
         .card-link:hover .card {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
+ 
+    
 </style>

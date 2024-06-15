@@ -26,7 +26,7 @@ namespace ZooApp.Controllers
         public async Task<IActionResult> Index(string searchString, int? searchId, string sortOrder, string dietType, int? age, int? pageNumber, string currentFilter, string currentDietType)
         {
             ViewData["AnimalNameFilter"] = searchString;
-            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentSort"] = sortOrder; 
 
             ViewData["AnimalIdFilter"] = searchId;
             ViewData["DietTypeFilter"] = string.IsNullOrEmpty(dietType) ? currentDietType : dietType;

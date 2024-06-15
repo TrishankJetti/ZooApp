@@ -25,11 +25,72 @@ namespace ZooApp.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string roleType, string sortOrder, string currentRoleType, int? pageNumber, string currentFilter)
         {
-            var employees = _context.Employee.Include(e => e.Enclosure);
-            return View(await employees.ToListAsync());
+            // Store filters and sort orders in ViewData for use in the view
+            ViewData["EmployeeNameFilter"] = searchString;
+            ViewData["RoleTypeFilter"] = string.IsNullOrEmpty(roleType) ? currentRoleType : roleType;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["RoleSortParm"] = sortOrder == "Role" ? "role_desc" : "Role";
+            ViewData["HireDateSortParm"] = sortOrder == "HireDate" ? "hiredate_desc" : "HireDate";
+
+            // Reset page number if search string changes
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            // Store current filter in ViewData
+            ViewData["CurrentFilter"] = searchString;
+
+            // Query to get all employees including their enclosure information
+            var employees = _context.Employee.Include(e => e.Enclosure).AsQueryable();
+
+            // Filter by search string (Name)
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                employees = employees.Where(e => e.Name.Contains(searchString));
+            }
+
+            // Filter by role type
+            if (!string.IsNullOrEmpty(roleType))
+            {
+                employees = employees.Where(e => e.Role == Enum.Parse<RoleType>(roleType));
+            }
+
+            // Sorting
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    employees = employees.OrderByDescending(e => e.Name);
+                    break;
+                case "Role":
+                    employees = employees.OrderBy(e => e.Role);
+                    break;
+                case "role_desc":
+                    employees = employees.OrderByDescending(e => e.Role);
+                    break;
+                case "HireDate":
+                    employees = employees.OrderBy(e => e.HireDate);
+                    break;
+                case "hiredate_desc":
+                    employees = employees.OrderByDescending(e => e.HireDate);
+                    break;
+                default:
+                    employees = employees.OrderBy(e => e.Name);
+                    break;
+            }
+
+            // Pagination
+            int pageSize = 3;
+            return View(await PaginatedList<Employee>.CreateAsync(employees.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
 
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)

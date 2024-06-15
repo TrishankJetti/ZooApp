@@ -24,7 +24,9 @@ namespace ZooApp.Models
         [Range(30000, 90000 , ErrorMessage = "Invalid Employee Salary.")]
         public decimal Salary { get; set; }
 
-        [Required(ErrorMessage = "Please enter a date pelase.")]
+        [ValidHireDate(ErrorMessage = "Hire date cannot be in the future or earlier than 50 years ago.")]
+        [Required(ErrorMessage = "Hire date is required")]
+        [DataType(DataType.Date)]
         public DateTime HireDate { get; set; }
 
 
@@ -49,5 +51,31 @@ namespace ZooApp.Models
         Admin,
         Manager
 
+    }
+
+    public class ValidHireDateAttribute : ValidationAttribute
+    {
+        private readonly DateTime _minDate;
+
+        public ValidHireDateAttribute()
+        {
+            _minDate = DateTime.Now.AddYears(-20); // Set a 50-year limit for example
+        }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if (value is DateTime hireDate)
+            {
+                if (hireDate > DateTime.Now)
+                {
+                    return new ValidationResult("Hire date cannot be in the future.");
+                }
+                else if (hireDate < _minDate)
+                {
+                    return new ValidationResult($"Hire date cannot be earlier than {_minDate.ToShortDateString()}.");
+                }
+            }
+            return ValidationResult.Success;
+        }
     }
 }
