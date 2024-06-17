@@ -101,8 +101,10 @@ namespace ZooApp.Controllers
             }
 
             var employee = await _context.Employee
-                .Include(e => e.Enclosure)
+                .Include(e => e.AnimalEmployees)
+                    .ThenInclude(ae => ae.Animal)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
+
             if (employee == null)
             {
                 return NotFound();
@@ -110,6 +112,7 @@ namespace ZooApp.Controllers
 
             return View(employee);
         }
+
 
         // GET: Employees/Create
         [Authorize(Roles = "Admin")]

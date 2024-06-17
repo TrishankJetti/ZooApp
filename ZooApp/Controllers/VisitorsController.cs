@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ZooApp.Data;
+using ZooApp.Models;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using ZooApp.data;
-using ZooApp.Models;
 
 namespace ZooApp.Controllers
 {
@@ -15,27 +14,31 @@ namespace ZooApp.Controllers
     public class VisitorsController : Controller
     {
         private readonly ZooAppContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public VisitorsController(ZooAppContext context)
+        public VisitorsController(ZooAppContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Visitors
         public async Task<IActionResult> Index(string searchString)
         {
             ViewData["VisitorNameFilter"] = searchString;
+            var userId = _userManager.GetUserId(User);
 
-            var visitors = _context.Visitor.AsQueryable();
+            var visitors = _context.Visitor
+                .Where(v => v.CreatedByUserId == userId)
+                .AsQueryable();
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 visitors = visitors.Where(v => v.Name.Contains(searchString) || v.Email.Contains(searchString));
             }
 
             return View(await visitors.ToListAsync());
         }
-
 
         // GET: Visitors/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -45,8 +48,10 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
+            var userId = _userManager.GetUserId(User);
             var visitor = await _context.Visitor
-                .FirstOrDefaultAsync(m => m.VisitorId == id);
+                .FirstOrDefaultAsync(m => m.VisitorId == id && m.CreatedByUserId == userId);
+
             if (visitor == null)
             {
                 return NotFound();
@@ -62,12 +67,13 @@ namespace ZooApp.Controllers
         }
 
         // POST: Visitors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("VisitorId,Name,Email,Phone,Address")] Visitor visitor)
         {
+            var userId = _userManager.GetUserId(User);
+            visitor.CreatedByUserId = userId;
+
             if (!ModelState.IsValid)
             {
                 _context.Add(visitor);
@@ -78,7 +84,6 @@ namespace ZooApp.Controllers
         }
 
         // GET: Visitors/Edit/5
-
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,25 +91,32 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            var visitor = await _context.Visitor.FindAsync(id);
+            var userId = _userManager.GetUserId(User);
+            var visitor = await _context.Visitor
+                .FirstOrDefaultAsync(m => m.VisitorId == id && m.CreatedByUserId == userId);
+
             if (visitor == null)
             {
                 return NotFound();
             }
+
             return View(visitor);
         }
 
         // POST: Visitors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-  
         public async Task<IActionResult> Edit(int id, [Bind("VisitorId,Name,Email,Phone,Address")] Visitor visitor)
         {
             if (id != visitor.VisitorId)
             {
                 return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+            if (visitor.CreatedByUserId != userId)
+            {
+                return Unauthorized();
             }
 
             if (!ModelState.IsValid)
@@ -131,7 +143,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: Visitors/Delete/5
-        [Authorize(Roles = "Admin , Employee")]
+        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -139,8 +151,10 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
+            var userId = _userManager.GetUserId(User);
             var visitor = await _context.Visitor
-                .FirstOrDefaultAsync(m => m.VisitorId == id);
+                .FirstOrDefaultAsync(m => m.VisitorId == id && m.CreatedByUserId == userId);
+
             if (visitor == null)
             {
                 return NotFound();
@@ -150,17 +164,20 @@ namespace ZooApp.Controllers
         }
 
         // POST: Visitors/Delete/5
-        [Authorize(Roles = "Admin , Employee")]
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userId = _userManager.GetUserId(User);
             var visitor = await _context.Visitor.FindAsync(id);
-            if (visitor != null)
+
+            if (visitor == null || visitor.CreatedByUserId != userId)
             {
-                _context.Visitor.Remove(visitor);
+                return Unauthorized();
             }
 
+            _context.Visitor.Remove(visitor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -54,7 +54,7 @@ namespace ZooApp.Models
         
        // Foreign Keys
        //This is the Employees that take care of the particular Animal
-        public int? EmployeeId { get; set; }
+        public int EmployeeId { get; set; }
         [ForeignKey(nameof(EmployeeId))]
         [Required(ErrorMessage = "You must select an Employee to create Animal.")]
         public Employee Employee { get; set; }

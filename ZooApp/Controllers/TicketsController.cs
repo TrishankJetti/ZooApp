@@ -63,7 +63,7 @@ namespace ZooApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TicketId,VisitorId,DateOfPurchase,EventId")] Ticket ticket)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
@@ -104,7 +104,7 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {

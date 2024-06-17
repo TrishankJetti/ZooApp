@@ -33,6 +33,20 @@
         .text-danger {
             color: #dc3545;
         }
+
+        .form-group:hover .input-group::after {
+            content: "▼"; /* Arrow symbol that respresents a dropdown typically used in web-design.*/
+            /*This is the positioning of the arrow that appears when the user hovers over the dropdown field.*/
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            font-size: 20px;
+            pointer-events: none;
+            /* This makes sure that whenever the user clicks on the drop down button,
+                                    that the dropdown will drop down and show all the roles instead of not doing
+                                    anything and restricting the action.*/
+        }
+
     </style>
 </head>
 <body>
@@ -62,22 +76,51 @@
     </div>
     <div class="form-group">
         <label asp-for="Sex" class="control-label">Sex:</label>
-        <select asp-for="Sex" class="form-control" asp-items="Html.GetEnumSelectList<Sex>()"></select>
+        <div class="input-group">
+        <select asp-for="Sex" class="form-control" asp-items="Html.GetEnumSelectList<Sex>()">
+        <option value="" disabled selected style="color: white; background-color:dimgrey">Select Sex from dropdown </option>
+        <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
+        then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
+        -->
+       
+        </select>
+                    </div>
         <span asp-validation-for="Sex" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Diet" class="control-label">Diet:</label>
-        <select asp-for="Diet" class="form-control" asp-items="Html.GetEnumSelectList<DietType>()"></select>
+        <div class="input-group">
+        <select asp-for="Diet" class="form-control" asp-items="Html.GetEnumSelectList<DietType>()">
+                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select DietType from dropdown </option>
+                        <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
+                        then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
+                        -->
+                    </select>
+        </div>
         <span asp-validation-for="Diet" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="EmployeeId" class="control-label">Employee:</label>
-        <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+        <div class="input-group">
+        <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId">
+                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select Employee from dropdown </option>
+                        <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
+                        then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
+                        -->
+        </select>
+                    </div>
         <span asp-validation-for="EmployeeId" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="EnclosureId" class="control-label">Enclosure Name:</label>
-        <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
+        <div class="input-group">
+        <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId">
+                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select Employee from dropdown </option>
+                        <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
+                        then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
+                        -->
+        </select>
+                    </div>
         <span asp-validation-for="EnclosureId" class="text-danger"></span>
     </div>
 
