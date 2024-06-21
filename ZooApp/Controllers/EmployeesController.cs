@@ -15,6 +15,12 @@ namespace ZooApp.Controllers
 {
     public class EmployeesController : Controller
     {
+        public async Task<IActionResult> Quiz()
+        {
+
+
+            return View();
+        }
         private readonly ZooAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
@@ -150,7 +156,7 @@ namespace ZooApp.Controllers
             ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", employee.EnclosureId);
             return View(employee);
         }
-
+        
         // GET: Employees/Edit/5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
@@ -236,7 +242,6 @@ namespace ZooApp.Controllers
 
             return View(employee);
         }
-
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin")]
@@ -244,18 +249,33 @@ namespace ZooApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var employee = await _context.Employee.FindAsync(id);
-            if (employee != null)
+            if (employee == null)
             {
-                _context.Employee.Remove(employee);
+                return NotFound();
             }
 
+            // Fetches all animals associated with this employee
+            var animalsWithEmployee = _context.Animal.Where(a => a.EmployeeId == id).ToList();
+
+            // Sets EmployeeId to null for associated animals
+            foreach (var animal in animalsWithEmployee)
+            {
+                animal.EmployeeId = null; 
+            }
+
+            // Remove the employee
+            _context.Employee.Remove(employee);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
+
+
 
         private bool EmployeeExists(int id)
         {
             return _context.Employee.Any(e => e.EmployeeId == id);
         }
+
     }
 }

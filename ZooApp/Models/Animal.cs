@@ -51,10 +51,11 @@ namespace ZooApp.Models
         //The diet field is also an enum like the Sex field.
         [Required]
         public DietType? Diet { get; set; }
-        
-       // Foreign Keys
-       //This is the Employees that take care of the particular Animal
-        public int EmployeeId { get; set; }
+
+        // Foreign Keys
+        //This is the Employees that take care of the particular Animal
+        [Required(ErrorMessage ="Must provide an Employee to take care of this Animal.")]
+        public int? EmployeeId { get; set; }
         [ForeignKey(nameof(EmployeeId))]
         [Required(ErrorMessage = "You must select an Employee to create Animal.")]
         public Employee Employee { get; set; }

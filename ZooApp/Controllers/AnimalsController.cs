@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -19,32 +18,52 @@ namespace ZooApp.Controllers
         public AnimalsController(ZooAppContext context)
         {
             _context = context;
-            
         }
 
         // GET: Animals
         public async Task<IActionResult> Index(string searchString, int? searchId, string sortOrder, string dietType, int? age, int? pageNumber, string currentFilter, string currentDietType)
         {
+            // Initialize ViewData for filters and sorting
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["AnimalNameFilter"] = searchString;
-            ViewData["CurrentSort"] = sortOrder; 
-
             ViewData["AnimalIdFilter"] = searchId;
             ViewData["DietTypeFilter"] = string.IsNullOrEmpty(dietType) ? currentDietType : dietType;
+
+            // Sorting parameters
             ViewData["AnimalAgeSorter"] = sortOrder == "Age" ? "age_desc" : "Age";
             ViewData["AnimalNameSort"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 
-            if (searchString != null)
+            // Page number handling
+            if (searchString != null || dietType != currentDietType || searchId.HasValue)
             {
-                pageNumber = 1;
+                pageNumber = 1; // Reset to first page if filters change
             }
             else
             {
-                searchString = currentFilter;
+                searchString = currentFilter; // Use previous filter
             }
 
-            var animals = from a in _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure) select a;
+            // Query the animals with initial filtering
+            var animals = from a in _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure)
+                          select a;
 
+            // Apply filtering
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                animals = animals.Where(a => a.Name.Contains(searchString));
+            }
 
+            if (searchId.HasValue)
+            {
+                animals = animals.Where(a => a.AnimalId == searchId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(dietType))
+            {
+                animals = animals.Where(a => a.Diet == Enum.Parse<DietType>(dietType));
+            }
+
+            // Apply sorting
             switch (sortOrder)
             {
                 case "name_desc":
@@ -61,21 +80,7 @@ namespace ZooApp.Controllers
                     break;
             }
 
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                animals = animals.Where(a => a.Name.Contains(searchString));
-            }
-
-            if (searchId.HasValue)
-            {
-                animals = animals.Where(a => a.AnimalId == searchId.Value);
-            }
-
-            if (!string.IsNullOrEmpty(dietType))
-            {
-                animals = animals.Where(a => a.Diet == Enum.Parse<DietType>(dietType));
-            }
-
+            // Page size and pagination
             int pageSize = 3;
             return View(await PaginatedList<Animal>.CreateAsync(animals.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
@@ -117,6 +122,23 @@ namespace ZooApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var enclosure = await _context.Enclosure
+                    .Include(e => e.Animals)
+                    .FirstOrDefaultAsync(e => e.EnclosureId == animal.EnclosureId);
+
+                if (enclosure == null)
+                {
+                    return NotFound();
+                }
+
+                if (enclosure.Animals.Count >= enclosure.Capacity)
+                {
+                    ModelState.AddModelError(string.Empty, "This enclosure is at full capacity. Please choose another enclosure or create a new one.");
+                    ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
+                    ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
+                    return View(animal);
+                }
+
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -161,6 +183,23 @@ namespace ZooApp.Controllers
             {
                 try
                 {
+                    var enclosure = await _context.Enclosure
+                        .Include(e => e.Animals)
+                        .FirstOrDefaultAsync(e => e.EnclosureId == animal.EnclosureId);
+
+                    if (enclosure == null)
+                    {
+                        return NotFound();
+                    }
+
+                    if (enclosure.Animals.Count >= enclosure.Capacity)
+                    {
+                        ModelState.AddModelError(string.Empty, "This enclosure is at full capacity. Please choose another enclosure or create a new one.");
+                        ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
+                        ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
+                        return View(animal);
+                    }
+
                     _context.Update(animal);
                     await _context.SaveChangesAsync();
                 }

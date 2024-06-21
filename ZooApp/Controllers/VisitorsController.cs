@@ -13,6 +13,12 @@ namespace ZooApp.Controllers
     [Authorize]
     public class VisitorsController : Controller
     {
+        public async Task<IActionResult> Quiz()
+        {
+
+
+            return View();
+        }
         private readonly ZooAppContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -92,6 +98,8 @@ namespace ZooApp.Controllers
             }
 
             var userId = _userManager.GetUserId(User);
+
+            // Find the visitor by id and ensure it belongs to the current user
             var visitor = await _context.Visitor
                 .FirstOrDefaultAsync(m => m.VisitorId == id && m.CreatedByUserId == userId);
 
@@ -106,7 +114,7 @@ namespace ZooApp.Controllers
         // POST: Visitors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VisitorId,Name,Email,Phone,Address")] Visitor visitor)
+        public async Task<IActionResult> Edit(int id, [Bind("VisitorId,Name,Email,Phone,Address,CreatedByUserId")] Visitor visitor)
         {
             if (id != visitor.VisitorId)
             {
@@ -114,16 +122,25 @@ namespace ZooApp.Controllers
             }
 
             var userId = _userManager.GetUserId(User);
-            if (visitor.CreatedByUserId != userId)
+
+            // Ensures the visitor exists and belongs to the current user
+            var existingVisitor = await _context.Visitor.FindAsync(id);
+            if (existingVisitor == null || existingVisitor.CreatedByUserId != userId)
             {
-                return Unauthorized();
+                return NotFound();
             }
+
+            // Updates only the allowed properties
+            existingVisitor.Name = visitor.Name;
+            existingVisitor.Email = visitor.Email;
+            existingVisitor.Phone = visitor.Phone;
+            existingVisitor.Address = visitor.Address;
 
             if (!ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(visitor);
+                    _context.Update(existingVisitor);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -142,8 +159,9 @@ namespace ZooApp.Controllers
             return View(visitor);
         }
 
+
         // GET: Visitors/Delete/5
-        
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

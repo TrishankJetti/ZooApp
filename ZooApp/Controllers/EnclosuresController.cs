@@ -13,6 +13,12 @@ namespace ZooApp.Controllers
 {
     public class EnclosuresController : Controller
     {
+        public async Task<IActionResult> Quiz()
+        {
+
+
+            return View();
+        }
         private readonly ZooAppContext _context;
 
         public EnclosuresController(ZooAppContext context)

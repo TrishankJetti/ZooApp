@@ -48,9 +48,9 @@ namespace ZooApp.data
                 entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
             });
 
-          
-       
-          
+
+
+
 
 
 
@@ -281,18 +281,7 @@ namespace ZooApp.data
 
 
             // Seeding data for the VisitorLog table
-            modelBuilder.Entity<VisitorLog>().HasData(
-    new VisitorLog { VisitorLogId = 1, VisitorId = 1, DateVisited = DateTime.Now.AddDays(-2), Comments = "Enjoyed the zoo!" },
-    new VisitorLog { VisitorLogId = 2, VisitorId = 2, DateVisited = DateTime.Now.AddDays(-1), Comments = "Great experience!" },
-    new VisitorLog { VisitorLogId = 3, VisitorId = 3, DateVisited = DateTime.Now.AddDays(-3), Comments = "Had a wonderful time with family!" },
-    new VisitorLog { VisitorLogId = 4, VisitorId = 4, DateVisited = DateTime.Now.AddDays(-4), Comments = "Educational and fun!" },
-    new VisitorLog { VisitorLogId = 5, VisitorId = 5, DateVisited = DateTime.Now.AddDays(-5), Comments = "Loved the animal exhibits!" },
-    new VisitorLog { VisitorLogId = 6, VisitorId = 6, DateVisited = DateTime.Now.AddDays(-6), Comments = "Amazing zoo experience!" },
-    new VisitorLog { VisitorLogId = 7, VisitorId = 7, DateVisited = DateTime.Now.AddDays(-7), Comments = "Fantastic day out!" },
-    new VisitorLog { VisitorLogId = 8, VisitorId = 8, DateVisited = DateTime.Now.AddDays(-8), Comments = "Will visit again soon!" },
-    new VisitorLog { VisitorLogId = 9, VisitorId = 9, DateVisited = DateTime.Now.AddDays(-9), Comments = "Kids loved the animals!" },
-    new VisitorLog { VisitorLogId = 10, VisitorId = 10, DateVisited = DateTime.Now.AddDays(-10), Comments = "Highly recommended!" }
-);
+           
 
 
 

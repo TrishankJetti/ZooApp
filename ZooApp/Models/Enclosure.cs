@@ -24,7 +24,7 @@ namespace ZooApp.Models
 
         
 
-        public ICollection<Animal> Animals { get; set; }
+        public ICollection<Animal> Animals { get; set; } = new List<Animal>();
 
         public ICollection<Employee> Employees { get; set; }
     }

@@ -8,17 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using ZooApp.Models;
 using ZooApp.data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ZooApp.Controllers
 {
     [Authorize]
     public class TicketsController : Controller
     {
-        private readonly ZooAppContext _context;
+        public async Task<IActionResult> Quiz()
+        {
 
-        public TicketsController(ZooAppContext context)
+
+            return View();
+        }
+        private readonly ZooAppContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public TicketsController(ZooAppContext context , UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Tickets
@@ -27,6 +35,7 @@ namespace ZooApp.Controllers
             var zooAppContext = _context.Ticket.Include(t => t.Event).Include(t => t.Visitor);
             return View(await zooAppContext.ToListAsync());
         }
+
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -49,33 +58,65 @@ namespace ZooApp.Controllers
         }
 
         // GET: Tickets/Create
-        [Authorize(Roles = "Admin , Employee")]
+      
         public IActionResult Create()
         {
+            var userId = _userManager.GetUserId(User);
+
+            // Query visitors created by the current user
+            var visitors = _context.Visitor
+             .Where(v => v.CreatedByUserId == userId).Select(v => new SelectListItem { 
+             Text = v.Name,
+             Value = v.VisitorId.ToString()
+               
+             })
+             .ToList();
+
             ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name"); // Use Event Name
-            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "Name"); // Use Visitor Name
+            ViewData["VisitorId"] = new SelectList(visitors, "Value", "Text"); // Use Visitor Name
             return View();
         }
 
         // POST: Tickets/Create
         [HttpPost]
-        [Authorize(Roles = "Admin , Employee")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketId,VisitorId,DateOfPurchase,EventId")] Ticket ticket)
+        
+        public async Task<IActionResult> Create([Bind("TicketId,DateOfPurchase,EventId,VisitorId")] Ticket ticket)
         {
-            if (!ModelState.IsValid)
+            if ( ModelState.IsValid)
             {
-                _context.Add(ticket);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name", ticket.EventId); // Use Event Name
+
+                var userId = _userManager.GetUserId(User);
+
+                // Query visitors created by the current user
+                var visitors = _context.Visitor
+                .Where(v => v.CreatedByUserId == userId).Select(v => new SelectListItem {
+               Text = v.Name,
+               Value = v.VisitorId.ToString()
+               })
+               .ToList();
+
+                ViewData["VisitorId"] = new SelectList(visitors, "Value", "Text", ticket.VisitorId); // Use Visitor Name
+                return View(ticket);
             }
-            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name", ticket.EventId); // Use Event Name
-            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "Name", ticket.VisitorId); // Use Visitor Name
-            return View(ticket);
+
+            // Ensure the VisitorId belongs to the current user if condition isnt met then the user will be unauthorized
+            var visitor = await _context.Visitor.FindAsync(ticket.VisitorId);
+            if (visitor == null || visitor.CreatedByUserId != _userManager.GetUserId(User))
+            {
+                return Unauthorized();
+            }
+
+            _context.Add(ticket);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
+
+
         // GET: Tickets/Edit/5
-        [Authorize(Roles = "Admin , Employee")]
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,23 +124,55 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.Ticket.FindAsync(id);
+            var userId = _userManager.GetUserId(User);
+
+            var ticket = await _context.Ticket
+                .Include(t => t.Event)
+                .Include(t => t.Visitor)
+                .FirstOrDefaultAsync(t => t.TicketId == id && t.Visitor.CreatedByUserId == userId);
+
             if (ticket == null)
             {
                 return NotFound();
             }
-            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name", ticket.EventId); // Use Event Name
-            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "Name", ticket.VisitorId); // Use Visitor Name
+
+            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name", ticket.EventId);
+
+            // Query visitors created by the current user
+            var visitors = _context.Visitor
+                .Where(v => v.CreatedByUserId == userId)
+                .Select(v => new SelectListItem
+                {
+                    Text = v.Name,
+                    Value = v.VisitorId.ToString(),
+                    Selected = v.VisitorId == ticket.VisitorId // Pre-select the current ticket's visitor
+                })
+                .ToList();
+
+            ViewData["VisitorId"] = new SelectList(visitors, "Value", "Text");
+
             return View(ticket);
         }
+
 
         // POST: Tickets/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin , Employee")]
-        public async Task<IActionResult> Edit(int id, [Bind("TicketId,VisitorId,DateOfPurchase,EventId")] Ticket ticket)
+       
+        public async Task<IActionResult> Edit(int id, [Bind("TicketId,DateOfPurchase,EventId,VisitorId")] Ticket ticket)
         {
             if (id != ticket.TicketId)
+            {
+                return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+
+            var existingTicket = await _context.Ticket
+                .Include(t => t.Visitor)
+                .FirstOrDefaultAsync(t => t.TicketId == id && t.Visitor.CreatedByUserId == userId);
+
+            if (existingTicket == null)
             {
                 return NotFound();
             }
@@ -108,7 +181,18 @@ namespace ZooApp.Controllers
             {
                 try
                 {
-                    _context.Update(ticket);
+                    // Ensure the VisitorId belongs to the current user
+                    var visitor = await _context.Visitor.FindAsync(ticket.VisitorId);
+                    if (visitor == null || visitor.CreatedByUserId != userId)
+                    {
+                        return Unauthorized();
+                    }
+
+                    existingTicket.DateOfPurchase = ticket.DateOfPurchase;
+                    existingTicket.EventId = ticket.EventId;
+                    existingTicket.VisitorId = ticket.VisitorId;
+
+                    _context.Update(existingTicket);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -124,13 +208,28 @@ namespace ZooApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name", ticket.EventId); // Use Event Name
-            ViewData["VisitorId"] = new SelectList(_context.Visitor, "VisitorId", "Name", ticket.VisitorId); // Use Visitor Name
+
+            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "Name", ticket.EventId);
+
+            // Query visitors created by the current user
+            var visitors = _context.Visitor
+                .Where(v => v.CreatedByUserId == userId)
+                .Select(v => new SelectListItem
+                {
+                    Text = v.Name,
+                    Value = v.VisitorId.ToString(),
+                    Selected = v.VisitorId == ticket.VisitorId // Pre-select the current ticket's visitor
+                })
+                .ToList();
+
+            ViewData["VisitorId"] = new SelectList(visitors, "Value", "Text", ticket.VisitorId);
+
             return View(ticket);
         }
 
+
         // GET: Tickets/Delete/5
-        [Authorize(Roles = "Admin , Employee")]
+        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -152,7 +251,7 @@ namespace ZooApp.Controllers
 
         // POST: Tickets/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "Admin , Employee")]
+        
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

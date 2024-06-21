@@ -6,13 +6,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <title>@ViewData["Title"]</title>
-
-      <style>
+   
+    <style>
         /* Custom Styles */
         body {
-            color: black;
-            background-color: #f8f9fa;
+            color: #333;
+            background-color: #f9f9f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         h1 {
@@ -21,19 +24,29 @@
             text-align: center;
         }
 
+        .container {
+            margin-top: 20px;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
 
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
         .card-body {
-            background-color: #f2f2f2;
-            font-size: 20px;
+            background-color: #fdfdfd;
+            font-size: 18px;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .card-body:hover {
-            background-color: lightgray;
-           
+            background-color: #f1f1f1;
+            transform: translateY(-3px);
         }
 
         .btn-primary {
@@ -41,169 +54,141 @@
         }
 
         .card-header.carnivore {
-            background-color: #ff4500; /* Red for Carnivore, to symbolize Meat or flesh. Typically what Carnivores consume. */
+            background-color: #ff6347; 
             color: #fff;
-            font-size: 35px;
         }
 
         .card-header.herbivore {
-            background-color: #32cd32; /* A Green for Herbivore, which symbolizes greeness of nature and vegetation. */
+            background-color: #4caf50;
             color: #fff;
-            font-size: 35px;
         }
 
         .card-header.omnivore {
-            background-color: #ffa500; /* Orange for Omnivore, to symbolize that these creatures with the Diet type are neither Meat eaters nor Vegetarian. */
+            background-color: #ffa500;
             color: #fff;
-            font-size: 35px;
         }
 
         .card-header.pescatarian {
-            background-color: cornflowerblue; /* Blue for Pescatarian, I chose a blue colours to symbolize, the ocean which is a typicla palce where you would find fish and etc. */
+            background-color: #4682b4; 
             color: #fff;
-            font-size: 35px;
         }
- 
-
-           
 
         #action-buttons {
             display: none;
             margin-top: 10px;
         }
 
-      
-        
+        .btn-sm {
+            margin-right: 5px;
+        }
+
+        .page-text {
+            margin: 0 10px;
+        }
+
+        #quick-actions {
+            margin-bottom: 20px;
+        }
+
+        .form-inline .form-group {
+            margin-right: 15px;
+        }
+
+        .btn i {
+            margin-right: 5px;
+        }
+
+        .btn:hover i {
+            animation: bounce 0.3s ease;
+        }
+
+        @@keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Animals</h1>
-        <form asp-action="Index" method="get">
+        <form asp-action="Index" method="get" class="form-inline">
             <div class="form-group">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="searchName" name="SearchString" value="@ViewData["AnimalNameFilter"]" placeholder="Please type an Animal name to search" />
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+                <input type="text" class="form-control" id="searchName" name="SearchString" value="@ViewData["AnimalNameFilter"]" placeholder="Search Animal by Name" />
             </div>
-            <div class="container">
-                <div id="quick-actions">
-                    <p id="toggle-button" class="btn btn-secondary">Quick actions:</p>
-                    <div class="form-group" id="action-buttons">
-                        <form id="action-form" method="POST" action="your-server-endpoint">
-                            <button type="submit" name="SortOrder" value="name_asc" class="btn btn-primary">Name ↑</button>
-                            <button type="submit" name="SortOrder" value="name_desc" class="btn btn-primary">Name ↓</button>
-                            <button type="submit" name="SortOrder" value="age_desc" class="btn btn-primary">Age ↓</button>
-                            <button type="submit" name="SortOrder" value="Age" class="btn btn-primary">Age ↑</button>
-                        </form>
-                    </div>
-                </div>
-
-            <script>
-                document.getElementById('toggle-button').addEventListener('click', function () {
-                    const actionButtons = document.getElementById('action-buttons');
-                    if (actionButtons.style.display === 'none' || actionButtons.style.display === '') {
-                        actionButtons.style.display = 'block';
-                    } else {
-                        actionButtons.style.display = 'none';
-                    }
-                });
-            </script>
-         
-
-
-            <!-- Drop down form for diet-based filtering -->
             <div class="form-group">
-                <label for="dietType">Filter by Diet:</label>
                 <select class="form-control" id="dietType" name="DietType">
-                    <option value="">All</option>
-                    <option value="Carnivore">Carnivore🍖</option>
-                    <option value="Herbivore">Herbivore🌱</option>
-                    <option value="Omnivore">Omnivore🍖🌱</option>
-                    <option value="Pescatarian">Pescatarian🐠</option>
+                    <option value="">Filter by Diet</option>
+                    <option value="Carnivore">Carnivore 🍖</option>
+                    <option value="Herbivore">Herbivore 🌱</option>
+                    <option value="Omnivore">Omnivore 🍖🌱</option>
+                    <option value="Pescatarian">Pescatarian 🐠</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Apply Filter</button>
-        <br/>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Search
+            </button>
         </form>
+
         @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
         {
-            <form asp-action="Index" method="get">
+            <form asp-action="Index" method="get" class="form-inline mt-2">
                 <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="searchId" name="SearchId" value="@ViewData["AnimalIdFilter"]" placeholder="Please type an Animal ID to search" />
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
+                    <input type="text" class="form-control" id="searchId" name="SearchId" value="@ViewData["AnimalIdFilter"]" placeholder="Search Animal by ID" />
                 </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
             </form>
         }
 
-        <a asp-action="Index">Back to original List</a>
-        <hr />
-        <div class="row">
-            <div class="col">
-                @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
-                {
-                    <a asp-action="Create" class="btn btn-success">Create New</a>
-                }
+        <div id="quick-actions" class="mt-3">
+            <button id="toggle-button" class="btn btn-secondary">
+                <i class="fas fa-cogs"></i> Quick Actions
+            </button>
+            <div id="action-buttons" class="mt-2">
+                <form id="action-form" method="get">
+                    <button type="submit" name="SortOrder" value="name_asc" class="btn btn-sm btn-outline-primary">Name <i class="fas fa-sort-alpha-down"></i></button>
+                    <button type="submit" name="SortOrder" value="name_desc" class="btn btn-sm btn-outline-primary">Name <i class="fas fa-sort-alpha-up"></i></button>
+                    <button type="submit" name="SortOrder" value="age_desc" class="btn btn-sm btn-outline-primary">Age <i class="fas fa-sort-numeric-down"></i></button>
+                    <button type="submit" name="SortOrder" value="age_asc" class="btn btn-sm btn-outline-primary">Age <i class="fas fa-sort-numeric-up"></i></button>
+                </form>
             </div>
         </div>
-        <br />
-        @{
-            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-        }
 
-        <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
-           asp-route-pageNumber="@(Model.PageIndex - 1)"
-           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-           asp-route-dietType="@ViewData["DietTypeFilter"]"
-           
-           class="btn btn-primary @prevDisabled">
-            Previous
-        </a>
-        <span class="page-text">Page @(Model.PageIndex) out of @(Model.TotalPages)</span>
-        <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
-           asp-route-pageNumber="@(Model.PageIndex + 1)"
-           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-           asp-route-dietType="@ViewData["DietTypeFilter"]"
-         
-           class="btn btn-primary @nextDisabled">
-            Next
-        </a>
+        <script>
+            document.getElementById('toggle-button').addEventListener('click', function () {
+                const actionButtons = document.getElementById('action-buttons');
+                if (actionButtons.style.display === 'none' || actionButtons.style.display === '') {
+                    actionButtons.style.display = 'block';
+                } else {
+                    actionButtons.style.display = 'none';
+                }
+            });
+        </script>
+
+        <hr />
+        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+        {
+            <div class="mb-2">
+                <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Create New</a>
+            </div>
+        }
         
         <div class="row">
             @foreach (var item in Model)
             {
-                var dietClass = item.Diet.ToString().ToLower(); // This code over here creates a variable named dietClass, which holds the name of animal's diet in lowercase.
-                <div class="col-md-4">
+                var dietClass = item.Diet.ToString().ToLower();
+                <div class="col-md-4 mb-4">
                     <div class="card">
-                        <div class="card-header @dietClass , card-header-hover">
-                           <!-- 
-                               This code above makes sure to append the animal's diet-type to end of the "card-header" class, to use the seperate classes that I have created
-                               for each animal based on their Diet. 
-                               For example an Animal with the Herbivore diet would have the class, "card-header.herbivore". The herbivore is lowercase since we converted it to lowercase above<a href="#"></a>
-                               Then based on the particular class that is assigned to the particular animal based on it's diet type, a distinct colour will appear Ranging from Red for Carnivores,
-                               Green for Herbivores, Orangish-Yellow for Omnivores and fianlly a light blue colour for the Pescitarians.
-                           -->
+                        <div class="card-header @dietClass">
                             <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
                         </div>
                         <div class="card-body">
-                            @if (User.IsInRole("Admin") || User.IsInRole("Employee")) // Makes sure that only Users who have the Admin and EMployee role can view the AnimalID field on the webpage.
+                            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                             {
                                 <p><strong>Animal Id:</strong> @Html.DisplayFor(modelItem => item.AnimalId)</p>
                             }
@@ -211,46 +196,60 @@
                             <p><strong>Age:</strong> @Html.DisplayFor(modelItem => item.Age)</p>
                             <p><strong>Sex:</strong> @Html.DisplayFor(modelItem => item.Sex)</p>
                             <p><strong>Diet:</strong> @Html.DisplayFor(modelItem => item.Diet)</p>
-                            <p><strong>Employee:</strong> @Html.DisplayFor(modelItem => item.Employee.Name) </p>
+                            <p><strong>Employee:</strong> @Html.DisplayFor(modelItem => item.Employee.Name)</p>
 
-                            <div class="action-links">
+                            <div class="action-links mt-3">
                                 @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                                 {
                                     <a asp-action="Edit" asp-route-id="@item.AnimalId" class="btn btn-sm btn-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brush-fill" viewBox="0 0 16 16">
-                                            <path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.1 6.1 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.1 8.1 0 0 1-3.078.132 4 4 0 0 1-.562-.135 1.4 1.4 0 0 1-.466-.247.7.7 0 0 1-.204-.288.62.62 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896q.19.012.348.048c.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04" />
-                                        </svg>
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.AnimalId" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i> Delete
                                     </a>
                                 }
                                 <a asp-action="Details" asp-route-id="@item.AnimalId" class="btn btn-sm btn-info">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
-                                    </svg>
+                                    <i class="fas fa-info-circle"></i> Details
                                 </a>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
-                                {
-                                    <a asp-action="Delete" asp-route-id="@item.AnimalId" class="btn btn-sm btn-danger">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                                        </svg>
-                                    </a>
-                                }
                             </div>
-                           
                         </div>
                     </div>
                 </div>
-                
             }
-
-          
-           
         </div>
+
+      <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+            <a class="page-link" asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-searchString="@ViewData["AnimalNameFilter"]"
+               asp-route-searchId="@ViewData["AnimalIdFilter"]"
+               asp-route-dietType="@ViewData["DietTypeFilter"]"
+               asp-route-currentFilter="@ViewData["AnimalNameFilter"]"
+               asp-route-currentDietType="@ViewData["DietTypeFilter"]"
+               asp-route-age="@ViewData["AnimalAgeSorter"]"
+               >Previous</a>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link">Page @(Model.PageIndex) of @(Model.TotalPages)</span>
+        </li>
+        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+            <a class="page-link" asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-searchString="@ViewData["AnimalNameFilter"]"
+               asp-route-searchId="@ViewData["AnimalIdFilter"]"
+               asp-route-dietType="@ViewData["DietTypeFilter"]"
+               asp-route-currentFilter="@ViewData["AnimalNameFilter"]"
+               asp-route-currentDietType="@ViewData["DietTypeFilter"]"
+               asp-route-age="@ViewData["AnimalAgeSorter"]"
+               >Next</a>
+        </li>
+    </ul>
+</nav>
+
     </div>
 </body>
-<br/>
-<br />
-<br/>
-
-
 </html>
