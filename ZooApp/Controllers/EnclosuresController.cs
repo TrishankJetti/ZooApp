@@ -162,24 +162,33 @@ namespace ZooApp.Controllers
 
         // POST: Enclosures/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "Admin , Employee")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var enclosure = await _context.Enclosure.FindAsync(id);
+
             if (enclosure == null)
             {
                 return NotFound();
             }
 
-            // Remove related animals
+            //This new variable relatedAnimals, is intialized to be equaled to the Animals in the particular enclosure, via the use of the enclosureid 
+            //as a unique identifier.
             var relatedAnimals = _context.Animal.Where(a => a.EnclosureId == id);
+
+            // Removes the relaredAnimals , which are animals related to that enclosure.
             _context.Animal.RemoveRange(relatedAnimals);
 
+            // THis code removes the enclosure from the database.
             _context.Enclosure.Remove(enclosure);
+
+            //saves changes after removal
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
+
 
     }
 }

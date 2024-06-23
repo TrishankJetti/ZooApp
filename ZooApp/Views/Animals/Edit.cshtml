@@ -9,7 +9,6 @@
     <title>@ViewData["Title"]</title>
     <style>
         body {
-          
             background-color: #f8f9fa;
         }
 
@@ -31,7 +30,7 @@
         <div class="col-md-6">
             <h1 class="text-center">Edit Animal</h1>
 
-            <form asp-action="Edit">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="AnimalId" />
 
@@ -53,41 +52,56 @@
                 <div class="form-group">
                     <label for="sex">Sex:</label>
                     <select asp-for="Sex" class="form-control" id="sex" asp-items="Html.GetEnumSelectList<Sex>()">
-                       
                     </select>
                     <span asp-validation-for="Sex" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="diet">Diet:</label>
                     <select asp-for="Diet" class="form-control" id="diet" asp-items="Html.GetEnumSelectList<DietType>()">
-                        
                     </select>
                     <span asp-validation-for="Diet" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="employee">Employee:</label>
                     <select asp-for="EmployeeId" class="form-control" id="employee" asp-items="ViewBag.EmployeeId">
-                      
                     </select>
                     <span asp-validation-for="EmployeeId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="enclosure">Enclosure Name:</label>
                     <select asp-for="EnclosureId" class="form-control" id="enclosure" asp-items="ViewBag.EnclosureId">
-                       
                     </select>
                     <span asp-validation-for="EnclosureId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImageFileName" class="control-label">Current Image</label>
+                    @if (!string.IsNullOrEmpty(Model.ImageFileName))
+                    {
+                        <img src="~/images/@Model.ImageFileName" alt="@Model.Name" class="img-thumbnail" style="max-width: 100px; height: 100px;" />
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ImageFile" class="control-label">Change Image</label>
+                    <input type="file" asp-for="ImageFile" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
                 </div>
                 <br />
                 <div class="form-group text-center">
                     <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index">Back to List</a>
                 </div>
+
             </form>
         </div>
     </div>
 
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+   
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
 </body>
 </html>

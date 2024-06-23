@@ -70,13 +70,15 @@
                                 <strong>Phone:</strong> @Html.DisplayFor(modelItem => item.Phone)
 
                                 <br />
-                                <strong>Salary:</strong> @Html.DisplayFor(modelItem => item.Salary)
-
-                                <br />
                                 <strong>Hire Date:</strong> @Html.DisplayFor(modelItem => item.HireDate)
 
                                 <br />
                             }
+                            @if (User.IsInRole("Admin"))
+                            {
+                            <strong>Salary:</strong> @Html.DisplayFor(modelItem => item.Salary)
+                            }
+                            <br/>
                             <strong>Enclosure:</strong> @Html.DisplayFor(modelItem => item.Enclosure.Name)
                         </p>
                     </div>

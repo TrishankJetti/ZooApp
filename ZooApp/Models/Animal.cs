@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZooApp.Models
 {
-    public enum Sex // The possible Genders for an animal are defied here.
+    public enum Sex // The possible Genders for an animal are defined here.
     {
         Male,
         Female,
         Unidentified
     }
 
-    public enum DietType // The possible Dietypes for an animal are defied here.
+    public enum DietType // The possible Dietypes for an animal are defined here.
     {
         Carnivore,
         Omnivore,
@@ -66,6 +66,13 @@ namespace ZooApp.Models
         [Required(ErrorMessage = "You must select an Enclosure to assign Animal to.")]
         public Enclosure Enclosure { get; set; }
 
+
+        // Property to store the file name
+        public string ImageFileName { get; set; }
+
+        // Property to store the uploaded file (not mapped to the database)
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
 
         // This is a junction table the Animal's table is related with which brings both the animal and employees in a relationship
         // but since SQL SERVER doesnt allow many to many relationships we must use a junction table inorder to make the relationship.

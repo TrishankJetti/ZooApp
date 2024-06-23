@@ -54,7 +54,7 @@
         <div class="col-md-6">
             <h1 class="text-center">Create Animal</h1>
 
-            <form asp-action="Create" method="post">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="AnimalId" />
@@ -123,11 +123,15 @@
                     </div>
         <span asp-validation-for="EnclosureId" class="text-danger"></span>
     </div>
+                <div class="form-group">
+                    <label asp-for="ImageFile" class="control-label"></label>
+                    <input asp-for="ImageFile" class="form-control" type="file" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
 
-    <br />
-    <div class="form-group text-center">
-        <input type="submit" value="Save" class="btn btn-primary" />
-    </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
 </form>
 
     <div>

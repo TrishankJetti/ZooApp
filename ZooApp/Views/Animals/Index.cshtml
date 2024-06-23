@@ -6,8 +6,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!--Links all the bootsrap icons,buttons and etc to the website so they can be accessed.-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"><!-- This link tags links Font Awesome's library of svg icons. These icons can be interacted with using CSS.-->
     <title>@ViewData["Title"]</title>
    
     <style>
@@ -19,9 +19,12 @@
         }
 
         h1 {
-            color: #007bff;
+            color: brown;
             margin-bottom: 20px;
             text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
         .container {
@@ -41,13 +44,9 @@
         .card-body {
             background-color: #fdfdfd;
             font-size: 18px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        .card-body:hover {
-            background-color: #f1f1f1;
-            transform: translateY(-3px);
-        }
+       
 
         .btn-primary {
             margin-right: 10px;
@@ -98,18 +97,7 @@
             margin-right: 5px;
         }
 
-        .btn:hover i {
-            animation: bounce 0.3s ease;
-        }
-
-        @@keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-3px);
-            }
-        }
+      
     </style>
 </head>
 <body>
@@ -140,7 +128,7 @@
                     <input type="text" class="form-control" id="searchId" name="SearchId" value="@ViewData["AnimalIdFilter"]" placeholder="Search Animal by ID" />
                 </div>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-search"></i> Search
+                    <i class="fas fa-search"></i> Search <!--Bootsrap icons, which I have linked view the link tag at the top of the page. -->
                 </button>
             </form>
         }
@@ -154,7 +142,7 @@
                     <button type="submit" name="SortOrder" value="name_asc" class="btn btn-sm btn-outline-primary">Name <i class="fas fa-sort-alpha-down"></i></button>
                     <button type="submit" name="SortOrder" value="name_desc" class="btn btn-sm btn-outline-primary">Name <i class="fas fa-sort-alpha-up"></i></button>
                     <button type="submit" name="SortOrder" value="age_desc" class="btn btn-sm btn-outline-primary">Age <i class="fas fa-sort-numeric-down"></i></button>
-                    <button type="submit" name="SortOrder" value="age_asc" class="btn btn-sm btn-outline-primary">Age <i class="fas fa-sort-numeric-up"></i></button>
+                    <button type="submit" name="SortOrder" value="Age" class="btn btn-sm btn-outline-primary">Age <i class="fas fa-sort-numeric-up"></i></button>
                 </form>
             </div>
         </div>
@@ -197,6 +185,11 @@
                             <p><strong>Sex:</strong> @Html.DisplayFor(modelItem => item.Sex)</p>
                             <p><strong>Diet:</strong> @Html.DisplayFor(modelItem => item.Diet)</p>
                             <p><strong>Employee:</strong> @Html.DisplayFor(modelItem => item.Employee.Name)</p>
+                            @if (item.ImageFileName != null)
+                            {
+                                <img src="~/images/@item.ImageFileName" alt="@item.Name" class="img-thumbnail" style="max-width: 300px; height: 300px; border-radius: 10px;" />
+                            }
+                         
 
                             <div class="action-links mt-3">
                                 @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
@@ -209,7 +202,7 @@
                                     </a>
                                 }
                                 <a asp-action="Details" asp-route-id="@item.AnimalId" class="btn btn-sm btn-info">
-                                    <i class="fas fa-info-circle"></i> Details
+                                    <i class="fas fa-info-circle"></i> Details  <!--Bootsrap icons, which I have lionked view the link tag at the top of the page. -->
                                 </a>
                             </div>
                         </div>

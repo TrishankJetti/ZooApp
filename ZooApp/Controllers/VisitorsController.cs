@@ -29,22 +29,40 @@ namespace ZooApp.Controllers
         }
 
         // GET: Visitors
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, string sortOrder, int? pageNumber)
         {
             ViewData["VisitorNameFilter"] = searchString;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
             var userId = _userManager.GetUserId(User);
 
             var visitors = _context.Visitor
                 .Where(v => v.CreatedByUserId == userId)
                 .AsQueryable();
 
+            // Apply search filter
             if (!string.IsNullOrEmpty(searchString))
             {
                 visitors = visitors.Where(v => v.Name.Contains(searchString) || v.Email.Contains(searchString));
             }
 
-            return View(await visitors.ToListAsync());
+            // Apply sorting
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    visitors = visitors.OrderByDescending(v => v.Name);
+                    break;
+                default:
+                    visitors = visitors.OrderBy(v => v.Name);
+                    break;
+            }
+
+            // Pagination setup
+            int pageSize = 3;
+            return View(await PaginatedList<Visitor>.CreateAsync(visitors.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
 
         // GET: Visitors/Details/5
         public async Task<IActionResult> Details(int? id)

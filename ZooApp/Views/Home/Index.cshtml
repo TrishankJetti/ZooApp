@@ -3,10 +3,71 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4 " style="font-family:'Times New Roman', Times, serif"><b>Welcome to Trishank's Zoo</b></h1>
-    <h6 class="display-6 "><b>Where dreams come True</b></h6>
-
+    <h1 class="display-4" style="font-family:'Times New Roman', Times, serif"><b>Welcome to Trishank's Zoo</b></h1>
+    <h6 class="display-6"><b>Where dreams come True</b></h6>
 </div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Trishank's Zoo</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#animals">Animals</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#employees">Employees</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#tickets">Tickets</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#visitors">Visitors</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#visitor-log">Visitor Log</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div id="animals" class="section">
+        <h2>Animals</h2>
+        <p>Explore the diverse wildlife we have at Trishank's Zoo. From exotic birds to majestic mammals, there's something for everyone to enjoy.</p>
+        <a href="/animals" class="btn btn-primary">Learn More</a>
+    </div>
+
+    <div id="employees" class="section">
+        <h2>Employees</h2>
+        <p>Meet the dedicated team that keeps Trishank's Zoo running smoothly. Our staff are passionate about animal care and conservation.</p>
+        <a href="/employees" class="btn btn-primary">Meet Our Team</a>
+    </div>
+
+    <div id="tickets" class="section">
+        <h2>Tickets</h2>
+        <p>Plan your visit to Trishank's Zoo. Find information on ticket prices, packages, and special discounts.</p>
+        <a href="/tickets" class="btn btn-primary">Buy Tickets</a>
+    </div>
+
+    <div id="visitors" class="section">
+        <h2>Visitors</h2>
+        <p>Get to know our visitors and their experiences at Trishank's Zoo. Share your own stories and connect with fellow animal lovers.</p>
+        <a href="/visitors" class="btn btn-primary">Visitor Stories</a>
+    </div>
+
+    <div id="visitor-log" class="section">
+        <h2>Visitor Log</h2>
+        <p>Check out our visitor log to see who has visited Trishank's Zoo recently. Leave your mark and become a part of our community.</p>
+        <a href="/visitor-log" class="btn btn-primary">View Log</a>
+    </div>
+</div>
+
 <style>
     /* Custom Styles */
     body {
@@ -14,34 +75,30 @@
         background-color: #f8f9fa;
     }
 
-
-    h6 {
-        color: #009bff;
-        margin-bottom: 20px;
-
-    }
-
-
     h1 {
         color: #007bff;
         margin-bottom: 20px;
     }
 
-    .form-group {
+    h6 {
+        color: #009bff;
         margin-bottom: 20px;
     }
 
-    th {
+    .section {
+        margin-bottom: 40px;
+    }
+
+    .btn-primary {
         background-color: #007bff;
-        color: #fff;
+        border: none;
     }
 
-    tr {
-        text-decoration-color: black;
-    }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
 
-    tbody tr:nth-child(even) {
-        background-color: #f2f2f2;
+    .navbar {
+        margin-bottom: 20px;
     }
 </style>
-

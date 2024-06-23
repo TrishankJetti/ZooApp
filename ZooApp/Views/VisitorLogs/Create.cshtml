@@ -1,11 +1,12 @@
 ﻿@model ZooApp.Models.VisitorLog
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Comment";
 }
+
 <link rel="stylesheet" href="~/css/site.css" />
 
-<h4 style="text-align:center">Comment Your Thoughts!</h4>
+<h4 style="text-align:center">Create Comment</h4>
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-6">
@@ -39,7 +40,7 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -54,14 +55,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-<style>
-    .form-group:hover .input-group::after {
-        content: "▼"; /* Arrow symbol that represents a dropdown typically used in web design */
-        position: absolute;
-        right: 10px;
-        top: 5px;
-        font-size: 20px;
-        pointer-events: none; /* Ensures that the dropdown will show all the roles */
-    }
-</style>

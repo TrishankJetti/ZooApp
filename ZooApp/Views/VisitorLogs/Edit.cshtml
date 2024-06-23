@@ -1,7 +1,7 @@
 ﻿@model ZooApp.Models.VisitorLog
 
 @{
-    ViewData["Title"] = "Comments";
+    ViewData["Title"] = "Edit Comment";
 }
 
 <link rel="stylesheet" href="~/css/site.css" />
@@ -10,8 +10,10 @@
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <form asp-action="Create" style="text-align:center">
+        <form asp-action="Edit" style="text-align:center">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="VisitorLogId" />
 
             <div class="form-group">
                 <label asp-for="VisitorId" class="control-label">Your Visitors</label>
@@ -19,16 +21,18 @@
                     <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId">
                         <option value="" disabled selected style="color: white; background-color:dimgrey">Select your Visitor from dropdown</option>
                     </select>
-                    <div class="form-group">
-                        <label asp-for="Review" class="control-label">Review</label>
-                        <div class="input-group">
-                            <select asp-for="Review" class="form-control" asp-items="Html.GetEnumSelectList<ReviewType>()">
-                                <option value="" disabled selected style="color: white; background-color:dimgrey">Select from dropdown</option>
-                            </select>
-                        </div>
-                        <span asp-validation-for="Review" class="text-danger"></span>
-                    </div>
+                </div>
                 <span asp-validation-for="VisitorId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Review" class="control-label">Review</label>
+                <div class="input-group">
+                    <select asp-for="Review" class="form-control" asp-items="Html.GetEnumSelectList<ReviewType>()">
+                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select from dropdown</option>
+                    </select>
+                </div>
+                <span asp-validation-for="Review" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -38,11 +42,9 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Save Changes" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-           
         </form>
-       
     </div>
 </div>
 
@@ -55,14 +57,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-<style>
-    .form-group:hover .input-group::after {
-        content: "▼"; /* Arrow symbol that represents a dropdown typically used in web design */
-        position: absolute;
-        right: 10px;
-        top: 5px;
-        font-size: 20px;
-        pointer-events: none; /* Ensures that the dropdown will show all the roles */
-    }
-</style>

@@ -1,23 +1,28 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ZooApp.Models;
-using ZooApp.Data;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using ZooApp.data;
+using ZooApp.Data;
+using ZooApp.Models;
 
 namespace ZooApp.Controllers
 {
     public class AnimalsController : Controller
     {
         private readonly ZooAppContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public AnimalsController(ZooAppContext context)
+        public AnimalsController(ZooAppContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Animals
@@ -33,7 +38,7 @@ namespace ZooApp.Controllers
             ViewData["AnimalAgeSorter"] = sortOrder == "Age" ? "age_desc" : "Age";
             ViewData["AnimalNameSort"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 
-            // Page number handling
+            // Pagination 
             if (searchString != null || dietType != currentDietType || searchId.HasValue)
             {
                 pageNumber = 1; // Reset to first page if filters change
@@ -63,6 +68,8 @@ namespace ZooApp.Controllers
                 animals = animals.Where(a => a.Diet == Enum.Parse<DietType>(dietType));
             }
 
+
+           
             // Apply sorting
             switch (sortOrder)
             {
@@ -80,9 +87,21 @@ namespace ZooApp.Controllers
                     break;
             }
 
+
+
+
             // Page size and pagination
             int pageSize = 3;
-            return View(await PaginatedList<Animal>.CreateAsync(animals.AsNoTracking(), pageNumber ?? 1, pageSize));
+            var paginatedAnimals = await PaginatedList<Animal>.CreateAsync(animals.AsNoTracking(), pageNumber ?? 1, pageSize);
+
+            if (paginatedAnimals.Any())
+            {
+                return View(paginatedAnimals);
+            }
+            else
+            {
+                return View("NoAnimals");
+            }
         }
 
         // GET: Animals/Details/5
@@ -118,7 +137,7 @@ namespace ZooApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Employee")]
-        public async Task<IActionResult> Create([Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId")] Animal animal)
+        public async Task<IActionResult> Create([Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId,ImageFile")] Animal animal)
         {
             if (!ModelState.IsValid)
             {
@@ -139,6 +158,18 @@ namespace ZooApp.Controllers
                     return View(animal);
                 }
 
+                if (animal.ImageFile != null)
+                {
+                    string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + animal.ImageFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await animal.ImageFile.CopyToAsync(fileStream);
+                    }
+                    animal.ImageFileName = uniqueFileName;
+                }
+
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -148,6 +179,7 @@ namespace ZooApp.Controllers
             ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
             return View(animal);
         }
+
 
         // GET: Animals/Edit/5
         [Authorize(Roles = "Admin,Employee")]
@@ -168,58 +200,78 @@ namespace ZooApp.Controllers
             return View(animal);
         }
 
+
+        // POST: Animals/Edit/5
         // POST: Animals/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Employee")]
-        public async Task<IActionResult> Edit(int id, [Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId")] Animal animal)
+        public async Task<IActionResult> Edit(int id, [Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId,ImageFileName,ImageFile")] Animal animal)
         {
             if (id != animal.AnimalId)
             {
                 return NotFound();
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                try
-                {
-                    var enclosure = await _context.Enclosure
-                        .Include(e => e.Animals)
-                        .FirstOrDefaultAsync(e => e.EnclosureId == animal.EnclosureId);
-
-                    if (enclosure == null)
-                    {
-                        return NotFound();
-                    }
-
-                    if (enclosure.Animals.Count >= enclosure.Capacity)
-                    {
-                        ModelState.AddModelError(string.Empty, "This enclosure is at full capacity. Please choose another enclosure or create a new one.");
-                        ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
-                        ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
-                        return View(animal);
-                    }
-
-                    _context.Update(animal);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AnimalExists(animal.AnimalId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
+                ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
+                return View(animal);
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
-            ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
-            return View(animal);
+
+            try
+            {
+                // Retrieve the existing entity without tracking
+                var existingAnimal = await _context.Animal.AsNoTracking().FirstOrDefaultAsync(a => a.AnimalId == id);
+                if (existingAnimal == null)
+                {
+                    return NotFound();
+                }
+
+                // Update specific properties only
+                existingAnimal.Name = animal.Name;
+                existingAnimal.Species = animal.Species;
+                existingAnimal.Age = animal.Age;
+                existingAnimal.Sex = animal.Sex;
+                existingAnimal.Diet = animal.Diet;
+                existingAnimal.EmployeeId = animal.EmployeeId;
+                existingAnimal.EnclosureId = animal.EnclosureId;
+
+                // Handle image file update if a new file is uploaded
+                if (animal.ImageFile != null)
+                {
+                    string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + animal.ImageFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await animal.ImageFile.CopyToAsync(fileStream);
+                    }
+                    existingAnimal.ImageFileName = uniqueFileName;
+                }
+
+                // Update the entity in the database
+                _context.Update(existingAnimal);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AnimalExists(animal.AnimalId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
+
+
+
 
         // GET: Animals/Delete/5
         [Authorize(Roles = "Admin,Employee")]

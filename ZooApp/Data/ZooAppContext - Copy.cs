@@ -135,11 +135,11 @@ namespace ZooApp.data
 
             // Seeding data for the Event table
             modelBuilder.Entity<Event>().HasData(
-                new Event { EventId = 1, Name = "Zoo Safari", Date = DateTime.Now.AddDays(10), Description = "Guided safari tour through the zoo", TicketPrice = 25m , ImageFileName="Guide.jpg"  },
-               new Event { EventId = 2, Name = "Wildlife Conservation Talk", Date = DateTime.Now.AddDays(17), Description = "Educational talk on wildlife conservation", TicketPrice = 10m , ImageFileName = "EducationalTalk.jpg" },
-              new Event { EventId = 3, Name = "Night at the Zoo", Date = DateTime.Now.AddDays(25), Description = "Experience the zoo after dark with special activities and tours", TicketPrice = 30m, ImageFileName = "ZooAfterDark.jpg" },
-             new Event { EventId = 4, Name = "Bird Watching Tour", Date = DateTime.Now.AddDays(30), Description = "Guided tour focusing on observing various bird species in the zoo", TicketPrice = 15m, ImageFileName = "BirdTour.jpg" },
-                new Event { EventId = 5, Name = "Animal Feeding Demonstration", Date = DateTime.Now.AddDays(40), Description = "Learn about animal diets and behavior during feeding time", TicketPrice = 20m, ImageFileName="AnimalDiet.jpg" }
+                new Event { EventId = 1, Name = "Zoo Safari", Date = DateTime.Now.AddDays(89), Description = "Guided safari tour through the zoo", TicketPrice = 25m , ImageFileName="Guide.jpg"  },
+               new Event { EventId = 2, Name = "Wildlife Conservation Talk", Date = DateTime.Now.AddDays(132), Description = "Educational talk on wildlife conservation", TicketPrice = 10m , ImageFileName = "EducationalTalk.jpg" },
+              new Event { EventId = 3, Name = "Night at the Zoo", Date = DateTime.Now.AddDays(90), Description = "Experience the zoo after dark with special activities and tours", TicketPrice = 30m, ImageFileName = "ZooAfterDark.jpg" },
+             new Event { EventId = 4, Name = "Bird Watching Tour", Date = DateTime.Now.AddDays(210), Description = "Guided tour focusing on observing various bird species in the zoo", TicketPrice = 15m, ImageFileName = "BirdTour.jpg" },
+                new Event { EventId = 5, Name = "Animal Feeding Demonstration", Date = DateTime.Now.AddDays(98), Description = "Learn about animal diets and behavior during feeding time", TicketPrice = 20m, ImageFileName="AnimalDiet.jpg" }
 
 
                );
@@ -193,22 +193,22 @@ namespace ZooApp.data
 
             // Seeding data for the Animal table
             modelBuilder.Entity<Animal>().HasData(
-                new Animal { AnimalId = 1, Name = "Lion", Species = "Panthera leo", Age = 5, Sex = Sex.Male, Diet = DietType.Carnivore, EmployeeId = 1, EnclosureId = 1 },
-                new Animal { AnimalId = 2, Name = "Elephant", Species = "Loxodonta africana", Age = 10, Sex = Sex.Female, Diet = DietType.Herbivore, EmployeeId = 2, EnclosureId = 2 },
-                 new Animal { AnimalId = 3, Name = "Parrot", Species = "Psittaciformes", Age = 3, Sex = Sex.Female, Diet = DietType.Omnivore, EmployeeId = 5, EnclosureId = 5 },
-                new Animal { AnimalId = 4, Name = "Tiger", Species = "Panthera tigris", Age = 6, Sex = Sex.Female, Diet = DietType.Carnivore, EmployeeId = 3, EnclosureId = 1 },
-                new Animal { AnimalId = 5, Name = "Gorilla", Species = "Gorilla gorilla", Age = 12, Sex = Sex.Male, Diet = DietType.Omnivore, EmployeeId = 4, EnclosureId = 2 },
-                new Animal { AnimalId = 6, Name = "Penguin", Species = "Aptenodytes forsteri", Age = 5, Sex = Sex.Male, Diet = DietType.Pescatarian, EmployeeId = 5, EnclosureId = 6 },
-                new Animal { AnimalId = 7, Name = "Kangaroo", Species = "Macropus", Age = 4, Sex = Sex.Female, Diet = DietType.Herbivore, EmployeeId = 6, EnclosureId = 3 },
-                new Animal { AnimalId = 8, Name = "Crocodile", Species = "Crocodylus", Age = 10, Sex = Sex.Male, Diet = DietType.Carnivore, EmployeeId = 3, EnclosureId = 4 },
-                new Animal { AnimalId = 9, Name = "Zebra", Species = "Equus zebra", Age = 7, Sex = Sex.Female, Diet = DietType.Herbivore, EmployeeId = 4, EnclosureId = 1 },
-                new Animal { AnimalId = 10, Name = "Panda", Species = "Ailuropoda melanoleuca", Age = 9, Sex = Sex.Male, Diet = DietType.Herbivore, EmployeeId = 5, EnclosureId = 2 },
-                new Animal { AnimalId = 11, Name = "Giraffe", Species = "Giraffa", Age = 8, Sex = Sex.Female, Diet = DietType.Herbivore, EmployeeId = 6, EnclosureId = 3 },
-                new Animal { AnimalId = 12, Name = "Lemur", Species = "Lemur", Age = 4, Sex = Sex.Male, Diet = DietType.Omnivore, EmployeeId = 3, EnclosureId = 4 },
-                new Animal { AnimalId = 13, Name = "Polar Bear", Species = "Ursus maritimus", Age = 11, Sex = Sex.Female, Diet = DietType.Carnivore, EmployeeId = 4, EnclosureId = 6 },
-                new Animal { AnimalId = 14, Name = "Hippo", Species = "Hippopotamus", Age = 6, Sex = Sex.Male, Diet = DietType.Herbivore, EmployeeId = 5, EnclosureId = 2 },
-                new Animal { AnimalId = 15, Name = "Sloth", Species = "Bradypus", Age = 5, Sex = Sex.Female, Diet = DietType.Herbivore, EmployeeId = 6, EnclosureId = 4 },
-                new Animal { AnimalId = 16, Name = "Wolf", Species = "Canis lupus", Age = 8, Sex = Sex.Male, Diet = DietType.Carnivore, EmployeeId = 3, EnclosureId = 3 }
+                new Animal { AnimalId = 1, Name = "Lion", Species = "Panthera leo", Age = 5, Sex = Sex.Male, Diet = DietType.Carnivore, EmployeeId = 1, EnclosureId = 1, ImageFileName= "Lion.jpg" },
+                new Animal { AnimalId = 2, Name = "Elephant", Species = "Loxodonta africana", Age = 10, Sex = Sex.Female, Diet = DietType.Herbivore, EmployeeId = 2, EnclosureId = 2 , ImageFileName="Elephant.jpg" },
+                 new Animal { AnimalId = 3, Name = "Parrot", Species = "Psittaciformes", Age = 3, Sex = Sex.Female, Diet = DietType.Omnivore, EmployeeId = 5, EnclosureId = 5 , ImageFileName="Parrot.jpg"},
+                new Animal { AnimalId = 4, Name = "Tiger", Species = "Panthera tigris", Age = 6, Sex = Sex.Female, Diet = DietType.Carnivore, EmployeeId = 3, EnclosureId = 1, ImageFileName = "Tiger.jpg" },
+                new Animal { AnimalId = 5, Name = "Gorilla", Species = "Gorilla gorilla", Age = 12, Sex = Sex.Male, Diet = DietType.Omnivore, EmployeeId = 4, EnclosureId = 2, ImageFileName = "Gorilla.jpg" },
+                new Animal { AnimalId = 6, Name = "Penguin", Species = "Aptenodytes forsteri", Age = 5, Sex = Sex.Male, Diet = DietType.Pescatarian, EmployeeId = 5, EnclosureId = 6, ImageFileName = "Penguin.jpg" },
+                new Animal { AnimalId = 7, Name = "Kangaroo", Species = "Macropus", Age = 4, Sex = Sex.Female, Diet = DietType.Herbivore, EmployeeId = 6, EnclosureId = 3, ImageFileName = "Kangaroo.jpg" },
+                new Animal { AnimalId = 8, Name = "Crocodile", Species = "Crocodylus", Age = 10, Sex = Sex.Male, Diet = DietType.Carnivore, EmployeeId = 3, EnclosureId = 4, ImageFileName = "Crocodile.jpg" },
+                new Animal { AnimalId = 9, Name = "Zebra", Species = "Equus zebra", Age = 7, Sex = Sex.Female, Diet = DietType.Herbivore, EmployeeId = 4, EnclosureId = 1, ImageFileName = "Zebra.jpg" },
+                new Animal { AnimalId = 10, Name = "Panda", Species = "Ailuropoda melanoleuca", Age = 9, Sex = Sex.Male, Diet = DietType.Herbivore, EmployeeId = 5, EnclosureId = 2, ImageFileName = "Panda.jpg" },
+                new Animal { AnimalId = 11, Name = "Giraffe", Species = "Giraffa", Age = 8, Sex = Sex.Female, Diet = DietType.Herbivore, EmployeeId = 6, EnclosureId = 3, ImageFileName = "Giraffe.jpg" },
+                new Animal { AnimalId = 12, Name = "Lemur", Species = "Lemur", Age = 4, Sex = Sex.Male, Diet = DietType.Omnivore, EmployeeId = 3, EnclosureId = 4, ImageFileName = "Lemur.jpg" },
+                new Animal { AnimalId = 13, Name = "Polar Bear", Species = "Ursus maritimus", Age = 11, Sex = Sex.Female, Diet = DietType.Carnivore, EmployeeId = 4, EnclosureId = 6, ImageFileName = "PolarBear.jpg" },
+                new Animal { AnimalId = 14, Name = "Hippo", Species = "Hippopotamus", Age = 6, Sex = Sex.Male, Diet = DietType.Herbivore, EmployeeId = 5, EnclosureId = 2, ImageFileName = "Hippo.jpg" },
+                new Animal { AnimalId = 15, Name = "Sloth", Species = "Bradypus", Age = 5, Sex = Sex.Female, Diet = DietType.Herbivore, EmployeeId = 6, EnclosureId = 4, ImageFileName = "Sloth.jpg" },
+                new Animal { AnimalId = 16, Name = "Wolf", Species = "Canis lupus", Age = 8, Sex = Sex.Male, Diet = DietType.Carnivore, EmployeeId = 3, EnclosureId = 3, ImageFileName = "Wolf.jpg" }
 
             );
 
@@ -281,7 +281,56 @@ namespace ZooApp.data
 
 
             // Seeding data for the VisitorLog table
-           
+            modelBuilder.Entity<VisitorLog>().HasData(
+                new VisitorLog
+                {
+                    VisitorLogId = 1,
+                    VisitorId = 1,
+                    Comments = "Had a wonderful time seeing the lions.",
+                    Review = ReviewType.Positive,
+                    CreatedOn = DateTime.Now.AddDays(-7)
+                },
+                new VisitorLog
+                {
+                    VisitorLogId = 2,
+                    VisitorId = 2,
+                    Comments = "The enclosures were clean and animals seemed happy.",
+                    Review = ReviewType.Positive,
+                    CreatedOn = DateTime.Now.AddDays(-5)
+                },
+                new VisitorLog
+                {
+                    VisitorLogId = 3,
+                    VisitorId = 3,
+                    Comments = "It was okay, but a bit crowded.",
+                    Review = ReviewType.Neutral,
+                    CreatedOn = DateTime.Now.AddDays(-3)
+                },
+                new VisitorLog
+                {
+                    VisitorLogId = 4,
+                    VisitorId = 4,
+                    Comments = "The event was informative, but too long.",
+                    Review = ReviewType.Neutral,
+                    CreatedOn = DateTime.Now.AddDays(-1)
+                },
+                new VisitorLog
+                {
+                    VisitorLogId = 5,
+                    VisitorId = 5,
+                    Comments = "Had issues finding parking.",
+                    Review = ReviewType.Negative,
+                    CreatedOn = DateTime.Now.AddDays(-2)
+                },
+                new VisitorLog
+                {
+                    VisitorLogId = 6,
+                    VisitorId = 6,
+                    Comments = "Loved the penguin show!",
+                    Review = ReviewType.Positive,
+                    CreatedOn = DateTime.Now.AddDays(-4)
+                }
+            );
 
 
 

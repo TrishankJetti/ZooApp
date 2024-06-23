@@ -30,10 +30,20 @@
             @Html.DisplayFor(model => model.Capacity)
         </dd>
     </dl>
-    
-    <form asp-action="Delete">
+
+    <form asp-action="Delete" onsubmit="return confirmDelete()"> <!--The onsubmit attribute makes sure that when the submit button is clicked a special action occurs. In this case, the confirmDelete() method will activate. The method is explained clearly below. -->
         <input type="hidden" asp-for="EnclosureId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>
+
+    <!--This piece of javascript ensure that a popup is displayed prompting the user to either accept the changes that the delete
+        is about to make or reject them.
+    -->
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this enclosure and all related animals?");
+        }
+    </script>
+
 </div>

@@ -1,18 +1,23 @@
-﻿@model IEnumerable<ZooApp.Models.Visitor>
+﻿@model PaginatedList<ZooApp.Models.Visitor>
 @{
     ViewData["Title"] = "Visitors";
 }
+
 <h2>Visitors</h2>
+
 <form asp-action="Index">
     <div class="form-group">
         <input type="text" name="searchString" value="@ViewData["VisitorNameFilter"]" class="form-control" placeholder="Search by name or email">
         <input type="submit" value="Search" class="btn btn-default">
     </div>
 </form>
+
 <table class="table">
     <thead>
         <tr>
-            <th>Name</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Name <i class="fas fa-sort"></i></a>
+            </th>
             <th>Email</th>
             <th>Phone</th>
             <th>Address</th>
@@ -22,18 +27,39 @@
     <tbody>
         @foreach (var item in Model)
         {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Email</td>
-                    <td>@item.Phone</td>
-                    <td>@item.Address</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.VisitorId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.VisitorId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.VisitorId">Delete</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Email</td>
+                <td>@item.Phone</td>
+                <td>@item.Address</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.VisitorId"><i class="fas fa-edit"></i> Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.VisitorId"><i class="fas fa-info-circle"></i> Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.VisitorId"><i class="fas fa-trash-alt"></i> Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
-<a asp-action="Create" class="btn btn-primary">Create New</a>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-end">
+        <li class="page-item @prevDisabled">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" asp-route-searchString="@ViewData["VisitorNameFilter"]">Previous</a>
+        </li>
+        <li class="page-item @nextDisabled">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" asp-route-searchString="@ViewData["VisitorNameFilter"]">Next</a>
+        </li>
+    </ul>
+</nav>
+
+<a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Create New</a>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Font Awesome script -->
+}

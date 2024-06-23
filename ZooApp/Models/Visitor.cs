@@ -21,7 +21,7 @@ namespace ZooApp.Models
 
         [Required(ErrorMessage = "Address is required")]
         [MinLength(5, ErrorMessage = "Address must be at least 5 characters long")]
-        public string Address { get; set; }
+        public string Address { get; set; } 
 
         [Required]
         public string CreatedByUserId { get; set; }
