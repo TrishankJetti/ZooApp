@@ -48,7 +48,7 @@ namespace ZooApp.Controllers
                 searchString = currentFilter; // Use previous filter
             }
 
-            // Query the animals with initial filtering
+            // Ensures that an EMployee is associated with oe Animal and an Enclosure is too. This enables us to view the fields of these of these tables rather than just the id field.
             var animals = from a in _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure)
                           select a;
 

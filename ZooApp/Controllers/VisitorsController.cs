@@ -28,8 +28,8 @@ namespace ZooApp.Controllers
             _userManager = userManager;
         }
 
-        // GET: Visitors
-        public async Task<IActionResult> Index(string searchString, string sortOrder, int? pageNumber)
+        // GET: Visitors/Index
+        public async Task<IActionResult> Index(string searchString, string sortOrder, int? pageNumber, bool isSearch = false)
         {
             ViewData["VisitorNameFilter"] = searchString;
             ViewData["CurrentSort"] = sortOrder;
@@ -45,6 +45,7 @@ namespace ZooApp.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 visitors = visitors.Where(v => v.Name.Contains(searchString) || v.Email.Contains(searchString));
+                isSearch = true; // Mark that a search has been performed
             }
 
             // Apply sorting
@@ -59,9 +60,27 @@ namespace ZooApp.Controllers
             }
 
             // Pagination setup
-            int pageSize = 3;
-            return View(await PaginatedList<Visitor>.CreateAsync(visitors.AsNoTracking(), pageNumber ?? 1, pageSize));
+            int pageSize = 4; // one page may show up to 3 records.
+            var paginatedVisitors = await PaginatedList<Visitor>.CreateAsync(visitors.AsNoTracking(), pageNumber ?? 1, pageSize);
+
+            // Code checks if there is any visitors left after the search and filter.
+            if (isSearch && !paginatedVisitors.Any())
+            {
+                return RedirectToAction("NoVisitors");
+            }
+
+            // Show the normal index view if not a search or if there are results
+            return View(paginatedVisitors);
         }
+
+        // NoResults action
+        public IActionResult NoVisitors()
+        {
+            return View();
+        }
+
+
+
 
 
         // GET: Visitors/Details/5
@@ -106,6 +125,7 @@ namespace ZooApp.Controllers
             }
             return View(visitor);
         }
+
 
         // GET: Visitors/Edit/5
         public async Task<IActionResult> Edit(int? id)

@@ -39,11 +39,15 @@
             <a asp-action="Index" style="color: #d2691e;">Back to original List</a>
             <hr />
 
+            
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                                    {
             <div class="row">
                 <div class="col">
                     <a asp-action="Create" class="btn btn-success" style="background-color: #20c997; border-color: #20c997;">Create New</a>
                 </div>
             </div>
+                                    }
             
             <br />
             <div class="row">

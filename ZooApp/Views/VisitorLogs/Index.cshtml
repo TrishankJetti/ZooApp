@@ -2,35 +2,39 @@
 
 @{
     ViewData["Title"] = "Comments";
+    int visitorCount = (int)ViewData["VisitorCount"];
     var currentUserId = ViewBag.CurrentUserId as string;
 }
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
 <link rel="stylesheet" href="~/css/site.css" />
 
-<h1 class="text-center">Comment Section</h1>
-
+<h1 class="text-center my-4">Comment Section</h1>
 <hr />
 
 <div class="container">
-    <div class="row mb-3">
+    <div class="row mb-4">
         <div class="col text-end">
-
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated && visitorCount > 0)
             {
-                <a asp-action="Create" class="btn btn-success btn-lg d-flex align-items-center justify-content-center" style="width: 200px; height: 50px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chat-dots-fill me-2" viewBox="0 0 16 16">
-                    <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
-                </svg>
-                Create New
-            </a>
+                <a asp-action="Create" class="btn btn-success btn-lg">
+                    <i class="fas fa-comment-dots me-2"></i> Create New
+                </a>
+            }
+
+            @if (visitorCount == 0 && User.Identity.IsAuthenticated)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <p style="text-align:center">You haven't Created any Visitors Yet'. Please create visitors first to post Comments.</p>
+                    <a asp-action="Index" asp-controller="Visitors" class="btn btn-info d-flex justify-content-center" >Go to your Visitors</a>
+                </div>
             }
         </div>
     </div>
 
-
-    <div class="card shadow-sm mb-3" style="max-width: 100%; border: none;">
-        <div class="card-body p-3">
+    <div class="card shadow-sm mb-3 border-0">
+        <div class="card-body p-4">
             <ul class="list-unstyled">
                 @foreach (var item in Model)
                 {
@@ -39,24 +43,35 @@
                             <h5 class="mt-0 mb-1">
                                 @Html.DisplayFor(modelItem => item.Visitor.Name)
                                 <small class="text-muted">@Html.DisplayFor(modelItem => item.CreatedOn)</small>
-                                @Html.DisplayFor(modelItem => item.Review)
+
+                                @if (item.Review == ReviewType.Negative)
+                                {
+                                    <span class="badge bg-danger text-light">@Html.DisplayFor(modelItem => item.Review)</span>
+                                }
+                                else if (item.Review == ReviewType.Positive)
+                                {
+                                    <span class="badge bg-success text-light">@Html.DisplayFor(modelItem => item.Review)</span>
+                                }
+                                else if (item.Review == ReviewType.Neutral)
+                                {
+                                    <span class="badge bg-warning text-light">@Html.DisplayFor(modelItem => item.Review)</span>
+                                }
                             </h5>
+                            @if (item.ModifiedOn.HasValue)
+                            {
+                                <span class="text-success">Modified on @DateTime.Now</span>
+                            }
                             <p>@Html.DisplayFor(modelItem => item.Comments)</p>
 
                             @if (item.Visitor.CreatedByUserId == currentUserId || User.IsInRole("Admin"))
                             {
                                 <div class="text-end">
-                                    <a asp-action="Edit" asp-route-id="@item.VisitorLogId">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="brown" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
-                                        </svg>
+                                    <a asp-action="Edit" asp-route-id="@item.VisitorLogId" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-edit"></i> Edit
                                     </a>
 
-
-                                    <a asp-action="Delete" asp-route-id="@item.VisitorLogId" class="btn btn-sm btn-danger">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                                        </svg>
+                                    <a asp-action="Delete" asp-route-id="@item.VisitorLogId" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </div>
                             }
@@ -68,17 +83,6 @@
     </div>
 </div>
 
-<style>
-    @@keyframes bounce {
-        0%, 100% {
-            transform: translateY(0);
-        }
-
-        50% {
-            transform: translateY(-3px);
-        }
-    }
-</style>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

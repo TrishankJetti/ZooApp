@@ -59,7 +59,7 @@ namespace ZooApp.Models
 
         public ValidHireDateAttribute()
         {
-            _minDate = DateTime.Now.AddYears(-20); // Set a 50-year limit for example
+            _minDate = DateTime.Now.AddYears(-20); // Set a 20-year limit for example
         }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)

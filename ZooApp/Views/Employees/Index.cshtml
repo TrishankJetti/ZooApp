@@ -2,7 +2,8 @@
 @{
     ViewData["Title"] = "Employee Directory";
 }
-
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!--Links all the bootsrap icons,buttons and etc to the website so they can be accessed.-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"><!-- This link tags links Font Awesome's library of svg icons. These icons can be interacted with using CSS.-->
 <div class="container-fluid">
     <div class="row mb-3">
         <div class="col-md-12 text-center">
@@ -86,10 +87,11 @@
                     {
                         <div class="card-footer text-center">
                             <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-primary">Edit</a>
-                            <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-info">Details</a>
+                            
                             <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-danger">Delete</a>
                         </div>
                     }
+                    <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-info">Details</a>
                 </div>
             </div>
         }

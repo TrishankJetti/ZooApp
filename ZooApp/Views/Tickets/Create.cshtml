@@ -18,11 +18,7 @@
                     <label asp-for="VisitorId" class="control-label"><i class="fas fa-user"></i> Visitor</label>
                     <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
                 </div>
-                <div class="form-group">
-                    <label asp-for="DateOfPurchase" class="control-label"><i class="fas fa-calendar-alt"></i> Date of Purchase</label>
-                    <input asp-for="DateOfPurchase" class="form-control" placeholder="yyyy-mm-dd" />
-                    <span asp-validation-for="DateOfPurchase" class="text-danger"></span>
-                </div>
+               
                 <div class="form-group">
                     <label asp-for="EventId" class="control-label"><i class="fas fa-calendar-check"></i> Event</label>
                     <select asp-for="EventId" class="form-control" asp-items="ViewBag.EventId"></select>

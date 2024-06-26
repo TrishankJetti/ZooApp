@@ -9,6 +9,8 @@ using ZooApp.Models;
 using ZooApp.data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Drawing.Printing;
+using System.Diagnostics.Metrics;
 
 namespace ZooApp.Controllers
 {
@@ -29,36 +31,82 @@ namespace ZooApp.Controllers
             _userManager = userManager;
         }
 
-        // GET: Tickets
-        public async Task<IActionResult> Index()
+        // GET: Tickets/Index
+        public async Task<IActionResult> Index(string searchString, string sortOrder, int? pageNumber)
         {
-            var zooAppContext = _context.Ticket.Include(t => t.Event).Include(t => t.Visitor);
-            return View(await zooAppContext.ToListAsync());
-        }
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["CurrentSort"] = sortOrder;
 
+            var userId = _userManager.GetUserId(User); // Get the current user's ID
 
-        // GET: Tickets/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            // Gets all the visitors where the CreatedByUserId is equal to the particular signed in user's ID
+            int visitorCount = await _context.Visitor
+                                             .Where(v => v.CreatedByUserId == userId)
+                                             .CountAsync();
+
+            // Retrieve the tickets for the current user
+            var ticketsQuery = _context.Ticket
+                                       .Include(t => t.Visitor)
+                                       .Include(t => t.Event)
+                                       .Where(t => t.Visitor.CreatedByUserId == userId);
+
+            // Apply search filter
+            if (!String.IsNullOrEmpty(searchString))
             {
-                return NotFound();
+                ticketsQuery = ticketsQuery.Where(t => t.Visitor.Name.Contains(searchString) || t.Visitor.Email.Contains(searchString));
             }
 
-            var ticket = await _context.Ticket
-                .Include(t => t.Event)
-                .Include(t => t.Visitor)
-                .FirstOrDefaultAsync(m => m.TicketId == id);
-            if (ticket == null)
+            // Apply sorting
+            switch (sortOrder)
             {
-                return NotFound();
+                case "name_desc":
+                    ticketsQuery = ticketsQuery.OrderByDescending(t => t.Visitor.Name);
+                    break;
+                case "Date":
+                    ticketsQuery = ticketsQuery.OrderBy(t => t.DateOfPurchase);
+                    break;
+                case "date_desc":
+                    ticketsQuery = ticketsQuery.OrderByDescending(t => t.DateOfPurchase);
+                    break;
+                default:
+                    ticketsQuery = ticketsQuery.OrderBy(t => t.Visitor.Name);
+                    break;
             }
 
-            return View(ticket);
+            // Pagination setup
+            int pageSize = 5;
+            var paginatedTickets = await PaginatedList<Ticket>.CreateAsync(ticketsQuery.AsNoTracking(), pageNumber ?? 1, pageSize);
+
+            // Check if there are no tickets left after filtering and pagination
+            if (!paginatedTickets.Any() && !String.IsNullOrEmpty(searchString))
+            {
+                return RedirectToAction("NoTickets");
+            }
+
+            // If there are no visitors created by the user
+            if (visitorCount == 0)
+            {
+                // Redirect to an appropriate action if needed, or just render the view with an empty ticket list
+                // For example: return RedirectToAction("Create", "Visitors"); to prompt the user to create visitors first
+            }
+
+            // Pass the visitor count to the view
+            ViewData["VisitorCount"] = visitorCount;
+
+            return View(paginatedTickets);
         }
+
+        // NoTickets action
+        public IActionResult NoTickets()
+        {
+            return View();
+        }
+
 
         // GET: Tickets/Create
-      
+
         public IActionResult Create()
         {
             var userId = _userManager.GetUserId(User);

@@ -1,57 +1,82 @@
 ﻿@model ZooApp.Models.VisitorLog
 
 @{
-    ViewData["Title"] = "Create Comment";
+    ViewData["Title"] = "Create Comment"; // Sets the page title displayed in the browser tab
 }
 
-<link rel="stylesheet" href="~/css/site.css" />
 
-<h4 style="text-align:center">Create Comment</h4>
-<hr />
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <form asp-action="Create" style="text-align:center">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<style>
+    /* CSS for dropdown arrow */
+    .form-group:hover .input-group::after {
+        content: "▼"; /* Arrow symbol that represents a dropdown */
+        position: absolute;
+        right: 10px;
+        top: 5px;
+        font-size: 20px;
+        pointer-events: none;
+    }
+</style>
 
-            <div class="form-group">
-                <label asp-for="VisitorId" class="control-label">Your Visitors</label>
-                <div class="input-group">
-                    <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId">
-                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select your Visitor from dropdown</option>
-                    </select>
-                </div>
-                <span asp-validation-for="VisitorId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Review" class="control-label">Review</label>
-                <div class="input-group">
-                    <select asp-for="Review" class="form-control" asp-items="Html.GetEnumSelectList<ReviewType>()">
-                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select from dropdown</option>
-                    </select>
-                </div>
-                <span asp-validation-for="Review" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Comments" class="control-label">Comments</label>
-                <textarea asp-for="Comments" class="form-control" rows="5"></textarea>
-                <span asp-validation-for="Comments" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+@if (ViewBag.VisitorId == null)
+{
+    <!-- If no visitors are available, display a warning and a link to create a visitor -->
+    <div class="alert alert-warning" role="alert" style="text-align:center">
+        No visitors available. Please create a visitor first.
     </div>
-</div>
+    <div style="text-align:center">
+        <a asp-action="Index" asp-controller="Visitors" class="btn btn-primary">Create Visitor</a>
+    </div>
+}
+else
+{
+    <!-- Form for creating a visitor log comment -->
+    <h4 style="text-align:center">Create Comment</h4>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create" method="post" class="text-center">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div> <!-- Validation summary area for model errors -->
+
+                <div class="form-group">
+                    <label asp-for="VisitorId" class="control-label">Select Visitor</label> <!-- Label for 'VisitorId' field -->
+                    <div class="input-group">
+                        <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId">
+                            <option value="" disabled selected>Select your visitor from dropdown</option> <!-- Placeholder option for 'VisitorId' -->
+                        </select>
+                    </div>
+                    <span asp-validation-for="VisitorId" class="text-danger"></span> <!-- Validation message for 'VisitorId' -->
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Review" class="control-label">Review</label> <!-- Label for 'Review' field -->
+                    <div class="input-group">
+                        <select asp-for="Review" class="form-control" asp-items="Html.GetEnumSelectList<ReviewType>()">
+                            <option value="" disabled selected>Select from dropdown</option> <!-- Placeholder option for 'Review' -->
+                        </select>
+                    </div>
+                    <span asp-validation-for="Review" class="text-danger"></span> <!-- Validation message for 'Review' -->
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Comments" class="control-label">Comments</label> <!-- Label for 'Comments' field -->
+                    <textarea asp-for="Comments" class="form-control" rows="5"></textarea> <!-- Textarea for 'Comments' -->
+                    <span asp-validation-for="Comments" class="text-danger"></span> <!-- Validation message for 'Comments' -->
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" /> <!-- Submit button -->
+                </div>
+            </form>
+        </div>
+    </div>
+}
 
 <div style="text-align:center">
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a> <!-- Link to navigate back to the list of visitor logs -->
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    } <!-- Loads necessary validation scripts -->
 }

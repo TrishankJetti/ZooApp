@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZooApp.Models
@@ -16,12 +18,20 @@ namespace ZooApp.Models
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string? Email { get; set; }
 
-        [RegularExpression(@"^(\+?64|0) ?[2-9]\d{7,9}$", ErrorMessage = "Invalid phone number format. Please enter a")]
+        // This validaiton ensures that Phone number msut begin with +64 and then have hypen ("-") then 2 digits then another hyphen then 3 digits then another hyphen then another 4 digits..
+        [RegularExpression(@"^\+64-\d{2}-\d{3}-\d{4}$", ErrorMessage = "Sorry, only New Zealand phone numbers in the format +64-00-000-0000 are supported currently.")]
         public string? Phone { get; set; }
+
+
+
+
+        //Address and its validaitons. Made sure users may not enter special characters and just random numbers ans their address and made sure atleast one letter has to be written inorder for this to work.
 
         [Required(ErrorMessage = "Address is required")]
         [MinLength(5, ErrorMessage = "Address must be at least 5 characters long")]
-        public string Address { get; set; } 
+        [RegularExpression(@"^(?=.*[a-zA-Z]).+$", ErrorMessage = "Address must contain at least one letter")]
+        public string Address { get; set; }
+
 
         [Required]
         public string CreatedByUserId { get; set; }
@@ -29,9 +39,9 @@ namespace ZooApp.Models
         [ForeignKey("CreatedByUserId")]
         public ApplicationUser CreatedByUser { get; set; }
 
-        // Navigation properties
-        public ICollection<VisitorLog> VisitorLogs { get; set; }
-        public ICollection<Ticket> Tickets { get; set; }
-        public ICollection<VisitorEventAttendance> EventAttendances { get; set; }
+        // Navigation properties with initialization. Initialization prevents null reference errors but this can also be prevented with sample data in context or intitializer alternatively.
+        public ICollection<VisitorLog> VisitorLogs { get; set; } = new List<VisitorLog>();
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+        public ICollection<VisitorEventAttendance> EventAttendances { get; set; } = new List<VisitorEventAttendance>();
     }
 }

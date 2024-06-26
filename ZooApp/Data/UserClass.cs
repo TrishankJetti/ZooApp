@@ -19,7 +19,7 @@ public class ApplicationUser : IdentityUser
     [Column(TypeName = "nvarchar(100)")]
     public string LastName { get; set; }
 
-
+    //This is the Age field . USers must be atleast a 
     [Required]
     [Range(13, int.MaxValue, ErrorMessage = "You must be at least 13 years old to register.")]
     [Display(Name = "Age")]

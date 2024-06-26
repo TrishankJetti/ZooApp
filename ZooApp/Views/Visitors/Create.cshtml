@@ -1,10 +1,14 @@
 ﻿@model ZooApp.Models.Visitor
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create"; // Sets the page title displayed in the browser tab
 }
 
+<!-- Link to site CSS -->
 <link rel="stylesheet" href="~/css/site.css" />
+
+<!-- Link to jQuery Mask Plugin CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" />
 
 <h1>Create</h1>
 
@@ -13,38 +17,62 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!-- Form starts with action attribute pointing to 'Create' action in the current controller -->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div> <!-- Validation summary area for model errors -->
+            <!-- Name input field -->
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label> <!-- Label for 'Name' field -->
+                <input asp-for="Name" class="form-control" /> <!-- Input field for 'Name' -->
+                <span asp-validation-for="Name" class="text-danger"></span> <!-- Validation message for 'Name' -->
             </div>
+
+            <!-- Email input field -->
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <label asp-for="Email" class="control-label"></label> <!-- Label for 'Email' field -->
+                <input asp-for="Email" class="form-control" /> <!-- Input field for 'Email' -->
+                <span asp-validation-for="Email" class="text-danger"></span> <!-- Validation message for 'Email' -->
             </div>
+
+            <!-- Phone input field with placeholder and title -->
             <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
+                <label asp-for="Phone" class="control-label" title="Format: +64-000-000-0000"></label> <!-- Label for 'Phone' field with title attribute -->
+                <input asp-for="Phone" class="form-control" placeholder="+64-000-000-0000" /> <!-- Input field for 'Phone' with placeholder -->
+                <span asp-validation-for="Phone" class="text-danger"></span> <!-- Validation message for 'Phone' -->
             </div>
+
+            <!-- Address input field -->
             <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
+                <label asp-for="Address" class="control-label"></label> <!-- Label for 'Address' field -->
+                <input asp-for="Address" class="form-control" /> <!-- Input field for 'Address' -->
+                <span asp-validation-for="Address" class="text-danger"></span> <!-- Validation message for 'Address' -->
             </div>
+
+            <!-- Submit button -->
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" /> <!-- Submit button with 'Create' label that will create a new Record in the database. -->
             </div>
         </form>
     </div>
 </div>
 
+<!-- Link to go back to the list of visitors -->
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to List</a> <!-- Link to navigate back to the list of visitors -->
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha512-0XDfGxFliYJPFrideYOoxdgNIvrwGTLnmK20xZbCAvPfLGQMzHUsaqZK8ZoH+luXGRxTrS46+Aq400nCnAT0/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- I got used an External JQuery library that has created this inpuit mask for me. It is free to use and will be refferenced in my write up.->
+
+    <!-- JavaScript code to initialize input mask for 'Phone' field and puts the javascript mask in use while simultaneously staisfying the needs of the Visitor Model. -->
+    <script>
+        $(document).ready(function () { // This code gets your code read yto function and is commonly used when trying to to use Javascriot inside.
+            $('input[name="Phone"]').mask('+64-00-000-0000'); // Applies input mask format for 'Phone' field simialr to the RegularExpression validaiton we have added in the model. 
+        });
+    </script>
+
+    <!-- This piece of code links the validation scripts to the front end. -->
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -1,7 +1,7 @@
 ﻿@model ZooApp.Models.Visitor
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit"; // Sets the page title displayed in the browser tab
 }
 
 <h1>Edit</h1>
@@ -11,39 +11,65 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
+            <!-- Display validation summary for model errors -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Hidden field for VisitorId -->
             <input type="hidden" asp-for="VisitorId" />
+
+            <!-- Name input field -->
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label> <!-- Label for 'Name' field -->
+                <input asp-for="Name" class="form-control" /> <!-- Input field for 'Name' -->
+                <span asp-validation-for="Name" class="text-danger"></span> <!-- Validation message for 'Name' -->
             </div>
+
+            <!-- Email input field -->
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <label asp-for="Email" class="control-label"></label> <!-- Label for 'Email' field -->
+                <input asp-for="Email" class="form-control" /> <!-- Input field for 'Email' -->
+                <span asp-validation-for="Email" class="text-danger"></span> <!-- Validation message for 'Email' -->
             </div>
+
+            <!-- Phone input field with placeholder and title -->
             <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
+                <label asp-for="Phone" class="control-label" title="Format: +123-456-7890 or 123-456-7890"></label> <!-- Label for 'Phone' field with title attribute -->
+                <input asp-for="Phone" class="form-control" placeholder="+123-456-7890" /> <!-- Input field for 'Phone' with placeholder -->
+                <span asp-validation-for="Phone" class="text-danger"></span> <!-- Validation message for 'Phone' -->
             </div>
+
+            <!-- Address input field -->
             <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
+                <label asp-for="Address" class="control-label"></label> <!-- Label for 'Address' field -->
+                <input asp-for="Address" class="form-control" /> <!-- Input field for 'Address' -->
+                <span asp-validation-for="Address" class="text-danger"></span> <!-- Validation message for 'Address' -->
             </div>
+
+            <!-- Submit button -->
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" /> <!-- Submit button with 'Save' label -->
             </div>
         </form>
     </div>
 </div>
 
+<!-- Link to go back to the list of visitors -->
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to List</a> <!-- Link to navigate back to the list of visitors -->
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha512-0XDfGxFliYJPFrideYOoxdgNIvrwGTLnmK20xZbCAvPfLGQMzHUsaqZK8ZoH+luXGRxTrS46+Aq400nCnAT0/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Loads jQuery and jQuery Mask Plugin for input masking -->
+    <!-- JavaScript code to initialize input mask for 'Phone' field -->
+    <script>
+        $(document).ready(function () { // Ensures code executes after DOM is fully loaded
+            $('input[name="Phone"]').mask('+64-00-000-0000'); // Adjust mask format as per your requirements
+        });
+    </script>
+
+    <!-- Renders validation scripts to handle client-side validations -->
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

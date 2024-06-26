@@ -168,27 +168,28 @@ namespace ZooApp.data
 
             // Seeding data for the Visitor table
             modelBuilder.Entity<Visitor>().HasData(
-     new Visitor { VisitorId = 1, Name = "Alice Johnson", Email = "alice@example.com", Phone = "123-456-7890", Address = "123 Main St", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 2, Name = "Bob Smith", Email = "bob@example.com", Phone = "987-654-3210", Address = "456 Elm St", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 3, Name = "Eva Martinez", Email = "eva@example.com", Phone = "111-111-1111", Address = "789 Oak St", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 4, Name = "David Brown", Email = "david@example.com", Phone = "222-222-2222", Address = "101 Pine St", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 5, Name = "Sophia Garcia", Email = "sophia@example.com", Phone = "333-333-3333", Address = "456 Maple Ave", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 6, Name = "Liam Rodriguez", Email = "liam@example.com", Phone = "444-444-4444", Address = "789 Elm St", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 7, Name = "Olivia Hernandez", Email = "olivia@example.com", Phone = "555-555-5555", Address = "123 Oak St", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 8, Name = "Lucas Martinez", Email = "lucas@example.com", Phone = "666-666-6666", Address = "789 Pine Ave", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 9, Name = "Isabella Nguyen", Email = "isabella@example.com", Phone = "777-777-7777", Address = "101 Maple St", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 10, Name = "Mia Kim", Email = "mia@example.com", Phone = "888-888-8888", Address = "456 Oak Ave", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 11, Name = "James Smith", Email = "james@example.com", Phone = "999-999-9999", Address = "123 Maple Ave", CreatedByUserId = "2" },
-     new Visitor { VisitorId = 12, Name = "Charlotte Johnson", Email = "charlotte@example.com", Phone = "101-101-1010", Address = "789 Pine St", CreatedByUserId = "3" },
-     new Visitor { VisitorId = 13, Name = "William Brown", Email = "william@example.com", Phone = "202-202-2020", Address = "456 Elm St", CreatedByUserId = "1" },
-     new Visitor { VisitorId = 14, Name = "Amelia Davis", Email = "amelia@example.com", Phone = "303-303-3030", Address = "123 Maple Ave", CreatedByUserId = "2" },
-     new Visitor { VisitorId = 15, Name = "Benjamin Wilson", Email = "benjamin@example.com", Phone = "404-404-4040", Address = "789 Elm Ave", CreatedByUserId = "2" },
-     new Visitor { VisitorId = 16, Name = "Emma Rodriguez", Email = "emma@example.com", Phone = "505-505-5050", Address = "101 Oak St", CreatedByUserId = "2" },
-     new Visitor { VisitorId = 17, Name = "Alexander Garcia", Email = "alexander@example.com", Phone = "606-606-6060", Address = "456 Pine Ave", CreatedByUserId = "2" },
-     new Visitor { VisitorId = 18, Name = "Grace Lee", Email = "grace@example.com", Phone = "707-707-7070", Address = "321 Oak St", CreatedByUserId = "3" },
-     new Visitor { VisitorId = 19, Name = "Jack Wilson", Email = "jack@example.com", Phone = "808-808-8080", Address = "654 Elm St", CreatedByUserId = "3" },
-     new Visitor { VisitorId = 20, Name = "Lily Smith", Email = "lily@example.com", Phone = "909-909-9090", Address = "987 Pine Ave", CreatedByUserId = "3" }
+     new Visitor { VisitorId = 1, Name = "Alice Johnson", Email = "alice@example.com", Phone = "+64-123-4567", Address = "123 Main St", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 2, Name = "Bob Smith", Email = "bob@example.com", Phone = "+64-987-6543", Address = "456 Elm St", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 3, Name = "Eva Martinez", Email = "eva@example.com", Phone = "+64-111-1111", Address = "789 Oak St", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 4, Name = "David Brown", Email = "david@example.com", Phone = "+64-222-2222", Address = "101 Pine St", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 5, Name = "Sophia Garcia", Email = "sophia@example.com", Phone = "+64-333-3333", Address = "456 Maple Ave", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 6, Name = "Liam Rodriguez", Email = "liam@example.com", Phone = "+64-444-4444", Address = "789 Elm St", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 7, Name = "Olivia Hernandez", Email = "olivia@example.com", Phone = "+64-555-5555", Address = "123 Oak St", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 8, Name = "Lucas Martinez", Email = "lucas@example.com", Phone = "+64-666-6666", Address = "789 Pine Ave", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 9, Name = "Isabella Nguyen", Email = "isabella@example.com", Phone = "+64-777-7777", Address = "101 Maple St", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 10, Name = "Mia Kim", Email = "mia@example.com", Phone = "+64-888-8888", Address = "456 Oak Ave", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 11, Name = "James Smith", Email = "james@example.com", Phone = "+64-999-9999", Address = "123 Maple Ave", CreatedByUserId = "2" },
+     new Visitor { VisitorId = 12, Name = "Charlotte Johnson", Email = "charlotte@example.com", Phone = "+64-101-1010", Address = "789 Pine St", CreatedByUserId = "3" },
+     new Visitor { VisitorId = 13, Name = "William Brown", Email = "william@example.com", Phone = "+64-202-2020", Address = "456 Elm St", CreatedByUserId = "1" },
+     new Visitor { VisitorId = 14, Name = "Amelia Davis", Email = "amelia@example.com", Phone = "+64-303-3030", Address = "123 Maple Ave", CreatedByUserId = "2" },
+     new Visitor { VisitorId = 15, Name = "Benjamin Wilson", Email = "benjamin@example.com", Phone = "+64-404-4040", Address = "789 Elm Ave", CreatedByUserId = "2" },
+     new Visitor { VisitorId = 16, Name = "Emma Rodriguez", Email = "emma@example.com", Phone = "+64-505-5050", Address = "101 Oak St", CreatedByUserId = "2" },
+     new Visitor { VisitorId = 17, Name = "Alexander Garcia", Email = "alexander@example.com", Phone = "+64-606-6060", Address = "456 Pine Ave", CreatedByUserId = "2" },
+     new Visitor { VisitorId = 18, Name = "Grace Lee", Email = "grace@example.com", Phone = "+64-707-7070", Address = "321 Oak St", CreatedByUserId = "3" },
+     new Visitor { VisitorId = 19, Name = "Jack Wilson", Email = "jack@example.com", Phone = "+64-808-8080", Address = "654 Elm St", CreatedByUserId = "3" },
+     new Visitor { VisitorId = 20, Name = "Lily Smith", Email = "lily@example.com", Phone = "+64-909-9090", Address = "987 Pine Ave", CreatedByUserId = "3" }
  );
+
 
 
             // Seeding data for the Animal table

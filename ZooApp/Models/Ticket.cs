@@ -9,7 +9,8 @@ namespace ZooApp.Models
         
         public int VisitorId { get; set; }
 
-        public DateTime DateOfPurchase { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime DateOfPurchase { get; set; }= DateTime.Now;
 
         public int EventId { get; set; }
 
