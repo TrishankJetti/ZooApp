@@ -186,8 +186,7 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            // Remove the validation for ImageFile as it's optional during edit
-            ModelState.Remove("ImageFile");
+      
 
             if (!ModelState.IsValid)
             {
@@ -202,7 +201,7 @@ namespace ZooApp.Controllers
                         return NotFound();
                     }
 
-                    // Update specific properties only
+                    // Update specific properties only as mentioned above this prevents the duplicate tracking error from occuring.
                     existingEmployee.Name = employee.Name;
                     existingEmployee.Role = employee.Role;
                     existingEmployee.Phone = employee.Phone;
