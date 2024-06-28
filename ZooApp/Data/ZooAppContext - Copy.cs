@@ -158,12 +158,12 @@ namespace ZooApp.data
 
             // Seeding data for the Enclosure table
             modelBuilder.Entity<Enclosure>().HasData(
-          new Enclosure { EnclosureId = 1, Name = "Savannah Enclosure", Habitat = "Savannah", Capacity = 5 }, 
-          new Enclosure { EnclosureId = 2, Name = "Jungle Enclosure", Habitat = "Jungle", Capacity = 10 }, 
-          new Enclosure { EnclosureId = 3, Name = "Forest Enclosure", Habitat = "Forest", Capacity = 7 }, 
-          new Enclosure { EnclosureId = 4, Name = "River Enclosure", Habitat = "River", Capacity = 6 },
-          new Enclosure { EnclosureId = 5, Name = "Aviary Enclosure", Habitat = "Aviary", Capacity = 8 }, 
-          new Enclosure { EnclosureId = 6, Name = "Arctic Enclosure", Habitat = "Arctic", Capacity = 5 } 
+          new Enclosure { EnclosureId = 1, Name = "Savannah Enclosure", Habitat = "Savannah", Capacity = 5 , ImageFileName = "Savannah.jpg"}, 
+          new Enclosure { EnclosureId = 2, Name = "Jungle Enclosure", Habitat = "Jungle", Capacity = 10 , ImageFileName = "Jungle.jpg" }, 
+          new Enclosure { EnclosureId = 3, Name = "Forest Enclosure", Habitat = "Forest", Capacity = 7 , ImageFileName= "Forest.jpg" }, 
+          new Enclosure { EnclosureId = 4, Name = "River Enclosure", Habitat = "River", Capacity = 6 , ImageFileName= "River.jpg"},
+          new Enclosure { EnclosureId = 5, Name = "Aviary Enclosure", Habitat = "Aviary", Capacity = 8 , ImageFileName = "Aviary.jpg" }, 
+          new Enclosure { EnclosureId = 6, Name = "Arctic Enclosure", Habitat = "Arctic", Capacity = 5  , ImageFileName = "Arctic.jpg"} 
 );
 
             // Seeding data for the Visitor table

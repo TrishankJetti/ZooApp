@@ -5,140 +5,159 @@
 
 <!DOCTYPE html>
 <html>
- 
-
 <head>
     <title>@ViewData["Title"]</title>
     <style>
         body {
             background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
         }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
         h1 {
             color: #007bff;
+            text-align: center;
             margin-bottom: 20px;
         }
-        .center-form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
         .btn-primary {
             background-color: #007bff;
             border-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+
         .text-danger {
             color: #dc3545;
+            font-size: 14px;
         }
 
-        .form-group:hover .input-group::after {
-            content: "▼"; /* Arrow symbol that respresents a dropdown typically used in web-design.*/
-            /*This is the positioning of the arrow that appears when the user hovers over the dropdown field.*/
-            position: absolute;
-            right: 10px;
-            top: 5px;
-            font-size: 20px;
-            pointer-events: none;
-            /* This makes sure that whenever the user clicks on the drop down button,
-                                    that the dropdown will drop down and show all the roles instead of not doing
-                                    anything and restricting the action.*/
+        .input-group {
+            position: relative;
         }
 
+            .input-group::after {
+                content: "▼";
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                pointer-events: none;
+            }
+
+       
     </style>
 </head>
 <body>
-    <div class="container center-form">
-        <div class="col-md-6">
-            <h1 class="text-center">Create Animal</h1>
+    <div class="container">
+        <h1>Create Animal</h1>
 
-            <form asp-action="Create" method="post" enctype="multipart/form-data">
-                @Html.AntiForgeryToken()
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="AnimalId" />
-               
-    <div class="form-group">
-        <label asp-for="Name" class="control-label">Name:</label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Species" class="control-label">Species:</label>
-        <input asp-for="Species" class="form-control" />
-        <span asp-validation-for="Species" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Age" class="control-label">Age:</label>
-        <input asp-for="Age" class="form-control" />
-        <span asp-validation-for="Age" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Sex" class="control-label">Sex:</label>
-        <div class="input-group">
-        <select asp-for="Sex" class="form-control" asp-items="Html.GetEnumSelectList<Sex>()">
-        <option value="" disabled selected style="color: white; background-color:dimgrey">Select Sex from dropdown </option>
-        <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
-        then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
-        -->
-       
-        </select>
-                    </div>
-        <span asp-validation-for="Sex" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Diet" class="control-label">Diet:</label>
-        <div class="input-group">
-        <select asp-for="Diet" class="form-control" asp-items="Html.GetEnumSelectList<DietType>()">
-                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select DietType from dropdown </option>
-                        <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
-                        then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
-                        -->
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AnimalId" />
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Name:</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Species" class="control-label">Species:</label>
+                <input asp-for="Species" class="form-control" />
+                <span asp-validation-for="Species" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Age" class="control-label">Age:</label>
+                <input asp-for="Age" class="form-control" min="1" max="100" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Sex" class="control-label">Sex:</label>
+                <div class="input-group">
+                    <select asp-for="Sex" class="form-control" asp-items="Html.GetEnumSelectList<Sex>()">
+                        <option value="" disabled selected>Select Sex from dropdown</option>
                     </select>
+                </div>
+                <span asp-validation-for="Sex" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Diet" class="control-label">Diet:</label>
+                <div class="input-group">
+                    <select asp-for="Diet" class="form-control" asp-items="Html.GetEnumSelectList<DietType>()">
+                        <option value="" disabled selected>Select DietType from dropdown</option>
+                    </select>
+                </div>
+                <span asp-validation-for="Diet" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label">Employee:</label>
+                <div class="input-group">
+                    <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId">
+                        <option value="" disabled selected>Select Employee from dropdown</option>
+                    </select>
+                </div>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EnclosureId" class="control-label">Enclosure Name:</label>
+                <div class="input-group">
+                    <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId">
+                        <option value="" disabled selected>Select Enclosure from dropdown</option>
+                    </select>
+                </div>
+                <span asp-validation-for="EnclosureId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label">Image:</label>
+                <input asp-for="ImageFile" class="form-control" type="file" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </form>
+
+        <div>
+            <a asp-action="Index">Back to List</a>
         </div>
-        <span asp-validation-for="Diet" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="EmployeeId" class="control-label">Employee:</label>
-        <div class="input-group">
-        <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId">
-                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select Employee from dropdown </option>
-                        <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
-                        then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
-                        -->
-        </select>
-                    </div>
-        <span asp-validation-for="EmployeeId" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="EnclosureId" class="control-label">Enclosure Name:</label>
-        <div class="input-group">
-        <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId">
-                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select Employee from dropdown </option>
-                        <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
-                        then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
-                        -->
-        </select>
-                    </div>
-        <span asp-validation-for="EnclosureId" class="text-danger"></span>
-    </div>
-                <div class="form-group">
-                    <label asp-for="ImageFile" class="control-label"></label>
-                    <input asp-for="ImageFile" class="form-control" type="file" />
-                    <span asp-validation-for="ImageFile" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-</form>
-
-    <div>
-        <a asp-action="Index">Back to List</a>
     </div>
 
     <partial name="_ValidationScriptsPartial" />
+
 </body>
 </html>
 

@@ -8,6 +8,7 @@
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+<!--These are all the styles that I have linked that enable me to use icons, different colour pallets and fonts!-->
 <link rel="stylesheet" href="~/css/site.css" />
 
 <h1 class="text-center my-4">Comment Section</h1>
@@ -23,7 +24,7 @@
                 </a>
             }
 
-            @if (visitorCount == 0 && User.Identity.IsAuthenticated)
+            @if (visitorCount == 0 && User.Identity.IsAuthenticated) // This makes sure that if the user is signed in and hasnt made any accounts then they will get this big alert inplace of the create button that explains the sitaution of how they will ahve to create a visitor to post a comment under that visitors name.
             {
                 <div class="alert alert-danger" role="alert">
                     <p style="text-align:center">You haven't Created any Visitors Yet'. Please create visitors first to post Comments.</p>
@@ -44,6 +45,7 @@
                                 @Html.DisplayFor(modelItem => item.Visitor.Name)
                                 <small class="text-muted">@Html.DisplayFor(modelItem => item.CreatedOn)</small>
 
+                                <!--These are all the possible badge colours for the review type based on the ReviewType they have.-->
                                 @if (item.Review == ReviewType.Negative)
                                 {
                                     <span class="badge bg-danger text-light">@Html.DisplayFor(modelItem => item.Review)</span>
@@ -57,13 +59,13 @@
                                     <span class="badge bg-warning text-light">@Html.DisplayFor(modelItem => item.Review)</span>
                                 }
                             </h5>
-                            @if (item.ModifiedOn.HasValue)
+                            @if (item.ModifiedOn.HasValue) // Since the ModifiedOn is a nullable variablw when it gets a value it means that it has been modifed hence the modifedon varaibles value will be set to todays date.
                             {
                                 <span class="text-success">Modified on @DateTime.Now</span>
                             }
                             <p>@Html.DisplayFor(modelItem => item.Comments)</p>
 
-                            @if (item.Visitor.CreatedByUserId == currentUserId || User.IsInRole("Admin"))
+                            @if (item.Visitor.CreatedByUserId == currentUserId || User.IsInRole("Admin")) // THis code over here makes sure that only the user or admins may only be able to delete comments , no one else.
                             {
                                 <div class="text-end">
                                     <a asp-action="Edit" asp-route-id="@item.VisitorLogId" class="btn btn-outline-secondary btn-sm">
@@ -83,7 +85,7 @@
     </div>
 </div>
 
-@section Scripts {
+@section Scripts { <!-- This is the validaiton scripts that ensure that the validaitons are in place for the fields.-->
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

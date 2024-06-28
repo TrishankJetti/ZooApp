@@ -83,12 +83,17 @@
                             <strong>Enclosure:</strong> @Html.DisplayFor(modelItem => item.Enclosure.Name)
                         </p>
                     </div>
-                    @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                    @if (User.IsInRole("Admin"))
                     {
                         <div class="card-footer text-center">
                             <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-primary">Edit</a>
-                            
-                            <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-danger">Delete</a>
+                        </div>
+                    }
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="card-footer text-center">
+                    <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-danger">Delete</a>
                         </div>
                     }
                     <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-info">Details</a>

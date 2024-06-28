@@ -48,7 +48,8 @@
             @Html.DisplayFor(model => model.Enclosure.Habitat)
         </dd>
     </dl>
-    
+    <br/>
+
     <form asp-action="Delete" onsubmit="return confirmDelete()">
         <input type="hidden" asp-for="EmployeeId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

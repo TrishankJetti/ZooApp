@@ -10,6 +10,7 @@
 <div>
     <h4>Enclosure</h4>
     <hr />
+    <!-- These are all the properties if a single Enclosure record that will be dispalying the particular record's details.-->
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
@@ -30,6 +31,7 @@
             @Html.DisplayFor(model => model.Capacity)
         </dd>
     </dl>
+    <br/>
 
     <form asp-action="Delete" onsubmit="return confirmDelete()"> <!--The onsubmit attribute makes sure that when the submit button is clicked a special action occurs. In this case, the confirmDelete() method will activate. The method is explained clearly below. -->
         <input type="hidden" asp-for="EnclosureId" />

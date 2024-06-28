@@ -12,170 +12,186 @@ using ZooApp.data;
 
 namespace ZooApp.Controllers
 {
-    [Authorize]
+    //This is the Controller for managing VisitorLogs
     public class VisitorLogsController : Controller
     {
-        private readonly ZooAppContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ZooAppContext _context; // DbContext for interacting with database
+        private readonly UserManager<ApplicationUser> _userManager; // Identity UserManager for managing users similar to the Visitor Controller, we are injected Identity into this controller.
 
+        // Constructor for VisitorLogsController
         public VisitorLogsController(ZooAppContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
-            _userManager = userManager;
+            _context = context; // Initialize ZooAppContext through dependency injection
+            _userManager = userManager; // Initialize UserManager through dependency injection
         }
-        // GET: VisitorLogs
+
+        // GET: VisitorLogs/Index
+
+        // Displays a list of VisitorLogs
         public async Task<IActionResult> Index()
         {
-            var userId = _userManager.GetUserId(User); // Get the current user's ID
+            var userId = _userManager.GetUserId(User); // Gets the current user's ID and stores it in the variabled , "userId".
 
+            // Retrieves all VisitorLogs including associated Visitor records. THis allows you to work with and manipulate the related Visitor Properties.
             var visitorLogs = await _context.VisitorLogs
                 .Include(vl => vl.Visitor)
                 .ToListAsync();
 
+            // Count and pass the number of Visitors created by the current user via Identity stated above when we initialized the userId variable. to the view
             ViewData["VisitorCount"] = await _context.Visitor
-                .Where(v => v.CreatedByUserId == userId)
-                .CountAsync();
+                .Where(v => v.CreatedByUserId == userId) // This code over here is crucial as it counts the number of visitors that have the value of the User's Id stored in the userId field.
+                .CountAsync(); //Counts the number of records, that meet the criteria above .
 
-            ViewBag.CurrentUserId = userId;
+            ViewBag.CurrentUserId = userId; // Pass the current user's ID to ViewBag for view access. View Bags are like predefined fields usually dropdowns , the predefined values in the dropdown are the records that have been created in related tables in this case since one Visitor can have many VisitorLogs, the VisitorId field is the foreign key in the logs table. 
+           
 
-            return View(visitorLogs); // Pass all visitorLogs to the view
+            return View(visitorLogs); // Return the list of VisitorLogs to the view.
         }
 
         // GET: VisitorLogs/Details/5
+
+        // Displays details of a specific VisitorLog
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound(); // Return NotFound if id is null
             }
 
+            // Retrieve the VisitorLog with associated Visitor entity
             var visitorLog = await _context.VisitorLogs
                 .Include(v => v.Visitor)
                 .FirstOrDefaultAsync(m => m.VisitorLogId == id);
 
             if (visitorLog == null)
             {
-                return NotFound();
+                return NotFound(); // Return NotFound if VisitorLog is not found
             }
 
-            return View(visitorLog);
+            return View(visitorLog); // Return the VisitorLog details to the view
         }
 
         // GET: VisitorLogs/Create
+        // Displays form to create a new VisitorLog
         public IActionResult Create()
         {
             var userId = _userManager.GetUserId(User); // Get the current user's ID
 
+            // Retrieve Visitors created by the current user so they may be prepopulated in the Viewbag that the form posseses.
             var visitors = _context.Visitor
                 .Where(v => v.CreatedByUserId == userId)
                 .ToList();
 
+            // Redirect to Visitors Index if no visitors exist, as the user must create a visitor inorder to post a comment.
             if (!visitors.Any())
             {
                 TempData["Message"] = "Please create a visitor first.";
                 return RedirectToAction("Index", "Visitors");
             }
 
+            // Pass list of visitors to the view for selection
             ViewData["VisitorId"] = new SelectList(visitors, "VisitorId", "Name");
             return View();
         }
 
         // POST: VisitorLogs/Create
+        // Handles creation of a new VisitorLog
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("VisitorLogId,VisitorId,Comments,Review")] VisitorLog visitorLog)
         {
             if (!ModelState.IsValid)
             {
-                visitorLog.CreatedOn = DateTime.Now;
+                visitorLog.CreatedOn = DateTime.Now; // Set creation date to the current date using DateTime.Now;.
                 visitorLog.VisitorId = _context.Visitor
                     .Where(v => v.CreatedByUserId == _userManager.GetUserId(User))
                     .Select(v => v.VisitorId)
-                    .FirstOrDefault();
+                    .FirstOrDefault(); // Set VisitorId based on current user
 
-                _context.Add(visitorLog);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _context.Add(visitorLog); // Add new VisitorLog to context
+                await _context.SaveChangesAsync(); // Save changes to database
+                return RedirectToAction(nameof(Index)); // Redirect to VisitorLogs Index after successful completion of the comment.
             }
 
+            // Retrieve visitors created by the current user
             var visitors = _context.Visitor
                 .Where(v => v.CreatedByUserId == _userManager.GetUserId(User))
                 .ToList();
 
+            // Pass list of visitors and current visitorLog data to view for correction
             ViewData["VisitorId"] = new SelectList(visitors, "VisitorId", "Name", visitorLog.VisitorId);
-            return View(visitorLog);
+            return View(visitorLog); // Return to Create view with posted data
         }
 
         // GET: VisitorLogs/Edit/5
+        // Displays form to edit an existing VisitorLog
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound(); // Return NotFound if id is null
             }
 
+            // Retrieve the VisitorLog to edit
             var visitorLog = await _context.VisitorLogs.FindAsync(id);
             if (visitorLog == null)
             {
-                return NotFound();
+                return NotFound(); // Return NotFound if VisitorLog is not found
             }
 
-            // Check if the current user is authorized to edit this log
             var userId = _userManager.GetUserId(User); // Get the current user's ID
 
-
+            // Pass list of visitors created by the current user and current visitorLog details to view for editing
             ViewData["VisitorId"] = new SelectList(_context.Visitor
                 .Where(v => v.CreatedByUserId == userId), "VisitorId", "Name", visitorLog.VisitorId);
 
-            return View(visitorLog);
+            return View(visitorLog); // Return VisitorLog details to the view for editing
         }
 
         // POST: VisitorLogs/Edit/5
-        // POST: VisitorLogs/Edit/5
+        // Handles update of an existing VisitorLog
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("VisitorLogId,VisitorId,Comments,Review,CreatedOn")] VisitorLog visitorLog)
         {
             if (id != visitorLog.VisitorLogId)
             {
-                return NotFound();
+                return NotFound(); // Return NotFound if id does not match visitorLog ID
             }
 
             if (ModelState.IsValid)
             {
-                return View(visitorLog);
+                return View(visitorLog); // Return to view if model state is valid
             }
 
             try
             {
-                // Check if the current user is authorized to edit this log
+                // Retrieve the existing VisitorLog to edit
                 var existingVisitorLog = await _context.VisitorLogs.FindAsync(id);
                 if (existingVisitorLog == null)
                 {
-                    return NotFound();
+                    return NotFound(); // Return NotFound if VisitorLog is not found
                 }
 
                 var userId = _userManager.GetUserId(User); // Get the current user's ID
 
-                // Ensure that only one instance of the entity is tracked by detaching the existing one
-                _context.Entry(existingVisitorLog).State = EntityState.Detached;
 
-                visitorLog.ModifiedOn = DateTime.Now;
+                visitorLog.ModifiedOn = DateTime.Now; // Set modification date to  current date.
 
-                // Update fields that can be modified
+                // Update fields of the existing VisitorLog to whatever the fields have been updated to contain in the create view of the form.
                 existingVisitorLog.VisitorId = visitorLog.VisitorId;
                 existingVisitorLog.Comments = visitorLog.Comments;
                 existingVisitorLog.Review = visitorLog.Review;
                 existingVisitorLog.ModifiedOn = visitorLog.ModifiedOn;
 
-                _context.Update(existingVisitorLog);
-                await _context.SaveChangesAsync();
+                _context.Update(existingVisitorLog); // Update existing VisitorLog in context
+                await _context.SaveChangesAsync(); // Save changes to database
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!VisitorLogExists(visitorLog.VisitorLogId))
                 {
-                    return NotFound();
+                    return NotFound(); // Return NotFound if VisitorLog does not exist
                 }
                 else
                 {
@@ -183,38 +199,41 @@ namespace ZooApp.Controllers
                 }
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index)); // Redirect to VisitorLogs Index after successful edit
         }
 
-
         // GET: VisitorLogs/Delete/5
+        // Displays confirmation for deleting a VisitorLog
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound(); // Return NotFound if id is null
             }
 
+            // Retrieve the VisitorLog to delete
             var visitorLog = await _context.VisitorLogs
                 .Include(v => v.Visitor)
                 .FirstOrDefaultAsync(m => m.VisitorLogId == id);
 
             if (visitorLog == null)
             {
-                return NotFound();
+                return NotFound(); // Return NotFound if VisitorLog is not found
             }
 
-            // Check if the current user is authorized to delete this log
             var userId = _userManager.GetUserId(User); // Get the current user's ID
+
+            // Check authorization to delete the VisitorLog
             if (visitorLog.Visitor.CreatedByUserId != userId)
             {
-                return Forbid(); // Or handle unauthorized access as needed
+                return Forbid(); // Return Forbidden if user is not authorized to delete
             }
 
-            return View(visitorLog);
+            return View(visitorLog); // Return VisitorLog details to view for confirmation
         }
 
         // POST: VisitorLogs/Delete/5
+        // Handles deletion of a VisitorLog
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -222,23 +241,25 @@ namespace ZooApp.Controllers
             var visitorLog = await _context.VisitorLogs.FindAsync(id);
             if (visitorLog != null)
             {
-                // Check if the current user is authorized to delete this log
                 var userId = _userManager.GetUserId(User); // Get the current user's ID
+
+                // Check authorization to delete the VisitorLog
                 if (visitorLog.Visitor.CreatedByUserId != userId)
                 {
-                    return Forbid(); // Or handle unauthorized access as needed
+                    return Forbid(); // Return Forbidden if user is not authorized to delete
                 }
 
-                _context.VisitorLogs.Remove(visitorLog);
-                await _context.SaveChangesAsync();
+                _context.VisitorLogs.Remove(visitorLog); // Remove VisitorLog from context
+                await _context.SaveChangesAsync(); // Save changes to database
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index)); // Redirect to VisitorLogs Index after deletion
         }
 
+        // Checks if a VisitorLog exists based on ID
         private bool VisitorLogExists(int id)
         {
-            return _context.VisitorLogs.Any(e => e.VisitorLogId == id);
+            return _context.VisitorLogs.Any(e => e.VisitorLogId == id); // Returns true if VisitorLog indeed exists which results in the visitorlog being to get edited and etc.
         }
     }
 }

@@ -8,100 +8,104 @@
 <head>
     <title>@ViewData["Title"]</title>
     <style>
-        body {
-            background-color: #f8f9fa;
+        
+
+        .input-group {
+            position: relative;
         }
 
-        h1 {
-            color: #007bff;
-            margin-bottom: 20px;
-        }
+            .input-group::after {
+                content: "▼";
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                pointer-events: none;
+            }
 
-        .center-form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
     </style>
 </head>
 <body>
-    <div class="container center-form">
-        <div class="col-md-6">
-            <h1 class="text-center">Edit Animal</h1>
+    <div class="container">
+        <h1>Edit Animal</h1>
 
-            <form asp-action="Edit" method="post" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="AnimalId" />
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AnimalId" />
 
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input asp-for="Name" class="form-control" id="name" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="species">Species:</label>
-                    <input asp-for="Species" class="form-control" id="species" />
-                    <span asp-validation-for="Species" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="age">Age:</label>
-                    <input asp-for="Age" class="form-control" id="age" />
-                    <span asp-validation-for="Age" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="sex">Sex:</label>
-                    <select asp-for="Sex" class="form-control" id="sex" asp-items="Html.GetEnumSelectList<Sex>()">
-                    </select>
-                    <span asp-validation-for="Sex" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="diet">Diet:</label>
-                    <select asp-for="Diet" class="form-control" id="diet" asp-items="Html.GetEnumSelectList<DietType>()">
-                    </select>
-                    <span asp-validation-for="Diet" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="employee">Employee:</label>
-                    <select asp-for="EmployeeId" class="form-control" id="employee" asp-items="ViewBag.EmployeeId">
-                    </select>
-                    <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="enclosure">Enclosure Name:</label>
-                    <select asp-for="EnclosureId" class="form-control" id="enclosure" asp-items="ViewBag.EnclosureId">
-                    </select>
-                    <span asp-validation-for="EnclosureId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ImageFileName" class="control-label">Current Image</label>
-                    @if (!string.IsNullOrEmpty(Model.ImageFileName))
-                    {
-                        <img src="~/images/@Model.ImageFileName" alt="@Model.Name" class="img-thumbnail" style="max-width: 100px; height: 100px;" />
-                    }
-                </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Name:</label>
+                <input asp-for="Name" class="form-control" pattern="[A-Za-z\s]+" required="true" title="Only letters and spaces are allowed" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
 
-                <div class="form-group">
-                    <label asp-for="ImageFile" class="control-label">Change Image</label>
-                    <input type="file" asp-for="ImageFile" class="form-control" />
-                    <span asp-validation-for="ImageFile" class="text-danger"></span>
-                </div>
-                <br />
-                <div class="form-group text-center">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="Index">Back to List</a>
-                </div>
+            <div class="form-group">
+                <label asp-for="Species" class="control-label">Species:</label>
+                <input asp-for="Species" class="form-control" pattern="[A-Za-z\s]+" required="true" title="Only letters and spaces are allowed" />
+                <span asp-validation-for="Species" class="text-danger"></span>
+            </div>
 
-            </form>
-        </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label">Age:</label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Sex" class="control-label">Sex:</label>
+                <div class="input-group">
+                    <select asp-for="Sex" class="form-control" asp-items="Html.GetEnumSelectList<Sex>()">
+                        <option value="" disabled selected>Select Sex from dropdown</option>
+                    </select>
+                </div>
+                <span asp-validation-for="Sex" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Diet" class="control-label">Diet:</label>
+                <div class="input-group">
+                    <select asp-for="Diet" class="form-control" asp-items="Html.GetEnumSelectList<DietType>()">
+                        <option value="" disabled selected>Select DietType from dropdown</option>
+                    </select>
+                </div>
+                <span asp-validation-for="Diet" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label">Employee:</label>
+                <div class="input-group">
+                    <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId">
+                        <option value="" disabled selected>Select Employee from dropdown</option>
+                    </select>
+                </div>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EnclosureId" class="control-label">Enclosure Name:</label>
+                <div class="input-group">
+                    <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId">
+                        <option value="" disabled selected>Select Enclosure from dropdown</option>
+                    </select>
+                </div>
+                <span asp-validation-for="EnclosureId" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label">Change Image</label>
+                <input type="file" asp-for="ImageFile" class="form-control" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
     </div>
 
-   
+    
 
-    @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
-    }
 </body>
 </html>

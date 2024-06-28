@@ -16,35 +16,32 @@
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" required pattern="[A-Z][a-zA-Z\s]*"
+                       title="Name has to begin with a capital letter and must not include any special characters or numbers." />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
+                <input asp-for="Date" class="form-control" required type="date" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control"></input>
+                <input asp-for="Description" class="form-control" required maxlength="500"
+                       pattern="[A-Z][a-zA-Z\s]*"
+                       title="Description has to begin with a capital letter and must not include any special characters or numbers." />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="TicketPrice" class="control-label"></label>
-                <input asp-for="TicketPrice" class="form-control" />
+                <input asp-for="TicketPrice" class="form-control" required type="number" min="5"
+                       title="Ticket price must be above $5." />
                 <span asp-validation-for="TicketPrice" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="ImageFileName" class="control-label">Current Image</label>
-                @if (Model.ImageFileName != null)
-                {
-                    <img src="~/images/@Model.ImageFileName" alt="@Model.Name" class="img-thumbnail" style="max-width: 100px; height: 100px;" />
-                }
-            </div>
 
             <div class="form-group">
                 <label asp-for="ImageFile" class="control-label">Change Image</label>
@@ -63,8 +60,4 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+

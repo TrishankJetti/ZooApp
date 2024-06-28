@@ -7,12 +7,15 @@ namespace ZooApp.Controllers
 {
     public class HomeController : Controller
     {
-        public async Task<IActionResult> Quiz()
+
+        public async Task<IActionResult> About()
         {
 
 
             return View();
         }
+
+       
 
         private readonly ILogger<HomeController> _logger;
 

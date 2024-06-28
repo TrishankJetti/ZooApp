@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ZooApp.Controllers
 {
+    //This is the controller for the junction table in the Visitors and events, as many visitors can visit many events. I ahven't changed anything in this controller and left it as default.
     public class VisitorEventAttendancesController : Controller
     {
         private readonly ZooAppContext _context;

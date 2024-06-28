@@ -10,27 +10,60 @@
     <h4>Enclosure</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name) <!-- Display label for Enclosure Name -->
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name) <!-- Display value of Enclosure Name -->
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Habitat)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Habitat) <!-- Display label for Enclosure Habitat -->
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Habitat)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Habitat) <!-- Display value of Enclosure Habitat -->
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Capacity)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Capacity) <!-- Display label for Enclosure Capacity -->
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Capacity)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Capacity) <!-- Display value of Enclosure Capacity -->
         </dd>
     </dl>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.EnclosureId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <h4>Animals in this Enclosure</h4>
+    <table class="table table-striped table-bordered table-hover">
+        <thead style="background:#3e2723; color:white;">
+            <tr>
+                <th>Name</th>
+                <th>Species</th>
+                <th>Age</th>
+                <th>Diet</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var animal in Model.Animals)
+            {
+                <tr>
+                    <td>@animal.Name</td> <!-- Display animal's Name -->
+                    <td>@animal.Species</td> <!-- Display animal's Species -->
+                    <td>@animal.Age</td> <!-- Display animal's Age -->
+                    <td>@animal.Diet</td> <!-- Display animal's Diet -->
+                    <td><img src="~/images/@animal.ImageFileName" alt="@animal.Name" class="img-thumbnail" style="max-width: 100px; height: 100px; border-radius: 10px;" /></td> <!-- Display animal's Image with styling -->
+                </tr>
+            }
+            @if (!Model.Animals.Any())
+            {
+                <tr>
+                    <td colspan="5" class="text-center">No animals in this enclosure.</td> <!-- Display message if no animals -->
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a> <!-- Link to return to the Enclosures list -->
 </div>

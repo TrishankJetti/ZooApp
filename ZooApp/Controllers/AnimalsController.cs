@@ -125,6 +125,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: Animals/Create
+        [HttpGet]
         [Authorize(Roles = "Admin,Employee")]
         public IActionResult Create()
         {
@@ -135,15 +136,12 @@ namespace ZooApp.Controllers
 
         // POST: Animals/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create([Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId,ImageFile")] Animal animal)
         {
             if (!ModelState.IsValid)
             {
-                var enclosure = await _context.Enclosure
-                    .Include(e => e.Animals)
-                    .FirstOrDefaultAsync(e => e.EnclosureId == animal.EnclosureId);
+                var enclosure = await _context.Enclosure.Include(e => e.Animals).FirstOrDefaultAsync(e => e.EnclosureId == animal.EnclosureId);
 
                 if (enclosure == null)
                 {
@@ -153,8 +151,7 @@ namespace ZooApp.Controllers
                 if (enclosure.Animals.Count >= enclosure.Capacity)
                 {
                     ModelState.AddModelError(string.Empty, "This enclosure is at full capacity. Please choose another enclosure or create a new one.");
-                    ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
-                    ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
+                    PopulateDropDownLists(animal);
                     return View(animal);
                 }
 
@@ -170,14 +167,19 @@ namespace ZooApp.Controllers
                     animal.ImageFileName = uniqueFileName;
                 }
 
+
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
+            PopulateDropDownLists(animal);
+            return View(animal);
+        }
+        private void PopulateDropDownLists(Animal animal)
+        {
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
             ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
-            return View(animal);
         }
 
 
@@ -202,73 +204,101 @@ namespace ZooApp.Controllers
 
 
         // POST: Animals/Edit/5
-        // POST: Animals/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Employee")]
-        public async Task<IActionResult> Edit(int id, [Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId,ImageFileName,ImageFile")] Animal animal)
+        public async Task<IActionResult> Edit(int id, [Bind("AnimalId,Name,Species,Age,Sex,Diet,EmployeeId,EnclosureId,ImageFile,ImageFileName")] Animal animal)
         {
             if (id != animal.AnimalId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            // Remove the validation for ImageFile as it's optional during edit
+            ModelState.Remove("ImageFile");
+
+            if (!ModelState.IsValid)
             {
-                ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", animal.EmployeeId);
-                ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", animal.EnclosureId);
-                return View(animal);
-            }
-
-            try
-            {
-                // Retrieve the existing entity without tracking
-                var existingAnimal = await _context.Animal.AsNoTracking().FirstOrDefaultAsync(a => a.AnimalId == id);
-                if (existingAnimal == null)
+                try
                 {
-                    return NotFound();
-                }
+                    // Retrieve the existing animal entity without tracking
+                    var existingAnimal = await _context.Animal
+                        .Include(a => a.Enclosure)
+                        .FirstOrDefaultAsync(a => a.AnimalId == id);
 
-                // Update specific properties only
-                existingAnimal.Name = animal.Name;
-                existingAnimal.Species = animal.Species;
-                existingAnimal.Age = animal.Age;
-                existingAnimal.Sex = animal.Sex;
-                existingAnimal.Diet = animal.Diet;
-                existingAnimal.EmployeeId = animal.EmployeeId;
-                existingAnimal.EnclosureId = animal.EnclosureId;
-
-                // Handle image file update if a new file is uploaded
-                if (animal.ImageFile != null)
-                {
-                    string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images");
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + animal.ImageFile.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    if (existingAnimal == null)
                     {
-                        await animal.ImageFile.CopyToAsync(fileStream);
+                        return NotFound();
                     }
-                    existingAnimal.ImageFileName = uniqueFileName;
-                }
 
-                // Update the entity in the database
-                _context.Update(existingAnimal);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AnimalExists(animal.AnimalId))
-                {
-                    return NotFound();
+                    // Check if the selected enclosure exists and is not at full capacity
+                    var enclosure = await _context.Enclosure
+                        .Include(e => e.Animals)
+                        .FirstOrDefaultAsync(e => e.EnclosureId == animal.EnclosureId);
+
+                    if (enclosure == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "Selected enclosure does not exist.");
+                        PopulateDropDownLists(existingAnimal); // Populate drop-down lists for view
+                        return View(animal);
+                    }
+
+                    if (enclosure.Animals.Count >= enclosure.Capacity)
+                    {
+                        ModelState.AddModelError(string.Empty, "Selected enclosure is at full capacity. Please choose another enclosure or create a new one.");
+                        PopulateDropDownLists(existingAnimal); // Populate drop-down lists for view
+                        return View(animal);
+                    }
+
+                    // Update specific properties only
+                    existingAnimal.Name = animal.Name;
+                    existingAnimal.Species = animal.Species;
+                    existingAnimal.Age = animal.Age;
+                    existingAnimal.Sex = animal.Sex;
+                    existingAnimal.Diet = animal.Diet;
+                    existingAnimal.EmployeeId = animal.EmployeeId;
+                    existingAnimal.EnclosureId = animal.EnclosureId;
+
+                    // Handle image file update if a new file is uploaded
+                    if (animal.ImageFile != null && animal.ImageFile.Length > 0)
+                    {
+                        string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + animal.ImageFile.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await animal.ImageFile.CopyToAsync(fileStream);
+                        }
+                        existingAnimal.ImageFileName = uniqueFileName;
+                    }
+
+                    // Update the entity in the database
+                    _context.Update(existingAnimal);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!AnimalExists(animal.AnimalId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
 
-            return RedirectToAction(nameof(Index));
+            // If ModelState is not valid, reload necessary data and return to the view with errors
+            PopulateDropDownLists(animal); // Populate drop-down lists for view
+            return View(animal);
         }
+
+
+
+
 
 
 

@@ -4,94 +4,77 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit Employee</h1>
 
-<h4>Employee</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="EmployeeId" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <div class="input-group">
-                    <select asp-for="Role" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
-                        <option value="" disabled selected style="color: white; background-color:dimgrey">Select from dropdown below</option>
-                        <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
-                            then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
-                        -->
-                    </select>
-                </div>
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="EmployeeId" />
 
-            <style>
-                .form-group:hover .input-group::after {
-                    content: "▼"; /* Arrow symbol that respresents a dropdown typically used in web-design.*/
-                    /*This is the positioning of the arrow that appears when the user hovers over the dropdown field.*/
-                    position: absolute;
-                    right: 10px;
-                    top: 5px;
-                    font-size: 20px;
-                    pointer-events: none;
-                    /* This makes sure that whenever the user clicks on the drop down button,
-                                    that the dropdown will drop down and show all the roles instead of not doing
-                                    anything and restricting the action.*/
-                }
-            </style>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Salary" class="control-label"></label>
-                <input asp-for="Salary" class="form-control" />
-                <span asp-validation-for="Salary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HireDate" class="control-label"></label>
-                <input asp-for="HireDate" class="form-control" />
-                <span asp-validation-for="HireDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EnclosureId" class="control-label"></label>
-                <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
-                <span asp-validation-for="EnclosureId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageFileName" class="control-label">Current Image</label>
-                @if (Model.ImageFileName != null)
-                {
-                    <img src="~/images/@Model.ImageFileName" alt="@Model.Name" class="img-thumbnail" style="max-width: 100px; height: 100px;" />
-                }
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ImageFile" class="control-label">Change Image</label>
-                <input type="file" asp-for="ImageFile" class="form-control" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-
-            <br />
-            
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label">Name:</label>
+        <input asp-for="Name" class="form-control" pattern="[A-Z][a-zA-Z\s]*" required="true" title="Name must start with a capital letter and only contain letters and spaces."/>
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group">
+        <label asp-for="Role" class="control-label">Role:</label>
+        <div class="input-group">
+            <select asp-for="Role" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
+                <option value="" disabled selected>Select Role from dropdown</option>
+            </select>
+        </div>
+        <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Phone" class="control-label">Phone:</label>
+        <input asp-for="Phone" class="form-control" required />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="Salary" class="control-label">Salary:</label>
+        <input asp-for="Salary" class="form-control" type="number" min="50000" data-val="true" data-val-range="Salary must be at least $50,000." data-val-range-min="50000" required />
+        <span asp-validation-for="Salary" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="HireDate" class="control-label">Hire Date:</label>
+        <input asp-for="HireDate" class="form-control" type="date"
+               min="@DateTime.Now.AddYears(-20).ToString("yyyy-MM-dd")" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="HireDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EnclosureId" class="control-label">Enclosure Name:</label>
+        <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId"></select>
+        <span asp-validation-for="EnclosureId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageFile" class="control-label">Change Image</label>
+        <input type="file" asp-for="ImageFile" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+<a asp-action="Index">Back to List</a>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <!-- Include any necessary scripts here, such as jQuery and input masking -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize any scripts needed for this view
+            $('input[name="Phone"]').mask('+64-00-000-0000');
+        });
+    </script>
 }

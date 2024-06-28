@@ -15,12 +15,7 @@ namespace ZooApp.Controllers
 {
     public class EmployeesController : Controller
     {
-        public async Task<IActionResult> Quiz()
-        {
-
-
-            return View();
-        }
+       
         private readonly ZooAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
@@ -148,6 +143,7 @@ namespace ZooApp.Controllers
                         await employee.ImageFile.CopyToAsync(fileStream);
                     }
                 }
+                
 
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
@@ -175,36 +171,72 @@ namespace ZooApp.Controllers
             return View(employee);
         }
 
+
+
+
+        // POST: Employees/Edit/5
         // POST: Employees/Edit/5
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Employee")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Name,Role,Phone,Salary,HireDate,EnclosureId,ImageFileName,ImageFile")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Name,Role,Phone,Salary,HireDate,EnclosureId,ImageFile,ImageFileName")] Employee employee)
         {
             if (id != employee.EmployeeId)
             {
                 return NotFound();
             }
 
+            // Remove the validation for ImageFile as it's optional during edit
+            ModelState.Remove("ImageFile");
+
             if (!ModelState.IsValid)
             {
                 try
                 {
-                    // Handle file upload
-                    if (employee.ImageFile != null)
+                    // Retrieve the existing employee entity without tracking
+                    var existingEmployee = await _context.Employee
+                        .FirstOrDefaultAsync(e => e.EmployeeId == id);
+
+                    if (existingEmployee == null)
                     {
-                        string fileName = Path.GetFileNameWithoutExtension(employee.ImageFile.FileName);
-                        string extension = Path.GetExtension(employee.ImageFile.FileName);
-                        employee.ImageFileName = $"{fileName}_{DateTime.Now:yyyyMMddHHmmssfff}{extension}";
-                        string path = Path.Combine(_hostEnvironment.WebRootPath, "images", employee.ImageFileName);
-                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        return NotFound();
+                    }
+
+                    // Update specific properties only
+                    existingEmployee.Name = employee.Name;
+                    existingEmployee.Role = employee.Role;
+                    existingEmployee.Phone = employee.Phone;
+                    existingEmployee.Salary = employee.Salary;
+                    existingEmployee.HireDate = employee.HireDate;
+                    existingEmployee.EnclosureId = employee.EnclosureId;
+
+                    // Handle image file update if a new file is uploaded
+                    if (employee.ImageFile != null && employee.ImageFile.Length > 0)
+                    {
+                        
+
+                        // Generate a unique file name for the new image
+                        string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + employee.ImageFile.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
                         {
                             await employee.ImageFile.CopyToAsync(fileStream);
                         }
+                        existingEmployee.ImageFileName = uniqueFileName;
+                    }
+                    else if (string.IsNullOrEmpty(employee.ImageFileName))
+                    {
+                        // If no new ImageFile is provided and ImageFileName is null or empty,
+                        // set it to the existing ImageFileName to maintain the current image
+                        existingEmployee.ImageFileName = existingEmployee.ImageFileName;
                     }
 
-                    _context.Update(employee);
+                    // Update the entity in the database
+                    _context.Update(existingEmployee);
                     await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -217,11 +249,32 @@ namespace ZooApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
+
+            // If ModelState is not valid, reload necessary data and return to the view with errors
             ViewData["EnclosureId"] = new SelectList(_context.Enclosure, "EnclosureId", "Name", employee.EnclosureId);
             return View(employee);
         }
+
+      
+
+
+        // Helper method to delete old image file if a new one is uploaded
+        private void DeleteOldImage(string fileName)
+        {
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                string filePath = Path.Combine(_hostEnvironment.WebRootPath, "images", fileName);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+        }
+
+
+
+
 
         // GET: Employees/Delete/5
         [Authorize(Roles = "Admin")]

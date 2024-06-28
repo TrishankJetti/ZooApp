@@ -1,5 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using ZooApp.Models;
 
 namespace ZooApp.Models
 {
@@ -68,9 +72,11 @@ namespace ZooApp.Models
 
 
         // Property to store the file name
+        
         public string ImageFileName { get; set; }
 
         // Property to store the uploaded file (not mapped to the database)
+        
         [NotMapped]
         public IFormFile ImageFile { get; set; }
 

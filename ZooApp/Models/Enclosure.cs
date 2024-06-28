@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZooApp.Models
 {
@@ -22,7 +23,13 @@ namespace ZooApp.Models
         [Range(1,30)]
         public int Capacity { get; set; }
 
-        
+        // Property to store the file name
+        public string ImageFileName { get; set; }
+
+        // Property to store the uploaded file (not mapped to the database)
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
+
 
         public ICollection<Animal> Animals { get; set; } = new List<Animal>();
 
