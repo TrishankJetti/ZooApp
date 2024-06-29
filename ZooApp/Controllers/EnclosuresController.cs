@@ -37,9 +37,9 @@ namespace ZooApp.Controllers
                 enclosures = enclosures.Where(e => e.Name.Contains(searchString));
             }
 
-            var enclosureList = await enclosures.ToListAsync();
+            var enclosureList = await enclosures.ToListAsync(); // Creates a list of all the enclosure assigned to a variable called enclosureList which is initialized to ne equalled to the list of enclosure.
 
-            if (enclosureList.Count == 0)
+            if (enclosureList.Count == 0) // If the list of enclosure is 0, the programme will return the NoEnclosures view to the user promptin them to go back to the index view.
             {
                 return View("NoEnclosures");
             }

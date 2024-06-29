@@ -72,10 +72,7 @@
             color: #fff;
         }
 
-        #action-buttons {
-            display: none;
-            margin-top: 10px;
-        }
+     
 
         .btn-sm {
             margin-right: 5px;
@@ -85,10 +82,7 @@
             margin: 0 10px;
         }
 
-        #quick-actions {
-            margin-bottom: 20px;
-        }
-
+    
         .form-inline .form-group {
             margin-right: 15px;
         }
@@ -141,7 +135,7 @@
         <br/>
         
 
-        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))// makes sure that only employees and admins may view this search bar for Animal ID
         {
             <form asp-action="Index" method="get" class="form-inline mt-2">
                 <div class="form-group">
@@ -157,7 +151,7 @@
             <button id="toggle-button" class="btn btn-secondary">
                 <i class="fas fa-cogs"></i> Quick Actions
             </button>
-            <div id="action-buttons" class="mt-2">
+            <div class="mt-2">
                 <form id="action-form" method="get">
                     <button type="submit" name="SortOrder" value="name_asc" class="btn btn-sm btn-outline-primary">Name <i class="fas fa-sort-alpha-down"></i></button>
                     <button type="submit" name="SortOrder" value="name_desc" class="btn btn-sm btn-outline-primary">Name <i class="fas fa-sort-alpha-up"></i></button>
@@ -166,23 +160,13 @@
                 </form>
             </div>
         </div>
-
-        <script>
-            document.getElementById('toggle-button').addEventListener('click', function () {
-                const actionButtons = document.getElementById('action-buttons');
-                if (actionButtons.style.display === 'none' || actionButtons.style.display === '') {
-                    actionButtons.style.display = 'block';
-                } else {
-                    actionButtons.style.display = 'none';
-                }
-            });
-        </script>
+        <br/>
 
         <!--Reset filter button that removes the filters from the Index view.-->
         <a asp-action="Index" class="btn btn-danger">Reset Filters</a>
 
         <hr />
-        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))// makes sure that only employees and admins may view this button to add Animals
         {
             <div class="mb-2">
                 <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Create New</a>
@@ -215,7 +199,7 @@
                          
 
                             <div class="action-links mt-3">
-                                @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                                @if (User.IsInRole("Admin") || User.IsInRole("Employee"))// makes sure that only employees and admins may view these buttons.
                                 {
                                     <a asp-action="Edit" asp-route-id="@item.AnimalId" class="btn btn-sm btn-primary">
                                         <i class="fas fa-edit"></i> Edit

@@ -83,19 +83,19 @@ namespace ZooApp.Areas.Identity.Pages.Account
             public string LastName { get; set; }
 
 
-
-            [Required]
-            [Range(13, int.MaxValue, ErrorMessage = "You must be at least 13 years old to register.")]
+            [Required(ErrorMessage = "Age is required.")]
+            [Range(13, int.MaxValue, ErrorMessage = "You must be at least 13 years old to register.")] // User must be at the age of atleast 13 to use the website and sign up.
+            [RegularExpression(@"^\d+$", ErrorMessage = "Age must be a whole number.")] // Makes sure that age has to be a whole number and nota decimal
             [Display(Name = "Age")]
             public int Age { get; set; }
+        
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        /// 
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            /// 
-
-            [Required(ErrorMessage ="Please enter an Email to register with.")]
+        [Required(ErrorMessage ="Please enter an Email to register with.")]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }

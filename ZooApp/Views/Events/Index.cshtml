@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<body style="color:#f8f4e">
 <div class="container" style="background-color: #fff4e6; border-radius: 15px; padding: 20px;">
     <div class="row">
         <div class="col-md-3">
@@ -36,11 +36,11 @@
             </form>
         </div>
         <div class="col-md-9">
-            <a asp-action="Index" style="color: #d2691e;">Back to original List</a>
+            <a asp-action="Index" style="color: #d2691e;">Reset Filters</a>
             <hr />
 
             
-                                    @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Employee")) // makes sure that only employees and admins may view this button to add events.
                                     {
             <div class="row">
                 <div class="col">
@@ -90,16 +90,20 @@
         </div>
     </div>
 </div>
+</body>
 <br />
 
 <style>
     /* Custom Styles */
+
     body {
-        color: #495057;
-        font-family: Arial, sans-serif;
-        font-size: 16px;
-        line-height: 1.5;
-        background-color: #f8f4e3; /* Light beige background */
+        background-color: #f8f4e3;
+    }
+
+    .container {
+        background-color: #fff4e6; /* Corrected background color */
+        border-radius: 15px;
+        padding: 20px;
     }
 
     .form-group {
@@ -109,11 +113,6 @@
     .form-control {
         background-color: #fff; /* White background for input fields */
         color: #495057; /* Dark gray text color for input fields */
-    }
-
-    th {
-        background-color: #d2691e; /* Dark orange for table headers */
-        color: #fff; /* White text for table headers */
     }
 
     .card {
@@ -136,6 +135,26 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
- 
+    .btn-primary {
+        background-color: #d2691e; /* Original background color */
+        border-color: #d2691e; /* Border color matching the theme */
+        color: #fff; /* White text color */
+    }
+
+        .btn-primary:hover {
+            background-color: #b55316; /* Darker color on hover */
+            color: #fff; /* Text color on hover */
+        }
+
+    .btn-success {
+        background-color: #20c997; /* Original color */
+        border-color: #20c997; /* Original border color */
+    }
+
+        .btn-success:hover {
+            background-color: #198754; /* Darker green on hover */
+            border-color: #198754; /* Darker green border on hover */
+        }
+
     
 </style>

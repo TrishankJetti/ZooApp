@@ -2,8 +2,9 @@
 
 @{
     ViewData["Title"] = "Comments";
-    int visitorCount = (int)ViewData["VisitorCount"];
-    var currentUserId = ViewBag.CurrentUserId as string;
+    int visitorCount = (int)ViewData["VisitorCount"]; // Gets the Current Visitor count from the controller's viewdata
+    var currentUserId = ViewBag.CurrentUserId as string; //Gathers the current user's id
+    var reviewFilter = ViewBag.ReviewFilter as string;  //
 }
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -27,10 +28,55 @@
             @if (visitorCount == 0 && User.Identity.IsAuthenticated) // This makes sure that if the user is signed in and hasnt made any accounts then they will get this big alert inplace of the create button that explains the sitaution of how they will ahve to create a visitor to post a comment under that visitors name.
             {
                 <div class="alert alert-danger" role="alert">
-                    <p style="text-align:center">You haven't Created any Visitors Yet'. Please create visitors first to post Comments.</p>
+                    <p style="text-align:center">You haven't Created any Visitors Yet. Please create visitors first to post Comments.</p>
                     <a asp-action="Index" asp-controller="Visitors" class="btn btn-info d-flex justify-content-center" >Go to your Visitors</a>
                 </div>
             }
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <!--Review filter-->
+            <!-- Form element with ASP.NET Core tag helpers for routing -->
+            <form asp-action="Index" method="get" class="form-inline  mr-2  mt-2">
+                <!-- Label for the dropdown filter -->
+
+                <!-- Dropdown select element for filtering by review type -->
+                <select id="reviewFilter" name="reviewFilter" class="form-control mr-2  mt-2">
+                    <!-- Option to select all reviews -->
+                    <option value="" selected>All Comments
+                    </option>
+
+                    <!-- Option to select Positive reviews, conditionally marked as selected the selected Review type, Positive-->
+                    <option value="Positive" selected="@(reviewFilter == "Posit ive")">Positive</option>
+
+                    <!-- Option to select Negative reviews, conditionally marked as selected the selected Review type, Negative -->
+                    <option value="Negative" selected="@(reviewFilter == "Negative")">Negative</option>
+
+                    <!-- Option to select Neutral reviews, conditionally marked as selected the selected Review type, Neutral-->
+                    <option value="Neutral" selected="@(reviewFilter == "Neutral")">Neutral</option>
+                </select>
+
+                <!-- Submit button to apply the filter -->
+                <button type="submit" class="btn btn-primary mr-2">Filter</button>
+
+                <br />
+                <div class="form-group mr-2 mt-2">
+                    <input type="text" id="searchString" name="searchString" placeholder="Enter Visitor's Name to see what they have posted!" value="@ViewBag.SearchString" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-primary mr-2 mt-2"><i class="fas fa-search"></i> Search</button>
+
+                <!-- Reset filter button that removes the filters from the Index view. -->
+                <a asp-action="Index" class="btn btn-danger mt-2">Reset Filters</a>
+            </form>
+         
+
+
+
+
+
+
         </div>
     </div>
 
@@ -45,7 +91,7 @@
                                 @Html.DisplayFor(modelItem => item.Visitor.Name)
                                 <small class="text-muted">@Html.DisplayFor(modelItem => item.CreatedOn)</small>
 
-                                <!--These are all the possible badge colours for the review type based on the ReviewType they have.-->
+                                <!--These are all the possible badge colours for the review type based on the ReviewType they have. I have used the font is awesome and bootsrap styles inorder to achieve this.-->
                                 @if (item.Review == ReviewType.Negative)
                                 {
                                     <span class="badge bg-danger text-light">@Html.DisplayFor(modelItem => item.Review)</span>
@@ -59,13 +105,13 @@
                                     <span class="badge bg-warning text-light">@Html.DisplayFor(modelItem => item.Review)</span>
                                 }
                             </h5>
-                            @if (item.ModifiedOn.HasValue) // Since the ModifiedOn is a nullable variablw when it gets a value it means that it has been modifed hence the modifedon varaibles value will be set to todays date.
+                            @if (item.ModifiedOn.HasValue) // Since the ModifiedOn is a nullable variable when it gets a value it means that it has been modified hence the modifiedon variable's value will be set to today's date.
                             {
-                                <span class="text-success">Modified on @DateTime.Now</span>
+                                <span class="text-success">Modified on @item.ModifiedOn.Value.ToShortDateString()</span>
                             }
                             <p>@Html.DisplayFor(modelItem => item.Comments)</p>
 
-                            @if (item.Visitor.CreatedByUserId == currentUserId || User.IsInRole("Admin")) // THis code over here makes sure that only the user or admins may only be able to delete comments , no one else.
+                            @if (item.Visitor.CreatedByUserId == currentUserId || User.IsInRole("Admin")) // This code over here makes sure that only the user or admins may only be able to delete comments, no one else.
                             {
                                 <div class="text-end">
                                     <a asp-action="Edit" asp-route-id="@item.VisitorLogId" class="btn btn-outline-secondary btn-sm">
@@ -85,8 +131,4 @@
     </div>
 </div>
 
-@section Scripts { <!-- This is the validaiton scripts that ensure that the validaitons are in place for the fields.-->
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+

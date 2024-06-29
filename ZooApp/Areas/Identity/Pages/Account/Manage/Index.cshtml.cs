@@ -37,23 +37,25 @@ namespace ZooApp.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
            
-            [RegularExpression(@"^[A-Z][a-zA-Z\s]*$", ErrorMessage = "First name has to begin with a capital letter and must not include any special characters or numbers.")]
+            [RegularExpression(@"^[A-Z][a-zA-Z\s]*$", ErrorMessage = "First name has to begin with a capital letter and must not include any special characters or numbers.")] //Validation
             [Required(ErrorMessage = "The first name field is required.")]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
-            [RegularExpression(@"^[A-Z][a-zA-Z\s]*$", ErrorMessage = "Last name has to begin with a capital letter and must not include any special characters or numbers.")]
+            [RegularExpression(@"^[A-Z][a-zA-Z\s]*$", ErrorMessage = "Last name has to begin with a capital letter and must not include any special characters or numbers.")] //Validation
             [Required(ErrorMessage = "The last name field is required.")]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
-            [Required]
-            [Range(13, int.MaxValue, ErrorMessage = "Age must be atleast 13 years old or older inorder to apply change.")]
+            [Required(ErrorMessage = "Age is required.")]
+            [Range(13, int.MaxValue, ErrorMessage = "You must be at least 13 years old to register.")] // The minimum age required to sue this website is 13, younger than that and you cant use it.
+            [RegularExpression(@"^\d+$", ErrorMessage = "Age must be a whole number.")] // Age cannot be a decimal and must be a whole number
             [Display(Name = "Age")]
             public int Age { get; set; }
+       
 
 
-            [Phone]
+        [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
         }

@@ -26,27 +26,48 @@ namespace ZooApp.Controllers
         }
 
         // GET: VisitorLogs/Index
-
-        // Displays a list of VisitorLogs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string reviewFilter, string searchString)
         {
-            var userId = _userManager.GetUserId(User); // Gets the current user's ID and stores it in the variabled , "userId".
+            var userId = _userManager.GetUserId(User); // Assuming you have UserManager injected
 
-            // Retrieves all VisitorLogs including associated Visitor records. THis allows you to work with and manipulate the related Visitor Properties.
-            var visitorLogs = await _context.VisitorLogs
-                .Include(vl => vl.Visitor)
-                .ToListAsync();
+            // Retrieves all VisitorLogs including associated Visitor records.
+            var visitorLogsQuery = _context.VisitorLogs.Include(vl => vl.Visitor).AsQueryable();
 
-            // Count and pass the number of Visitors created by the current user via Identity stated above when we initialized the userId variable. to the view
+            // Apply filter based on the selected review type
+            if (!string.IsNullOrEmpty(reviewFilter))
+            {
+                // Parses the selected review filter string to ReviewType enum
+                var selectedReview = Enum.Parse<ReviewType>(reviewFilter);
+                // Filter visitorLogsQuery to include only logs with the selected review type
+                visitorLogsQuery = visitorLogsQuery.Where(v => v.Review == selectedReview);
+            }
+
+            // Apply search filter based on the visitor's name
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                visitorLogsQuery = visitorLogsQuery.Where(vl => vl.Visitor.Name.Contains(searchString));
+            }
+
+            var visitorLogs = await visitorLogsQuery.ToListAsync();
+
+            // Count and pass the number of Visitors created by the current user to the view
             ViewData["VisitorCount"] = await _context.Visitor
-                .Where(v => v.CreatedByUserId == userId) // This code over here is crucial as it counts the number of visitors that have the value of the User's Id stored in the userId field.
-                .CountAsync(); //Counts the number of records, that meet the criteria above .
+                .Where(v => v.CreatedByUserId == userId)
+                .CountAsync();
 
-            ViewBag.CurrentUserId = userId; // Pass the current user's ID to ViewBag for view access. View Bags are like predefined fields usually dropdowns , the predefined values in the dropdown are the records that have been created in related tables in this case since one Visitor can have many VisitorLogs, the VisitorId field is the foreign key in the logs table. 
-           
+            ViewBag.CurrentUserId = userId; // Pass the current user's ID to ViewBag for view access
+            ViewBag.ReviewFilter = reviewFilter; // Pass the current filter to ViewBag for view access
+            ViewBag.SearchString = searchString; // Pass the current search string to ViewBag for view access
 
-            return View(visitorLogs); // Return the list of VisitorLogs to the view.
+            if (!visitorLogs.Any())
+            {
+                return View("NoVisitorLogs");
+            }
+
+            return View(visitorLogs); // Return the list of VisitorLogs to the view
         }
+
+
 
         // GET: VisitorLogs/Details/5
 

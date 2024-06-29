@@ -64,6 +64,17 @@ namespace ZooApp.Controllers
                 employees = employees.Where(e => e.Role == Enum.Parse<RoleType>(roleType));
             }
 
+
+
+
+            var employeeList = await employees.ToListAsync(); // Creates a list of all the employees assigned to a variable called employeeList which is initialized to ne equalled to the list of employee.
+
+            if (employeeList.Count == 0) // If the list of employee is 0, the programme will return the NoEmployee view to the user promptin them to go back to the index view.
+            {
+                return View("NoEmployees");
+            }
+
+
             // Sorting
             switch (sortOrder)
             {

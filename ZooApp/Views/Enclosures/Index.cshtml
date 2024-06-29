@@ -19,9 +19,9 @@
         </div>
     </form>
 
-    @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+    @if (User.IsInRole("Admin") || User.IsInRole("Employee"))// makes sure that only employees and admins may view this button to add events.
                         {
-    <a asp-action="Create" class="btn btn-primary">Add New Enclosure</a>
+    <a asp-action="Create" class="btn btn-primary mb-3">Add New Enclosure</a>
                         }
 
     <a asp-action="Index" class="btn btn-secondary mb-3">Back to original List</a>
@@ -43,7 +43,7 @@
                         <a asp-action="Details" asp-route-id="@item.EnclosureId" class="btn btn-sm btn-info" title="Details">
                             <i class="bi bi-info-circle-fill"></i> Details
                         </a>
-                        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))// makes sure that only employees and admins may view this button to add events.
                         {
                             <div class="text-end">
                                 <a asp-action="Edit" asp-route-id="@item.EnclosureId" class="btn btn-sm btn-primary" title="Edit">

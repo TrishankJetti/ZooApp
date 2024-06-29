@@ -62,14 +62,17 @@ namespace ZooApp.Controllers
             {
                 animals = animals.Where(a => a.AnimalId == searchId.Value);
             }
-
+            // Check if the dietType parameter is not null or empty
             if (!string.IsNullOrEmpty(dietType))
             {
+                // Filter the 'animals' collection based on the selected diet type
+                // Parse the 'dietType' string to the 'DietType' enum
                 animals = animals.Where(a => a.Diet == Enum.Parse<DietType>(dietType));
             }
 
 
-           
+
+
             // Apply sorting
             switch (sortOrder)
             {
