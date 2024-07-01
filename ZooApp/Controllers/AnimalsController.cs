@@ -26,7 +26,15 @@ namespace ZooApp.Controllers
         }
 
         // GET: Animals
-        public async Task<IActionResult> Index(string searchString, int? searchId, string sortOrder, string dietType, int? age, int? pageNumber, string currentFilter, string currentDietType)
+        public async Task<IActionResult> Index(
+            string searchString,
+            int? searchId,
+            string sortOrder,
+            string dietType,
+            int? age,
+            int? pageNumber,
+            string currentFilter,
+            string currentDietType)
         {
             // Initialize ViewData for filters and sorting
             ViewData["CurrentSort"] = sortOrder;
@@ -34,23 +42,15 @@ namespace ZooApp.Controllers
             ViewData["AnimalIdFilter"] = searchId;
             ViewData["DietTypeFilter"] = string.IsNullOrEmpty(dietType) ? currentDietType : dietType;
 
-            // Sorting parameters
-            ViewData["AnimalAgeSorter"] = sortOrder == "Age" ? "age_desc" : "Age";
-            ViewData["AnimalNameSort"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            // Initialize currentFilter and currentDietType
+            ViewData["CurrentFilter"] = searchString ?? currentFilter;
+            ViewData["CurrentDietType"] = dietType ?? currentDietType;
 
-            // Pagination 
-            if (searchString != null || dietType != currentDietType || searchId.HasValue)
-            {
-                pageNumber = 1; // Reset to first page if filters change
-            }
-            else
-            {
-                searchString = currentFilter; // Use previous filter
-            }
+            // Ensure that pageNumber is set correctly
+            pageNumber = pageNumber ?? 1;
 
-            // Ensures that an EMployee is associated with oe Animal and an Enclosure is too. This enables us to view the fields of these of these tables rather than just the id field.
-            var animals = from a in _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure)
-                          select a;
+            // Query
+            var animals = _context.Animal.Include(a => a.Employee).Include(a => a.Enclosure).AsQueryable();
 
             // Apply filtering
             if (!string.IsNullOrEmpty(searchString))
@@ -62,16 +62,11 @@ namespace ZooApp.Controllers
             {
                 animals = animals.Where(a => a.AnimalId == searchId.Value);
             }
-            // Check if the dietType parameter is not null or empty
+
             if (!string.IsNullOrEmpty(dietType))
             {
-                // Filter the 'animals' collection based on the selected diet type
-                // Parse the 'dietType' string to the 'DietType' enum
                 animals = animals.Where(a => a.Diet == Enum.Parse<DietType>(dietType));
             }
-
-
-
 
             // Apply sorting
             switch (sortOrder)
@@ -90,12 +85,9 @@ namespace ZooApp.Controllers
                     break;
             }
 
-
-
-
-            // Page size and pagination
+            // Pagination
             int pageSize = 3;
-            var paginatedAnimals = await PaginatedList<Animal>.CreateAsync(animals.AsNoTracking(), pageNumber ?? 1, pageSize);
+            var paginatedAnimals = await PaginatedList<Animal>.CreateAsync(animals.AsNoTracking(), pageNumber.Value, pageSize);
 
             if (paginatedAnimals.Any())
             {

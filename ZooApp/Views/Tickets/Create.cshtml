@@ -4,7 +4,6 @@
     ViewData["Title"] = "Create Ticket";
 }
 <link rel="stylesheet" href="~/css/site.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-SZXxX4whJ79/gErwcOYfzME0L7mUlj6UeS8eZ8BcDq3jtDY/LUuvwhU8b1eij3M" crossorigin="anonymous">
 
 <h1 class="text-center">Create a New Ticket</h1>
 
@@ -16,12 +15,23 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                 <div class="form-group">
                     <label asp-for="VisitorId" class="control-label"><i class="fas fa-user"></i> Visitor</label>
-                    <select asp-for="VisitorId" class="form-control" asp-items="ViewBag.VisitorId"></select>
+                    <div class="input-group">
+                        <select asp-for="VisitorId" class="form-control" place-holder="Select your visitor from dropdown" asp-items="ViewBag.VisitorId" required> 
+                            <option value="" disabled selected>Select your visitor from dropdown</option>
+                            </select>
+                       
+                    </div>
                 </div>
                
                 <div class="form-group">
                     <label asp-for="EventId" class="control-label"><i class="fas fa-calendar-check"></i> Event</label>
-                    <select asp-for="EventId" class="form-control" asp-items="ViewBag.EventId"></select>
+                    <div class="input-group">
+                    <select asp-for="EventId" class="form-control" asp-items="ViewBag.EventId">
+
+                            <option value="" disabled selected>Select your visitor from dropdown</option>
+                    </select>
+                      
+                    </div>
                 </div>
                 <div class="form-group text-center">
                     <input type="submit" value="Create Ticket" class="btn btn-primary btn-lg" />
@@ -41,6 +51,20 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <!-- Optional: Include the date picker library -->
+
    
 }
+
+
+
+<style>
+    /* CSS for dropdown arrow */
+    .form-group:hover .input-group::after {
+        content: "▼"; /* Arrow symbol that represents a dropdown */
+        position: absolute;
+        right: 10px;
+        top: 5px;
+        font-size: 20px;
+        pointer-events: none;
+    }
+</style>

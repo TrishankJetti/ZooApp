@@ -22,38 +22,45 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Role)
         </dd>
-         @if (User.IsInRole("Admin") || User.IsInRole("Employee")) // Makes sure only Admins and employees can view this page.
-                    {
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-                    }
-                     @if (User.IsInRole("Admin")) // makes sure only Admins may view this page.
-                    {
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Salary)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Salary)
-        </dd>
-                    }
-                     @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
-                    {
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HireDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HireDate)
-        </dd>
-                    }
+        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+        {
+                <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Phone)
+                </dt>
+                <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Phone)
+                </dd>
+        }
+        @if (User.IsInRole("Admin"))
+        {
+                <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Salary)
+                </dt>
+                <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Salary)
+                </dd>
+        }
+        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+        {
+                <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.HireDate)
+                </dt>
+                <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.HireDate)
+                </dd>
+        }
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Enclosure)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Enclosure.Habitat)
+            @if (Model.Enclosure != null && !string.IsNullOrEmpty(Model.Enclosure.Name))
+            {
+                @Html.DisplayFor(model => model.Enclosure.Name)
+            }
+            else
+            {
+                    <span>No Enclosure Currently</span>
+            }
         </dd>
     </dl>
 </div>
@@ -76,20 +83,20 @@
             foreach (var animalEmployee in Model.AnimalEmployees)
             {
                 var animal = animalEmployee.Animal;
-                <tr>
-                    <td>@Html.DisplayFor(_ => animal.Name)</td>
-                    <td>@Html.DisplayFor(_ => animal.Species)</td>
-                    <td>@Html.DisplayFor(_ => animal.Age)</td>
-                    <td>@Html.DisplayFor(_ => animal.Diet)</td>
-                    <td><img src="~/images/@animal.ImageFileName" alt="@animal.Name" class="img-thumbnail" style="max-width: 100px; height: 100px; border-radius: 10px;" /></td>
-                </tr>
+                        <tr>
+                            <td>@Html.DisplayFor(_ => animal.Name)</td>
+                            <td>@Html.DisplayFor(_ => animal.Species)</td>
+                            <td>@Html.DisplayFor(_ => animal.Age)</td>
+                            <td>@Html.DisplayFor(_ => animal.Diet)</td>
+                            <td><img src="~/images/@animal.ImageFileName" alt="@animal.Name" class="img-thumbnail" style="max-width: 100px; height: 100px; border-radius: 10px;" /></td>
+                        </tr>
             }
         }
         else
         {
-            <tr>
-                <td colspan="4" class="text-center">No animals assigned to this employee.</td>
-            </tr>
+                <tr>
+                    <td colspan="5" class="text-center">No animals assigned to this employee.</td>
+                </tr>
         }
     </tbody>
 </table>
@@ -100,7 +107,6 @@
         color: black;
         background-color: #f8f9fa;
     }
-
 
     .table {
         margin-top: 20px;
@@ -114,11 +120,8 @@
     tr {
         text-decoration-color: black;
     }
-
-
 </style>
 
 <div>
-    
     <a asp-action="Index">Back to List</a>
 </div>

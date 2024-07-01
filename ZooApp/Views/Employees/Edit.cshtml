@@ -68,13 +68,15 @@
 <a asp-action="Index">Back to List</a>
 
 @section Scripts {
-    <!-- Include any necessary scripts here, such as jQuery and input masking -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha512-0XDfGxFliYJPFrideYOoxdgNIvrwGTLnmK20xZbCAvPfLGQMzHUsaqZK8ZoH+luXGRxTrS46+Aq400nCnAT0/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- I got used an External JQuery library that has created this inpuit mask for me. It is free to use and will be refferenced in my write up.->
 
+    <!-- JavaScript code to initialize input mask for 'Phone' field and puts the javascript mask in use while simultaneously staisfying the needs of the Visitor Model. -->
     <script>
-        $(document).ready(function () {
-            // Initialize any scripts needed for this view
-            $('input[name="Phone"]').mask('+64-00-000-0000');
+        $(document).ready(function () { // This code gets your code read yto function and is commonly used when trying to to use Javascriot inside.
+            $('input[name="Phone"]').mask('+64-00-000-0000'); // Applies input mask format for 'Phone' field simialr to the RegularExpression validaiton we have added in the model.
         });
     </script>
+
+  
 }

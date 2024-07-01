@@ -5,8 +5,8 @@
     int visitorCount = (int)ViewData["VisitorCount"]; // This initializes a variable called visitorOCunt which is equaled to the ViewData of VisitorDate parsed to an int's vlaue. which we can then use to shwo what sites to show to the user.
 }
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!--Links all the bootsrap icons,buttons and etc to the website so they can be accessed.-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"><!-- This link tags links Font Awesome's library of svg icons. These icons can be interacted with using CSS.-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" /> <!--Links all the bootsrap icons,buttons and etc to the website so they can be accessed.-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" /><!-- This link tags links Font Awesome's library of svg icons. These icons can be interacted with using CSS.-->
 </head>
 <h2>Tickets</h2>
 
@@ -44,7 +44,10 @@
     </form>
     <br />
 
-    <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Buy Tickets!</a>
+    <a asp-action="Create" class="btn btn-success btn-lg">
+
+        <i class="fas fa-dollar-sign fa-spin"></i> Buy Tickets! <!--Added a spin animation to make the button strand out and look nice.-->
+    </a>
     <br />
     <br />
 

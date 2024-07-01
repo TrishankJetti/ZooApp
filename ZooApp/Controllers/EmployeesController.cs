@@ -113,9 +113,18 @@ namespace ZooApp.Controllers
             }
 
             var employee = await _context.Employee
-                .Include(e => e.AnimalEmployees)
-                    .ThenInclude(ae => ae.Animal)
-                .FirstOrDefaultAsync(m => m.EmployeeId == id);
+     .Include(e => e.AnimalEmployees)
+         .ThenInclude(ae => ae.Animal)
+     .Include(e => e.Enclosure) // Include the Enclosure navigation property
+     .FirstOrDefaultAsync(m => m.EmployeeId == id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return View(employee);
+
 
             if (employee == null)
             {

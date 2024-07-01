@@ -1,10 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!--Links all the bootsrap icons,buttons and etc to the website so they can be accessed.-->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"><!-- This link tags links Font Awesome's library of svg icons. These icons can be interacted with using CSS.-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
 
-<!-- THese are all the custom style I will be applying to this page!-->
 <style>
     body {
         background-color: #f0f0f0;
@@ -19,6 +18,9 @@
     .card {
         transition: transform 0.2s;
         box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        border: none;
+        border-radius: 8px;
+        overflow: hidden;
     }
 
     .card:hover {
@@ -27,6 +29,8 @@
     }
 
     .card-img-top {
+        width: 100%;
+        height: auto;
         max-height: 250px;
         object-fit: cover;
     }
@@ -54,17 +58,16 @@
         text-decoration: none;
     }
 
-    /* Add animation to the header */
     .header {
         animation: fadeFromBlack 2s forwards;
     }
 
-    /* Keyframes for fading effect */
     @@keyframes fadeFromBlack {
         from {
             opacity: 0;
             filter: brightness(0.5);
         }
+
         to {
             opacity: 1;
             filter: brightness(1);
@@ -78,7 +81,7 @@
         <h2><strong>Where Dreams Come True!</strong></h2>
     </header>
 
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-md-6">
             <div class="card border-0">
                 <a class="nav-link text-dark" href="@Url.Action("Index", "Animals")">
@@ -86,7 +89,7 @@
                 </a>
                 <div class="card-body">
                     <h2 class="card-title">Animals</h2>
-                    <p class="card-text">Explore the diverse wildlife in our zoo. From Lions , Crocodiles and even Penguins we offer a wide variety of animals you can meet.</p>
+                    <p class="card-text">Explore the diverse wildlife in our zoo. From Lions, Crocodiles, and even Penguins, we offer a wide variety of animals you can meet.</p>
                     <a href="@Url.Action("Index", "Animals")" class="btn btn-primary">Check them Out?</a>
                 </div>
             </div>
@@ -105,7 +108,7 @@
         </div>
     </div>
 
-    <div class="row mt-4">
+    <div class="row mb-4">
         <div class="col-md-6">
             <div class="card border-0">
                 <a class="nav-link text-dark" href="@Url.Action("Index", "Tickets")">
@@ -132,7 +135,7 @@
         </div>
     </div>
 
-    <div class="row mt-4">
+    <div class="row mb-4">
         <div class="col-md-6">
             <div class="card border-0">
                 <a class="nav-link text-dark" href="@Url.Action("Index", "VisitorLogs")">
@@ -140,20 +143,47 @@
                 </a>
                 <div class="card-body">
                     <h2 class="card-title">Visitor Logs</h2>
-                    <p class="card-text">See what other have to say about our Zoo, or express your voice!</p>
+                    <p class="card-text">See what others have to say about our Zoo, or express your voice!</p>
                     <a href="@Url.Action("Index", "VisitorLogs")" class="btn btn-primary">View Comments</a>
                 </div>
             </div>
         </div>
-        
-        <!-- About Section -->
         <div class="col-md-6">
             <div class="card border-0">
-                <img src="~/images/about.jpg" alt="About Jetti's Zoo" class="card-img-top">
+                <a class="nav-link text-dark" href="@Url.Action("About", "Home")">
+                    <img src="~/images/about.jpg" alt="About Jetti's Zoo" class="card-img-top">
+                </a>
                 <div class="card-body">
                     <h2 class="card-title">About Jetti's Zoo</h2>
                     <p class="card-text">Discover the history and mission of Jetti's Zoo. Learn about our conservation efforts and educational programs.</p>
-                    <a href="@Url.Action("About", "Home")" " class="btn btn-primary">Learn More</a>
+                    <a href="@Url.Action("About", "Home")" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card border-0">
+                <a class="nav-link text-dark" href="@Url.Action("Index", "Enclosures")">
+                    <img src="~/images/enclosures.jpg" alt="Enclosures" class="card-img-top">
+                </a>
+                <div class="card-body">
+                    <h2 class="card-title">Enclosures</h2>
+                    <p class="card-text">Discover the different enclosures that house our wonderful animals!</p>
+                    <a href="@Url.Action("Index", "Enclosures")" class="btn btn-primary">View Enclosures</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0">
+                <a class="nav-link text-dark" href="@Url.Action("Index", "Events")">
+                    <img src="~/images/events.png" alt="Events" class="card-img-top">
+                </a>
+                <div class="card-body">
+                    <h2 class="card-title">Events</h2>
+                    <p class="card-text">Stay updated on our exciting events and activities!</p>
+                    <a href="@Url.Action("Index", "Events")" class="btn btn-primary">View Events</a>
                 </div>
             </div>
         </div>

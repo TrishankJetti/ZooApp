@@ -69,7 +69,7 @@ namespace ZooApp.Controllers
 
 
         // GET: Enclosures/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Create()
         {
             return View();
@@ -78,7 +78,7 @@ namespace ZooApp.Controllers
         // POST: Enclosures/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create([Bind("EnclosureId,Name,Habitat,Capacity,ImageFile")] Enclosure enclosure)
         {
             if (ModelState.IsValid)
@@ -99,7 +99,7 @@ namespace ZooApp.Controllers
         }
 
         // GET: Enclosures/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -119,7 +119,7 @@ namespace ZooApp.Controllers
         // POST: Enclosures/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Edit(int id, [Bind("EnclosureId,Name,Habitat,Capacity,ImageFileName,ImageFile")] Enclosure enclosure)
         {
             if (id != enclosure.EnclosureId)
@@ -226,7 +226,11 @@ namespace ZooApp.Controllers
         [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var enclosure = await _context.Enclosure.FindAsync(id);
+            // Fetch the enclosure with related Employees and Animals
+            var enclosure = await _context.Enclosure
+                .Include(e => e.Employees)
+                .Include(e => e.Animals)
+                .FirstOrDefaultAsync(e => e.EnclosureId == id);
 
             if (enclosure == null)
             {
@@ -237,9 +241,20 @@ namespace ZooApp.Controllers
             var relatedAnimals = _context.Animal.Where(a => a.EnclosureId == id);
             _context.Animal.RemoveRange(relatedAnimals);
 
+            await _context.SaveChangesAsync(); // Save changes after removing animals
+
+            // Update related employees to disassociate them from the enclosure
+            var relatedEmployees = _context.Employee.Where(e => e.EnclosureId == id);
+            foreach (var employee in relatedEmployees)
+            {
+                employee.EnclosureId = null;
+            }
+            _context.UpdateRange(relatedEmployees);
+
+            await _context.SaveChangesAsync(); // Save changes after disassociating employees
+
             // Remove the enclosure
             _context.Enclosure.Remove(enclosure);
-
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

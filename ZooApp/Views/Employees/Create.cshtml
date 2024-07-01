@@ -20,9 +20,6 @@
         <div class="input-group">
             <select asp-for="Role" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
                 <option value="" disabled selected style="color: white; background-color:dimgrey">Select from dropdown below</option>
-                <!-- Giving the value attribute in the option tag, no value this makes sure that the particular option is considered invalid
-                    then the applicaiton will catch the null value given and show a error message to the user isntead of breaking.
-                -->
             </select>
         </div>
         <span asp-validation-for="Role" class="text-danger"></span>
@@ -30,22 +27,18 @@
 
     <style>
         .form-group:hover .input-group::after {
-            content: "▼"; /* Arrow symbol that respresents a dropdown typically used in web-design.*/
-            /* This is the positioning of the arrow that appears when the user hovers over the dropdown field. */
+            content: "▼";
             position: absolute;
             right: 10px;
             top: 5px;
             font-size: 20px;
             pointer-events: none;
-            /* This makes sure that whenever the user clicks on the drop down button,
-               that the dropdown will drop down and show all the roles instead of not doing
-               anything and restricting the action.*/
         }
     </style>
 
     <div class="form-group">
         <label asp-for="Phone" class="control-label"></label>
-        <input asp-for="Phone" class="form-control" />
+        <input asp-for="Phone" class="form-control" placeholder="+64-000-000-0000" />
         <span asp-validation-for="Phone" class="text-danger"></span>
     </div>
 
@@ -85,5 +78,18 @@
 </form>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha512-0XDfGxFliYJPFrideYOoxdgNIvrwGTLnmK20xZbCAvPfLGQMzHUsaqZK8ZoH+luXGRxTrS46+Aq400nCnAT0/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- I got used an External JQuery library that has created this inpuit mask for me. It is free to use and will be refferenced in my write up.->
+
+    <!-- JavaScript code to initialize input mask for 'Phone' field and puts the javascript mask in use while simultaneously staisfying the needs of the Visitor Model. -->
+    <script>
+        $(document).ready(function () { // This code gets your code read yto function and is commonly used when trying to to use Javascriot inside.
+            $('input[name="Phone"]').mask('+64-00-000-0000'); // Applies input mask format for 'Phone' field simialr to the RegularExpression validaiton we have added in the model.
+        });
+    </script>
+
+    <!-- This piece of code links the validation scripts to the front end. -->
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

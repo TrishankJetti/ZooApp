@@ -8,8 +8,6 @@
 <head>
     <title>@ViewData["Title"]</title>
     <style>
-        
-
         .input-group {
             position: relative;
         }
@@ -23,6 +21,10 @@
                 pointer-events: none;
             }
 
+        /* Additional style for select elements */
+        select.form-control:hover + .input-group::after {
+            color: #007bff; /* Change color on hover if desired */
+        }
     </style>
 </head>
 <body>
@@ -35,15 +37,16 @@
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Name:</label>
-                <input asp-for="Name" class="form-control" pattern="[A-Za-z\s]+" required="true" title="Only letters and spaces are allowed" />
+                <input asp-for="Name" class="form-control" pattern="[A-Z][A-Za-z\s]*" required="true" title="Name must start with a capital letter and only letters and spaces are allowed" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Species" class="control-label">Species:</label>
-                <input asp-for="Species" class="form-control" pattern="[A-Za-z\s]+" required="true" title="Only letters and spaces are allowed" />
+                <input asp-for="Species" class="form-control" pattern="[A-Z][A-Za-z\s]*" required="true" title="Species must start with a capital letter and only letters and spaces are allowed" />
                 <span asp-validation-for="Species" class="text-danger"></span>
             </div>
+
 
             <div class="form-group">
                 <label asp-for="Age" class="control-label">Age:</label>
@@ -91,7 +94,6 @@
                 <span asp-validation-for="EnclosureId" class="text-danger"></span>
             </div>
 
-
             <div class="form-group">
                 <label asp-for="ImageFile" class="control-label">Change Image</label>
                 <input type="file" asp-for="ImageFile" class="form-control" />
@@ -104,8 +106,6 @@
             </div>
         </form>
     </div>
-
-    
-
 </body>
 </html>
+

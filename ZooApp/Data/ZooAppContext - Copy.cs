@@ -52,10 +52,7 @@ namespace ZooApp.data
 
 
 
-
-
-
-        modelBuilder.Entity<Animal>().ToTable("Animal");
+            modelBuilder.Entity<Animal>().ToTable("Animal");
             modelBuilder.Entity<Event>().ToTable("Event");
             modelBuilder.Entity<Employee>().ToTable("Employee");
             modelBuilder.Entity<Enclosure>().ToTable("Enclosure");

@@ -2,8 +2,9 @@
 @{
     ViewData["Title"] = "Employee Directory";
 }
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!--Links all the bootsrap icons,buttons and etc to the website so they can be accessed.-->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"><!-- This link tags links Font Awesome's library of svg icons. These icons can be interacted with using CSS.-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Links all the bootstrap icons, buttons, etc. -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"><!-- Links Font Awesome's library of SVG icons. -->
+
 <div class="container-fluid">
     <div class="row mb-3">
         <div class="col-md-12 text-center">
@@ -24,7 +25,7 @@
             </div>
             <br/>
             <div class="form-group">
-                <label for="roleType">Filter by Diet:</label>
+                <label for="roleType">Filter by Role:</label>
                 <select class="form-control" id="roleType" name="RoleType">
                     <option value="">All</option>
                     <option value="Zookeeper">Zookeeper</option>
@@ -39,69 +40,65 @@
         </form>
 
         <br/>
-        
-        
 
-        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
-                    {
-        <div class="col-md-12 text-right">
-
-            <a asp-action="Create" class="btn btn-primary">Add New Employee</a>
-        </div>
-                    }
+        @if (User.IsInRole("Admin"))
+        {
+                <div class="col-md-12 text-right">
+                    <a asp-action="Create" class="btn btn-primary">Add New Employee</a>
+                </div>
+        }
     </div>
 
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-md-4 col-sm-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-header text-center">
-                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-                    </div>
-                    <div class="card-body text-center">
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header text-center">
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        </div>
+                        <div class="card-body text-center">
                         @if (item.ImageFileName != null)
                         {
-                            <img src="~/images/@item.ImageFileName" alt="@item.Name" class="img-fluid rounded-circle mb-3" style="max-width: 150px; height: 150px;" />
+                                    <img src="~/images/@item.ImageFileName" alt="@item.Name" class="img-fluid rounded-circle mb-3" style="max-width: 150px; height: 150px;" />
                         }
-                        <p class="card-text">
-                            <strong>Role:</strong> @Html.DisplayFor(modelItem => item.Role)<br />
+                            <p class="card-text">
+                                <strong>Role:</strong> @Html.DisplayFor(modelItem => item.Role)<br />
                             @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                             {
-                                <strong>Phone:</strong> @Html.DisplayFor(modelItem => item.Phone)
-
-                                <br />
-                                <strong>Hire Date:</strong> @Html.DisplayFor(modelItem => item.HireDate)
-
-                                <br />
+                                        <strong>Phone:</strong> @Html.DisplayFor(modelItem => item.Phone)
+                                        <br />
+                                        <strong>Hire Date:</strong> @Html.DisplayFor(modelItem => item.HireDate)
+                                        <br />
                             }
                             @if (User.IsInRole("Admin"))
                             {
-                            <strong>Salary:</strong> @Html.DisplayFor(modelItem => item.Salary)
+                                        <strong>Salary:</strong> @Html.DisplayFor(modelItem => item.Salary)
                             }
-                            <br/>
-                            <strong>Enclosure:</strong> @Html.DisplayFor(modelItem => item.Enclosure.Name)
-                        </p>
+                                <br/>
+                                <strong>Enclosure:</strong> 
+                            @if (item.Enclosure != null && !string.IsNullOrEmpty(item.Enclosure.Name))
+                            {
+                                @Html.DisplayFor(modelItem => item.Enclosure.Name)
+                            }
+                            else
+                            {
+                                        <span>No Enclosure Currently</span>
+                            }
+                            </p>
+                        </div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                                <div class="card-footer text-center">
+                                    <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-primary">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-danger">Delete</a>
+                                </div>
+                    }
+                        <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-info">Details</a>
                     </div>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <div class="card-footer text-center">
-                            <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-primary">Edit</a>
-                        </div>
-                    }
-
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <div class="card-footer text-center">
-                    <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-danger">Delete</a>
-                        </div>
-                    }
-                    <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-info">Details</a>
                 </div>
-            </div>
         }
     </div>
-
 
     @{
         var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
@@ -127,8 +124,6 @@
     </a>
     <br />
 </div>
-<br/>
-
 <br/>
 
 <style>

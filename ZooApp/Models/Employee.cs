@@ -24,13 +24,13 @@ namespace ZooApp.Models
         [Range(30000, 90000 , ErrorMessage = "Invalid Employee Salary.")]
         public decimal Salary { get; set; }
 
-        [ValidHireDate(ErrorMessage = "Hire date cannot be in the future or earlier than 50 years ago.")]
+        [ValidHireDate(ErrorMessage = "Hire date cannot be in the future or earlier than 20 years ago.")]
         [Required(ErrorMessage = "Hire date is required")]
         [DataType(DataType.Date)]
         public DateTime HireDate { get; set; }
 
-
-        public int EnclosureId { get; set; }
+        
+        public int? EnclosureId { get; set; }
         public Enclosure? Enclosure { get; set; }
 
         public ICollection<AnimalEmployee> AnimalEmployees { get; set; }

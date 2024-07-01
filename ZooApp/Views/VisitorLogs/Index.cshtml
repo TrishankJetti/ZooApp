@@ -107,22 +107,26 @@
                             </h5>
                             @if (item.ModifiedOn.HasValue) // Since the ModifiedOn is a nullable variable when it gets a value it means that it has been modified hence the modifiedon variable's value will be set to today's date.
                             {
-                                <span class="text-success">Modified on @item.ModifiedOn.Value.ToShortDateString()</span>
+                                <span class="text-success">Edited on @item.ModifiedOn.Value.ToShortDateString()</span>
                             }
                             <p>@Html.DisplayFor(modelItem => item.Comments)</p>
 
-                            @if (item.Visitor.CreatedByUserId == currentUserId || User.IsInRole("Admin")) // This code over here makes sure that only the user or admins may only be able to delete comments, no one else.
-                            {
+                        
                                 <div class="text-end">
+                                    @if (item.Visitor.CreatedByUserId == currentUserId) // This code over here makes sure that only the user or admins may only be able to delete comments, no one else.
+                                {
                                     <a asp-action="Edit" asp-route-id="@item.VisitorLogId" class="btn btn-outline-secondary btn-sm">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
-
+                                }
+                                @if (item.Visitor.CreatedByUserId == currentUserId || User.IsInRole("Admin")) // This code over here makes sure that only the user or admins may only be able to delete comments, no one else.
+                                {
                                     <a asp-action="Delete" asp-route-id="@item.VisitorLogId" class="btn btn-danger btn-sm">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
+                                }
                                 </div>
-                            }
+                        
                         </div>
                     </li>
                 }

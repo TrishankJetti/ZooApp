@@ -27,6 +27,7 @@
 
         .form-group {
             margin-bottom: 20px;
+            position: relative; /* Ensure relative positioning for the hover effect */
         }
 
         .form-control {
@@ -56,20 +57,16 @@
             font-size: 14px;
         }
 
-        .input-group {
-            position: relative;
+        /* CSS for dropdown arrow */
+        .form-group:hover .input-group::after {
+            content: "▼"; /* Arrow symbol that represents a dropdown */
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            pointer-events: none;
         }
-
-            .input-group::after {
-                content: "▼";
-                position: absolute;
-                top: 50%;
-                right: 10px;
-                transform: translateY(-50%);
-                pointer-events: none;
-            }
-
-       
     </style>
 </head>
 <body>
@@ -142,7 +139,7 @@
 
             <div class="form-group">
                 <label asp-for="ImageFile" class="control-label">Image:</label>
-                <input asp-for="ImageFile" class="form-control" type="file" accept="Image/*"/>
+                <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
 

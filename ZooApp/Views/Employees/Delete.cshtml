@@ -44,8 +44,15 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Enclosure)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Enclosure.Habitat)
+        <dd class="col-sm-10">
+            @if (Model.Enclosure != null && !string.IsNullOrEmpty(Model.Enclosure.Name))
+            {
+                @Html.DisplayFor(model => model.Enclosure.Name)
+            }
+            else
+            {
+                    <span>No Enclosure Currently</span>
+            }
         </dd>
     </dl>
     <br/>
