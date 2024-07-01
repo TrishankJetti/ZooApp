@@ -11,6 +11,7 @@ Microsoft.EntityFrameworkCore.SqlServer
 Microsoft.EntityFrameworkCore.Tools
 Microsoft.EntityFrameworkCore.Design
 
+Enjoy :)
 
 -------------
 ACCOUNT DETAILS
