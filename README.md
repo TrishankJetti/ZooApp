@@ -11,6 +11,10 @@ Microsoft.EntityFrameworkCore.SqlServer
 Microsoft.EntityFrameworkCore.Tools
 Microsoft.EntityFrameworkCore.Design
 
+
+Alternatively you can copy and paste the repository link into visual studio to clone the repository then you culd just run the command and it should work unless you havent gotten the addons above.
+Remember you need to create an account inorder to buy tickets and post comments. 
+
 Enjoy :)
 
 -------------
