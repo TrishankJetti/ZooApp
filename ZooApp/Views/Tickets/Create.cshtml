@@ -1,11 +1,11 @@
 ﻿@model ZooApp.Models.Ticket
 
 @{
-    ViewData["Title"] = "Create Ticket";
+    ViewData["Title"] = "Buy a Ticket";
 }
-<link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-<h1 class="text-center">Create a New Ticket</h1>
+<h1 class="text-center">Buy a Ticket</h1>
 
 <hr />
 <div class="container">
@@ -14,27 +14,27 @@
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                 <div class="form-group">
-                    <label asp-for="VisitorId" class="control-label"><i class="fas fa-user"></i> Visitor</label>
+                    <label asp-for="VisitorId" class="control-label"><i class="fas fa-user" style="color: #5b3c06;"></i> Visitor</label>
                     <div class="input-group">
-                        <select asp-for="VisitorId" class="form-control" place-holder="Select your visitor from dropdown" asp-items="ViewBag.VisitorId" required> 
-                            <option value="" disabled selected>Select your visitor from dropdown</option>
-                            </select>
-                       
+                        <select asp-for="VisitorId" class="form-control" placeholder="Select your visitor from dropdown" asp-items="ViewBag.VisitorId" required>
+                            <option value="" disabled selected>Select a visitor from the dropdown</option>
+                            <!-- Replace with actual options -->
+                        </select>
                     </div>
                 </div>
-               
                 <div class="form-group">
                     <label asp-for="EventId" class="control-label"><i class="fas fa-calendar-check"></i> Event</label>
                     <div class="input-group">
-                    <select asp-for="EventId" class="form-control" asp-items="ViewBag.EventId">
-
-                            <option value="" disabled selected>Select your visitor from dropdown</option>
-                    </select>
-                      
+                        <select asp-for="EventId" class="form-control" asp-items="ViewBag.ImageFile">
+                            <option value="" disabled selected>Select an event from the dropdown</option>
+                            <!-- Replace with actual options -->
+                        </select>
                     </div>
                 </div>
                 <div class="form-group text-center">
-                    <input type="submit" value="Create Ticket" class="btn btn-primary btn-lg" />
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fa fa-ticket fa-spin"></i> Book Ticket
+                    </button>
                 </div>
             </form>
         </div>
@@ -50,14 +50,12 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-
-   
 }
 
-
-
 <style>
+    /* CSS for spinning animation */
+  
+
     /* CSS for dropdown arrow */
     .form-group:hover .input-group::after {
         content: "▼"; /* Arrow symbol that represents a dropdown */

@@ -65,9 +65,8 @@ namespace ZooApp.Models
         public Employee Employee { get; set; }
 
         //This is the Enclosures that houses each Animal.
-        public int EnclosureId { get; set; }
+        public int? EnclosureId { get; set; }
         [ForeignKey(nameof(EnclosureId))]
-        [Required(ErrorMessage = "You must select an Enclosure to assign Animal to.")]
         public Enclosure Enclosure { get; set; }
 
 

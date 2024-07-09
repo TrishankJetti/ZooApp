@@ -200,7 +200,14 @@
                             <p><strong>Sex:</strong> @Html.DisplayFor(modelItem => item.Sex)</p>
                             <p><strong>Diet:</strong> @Html.DisplayFor(modelItem => item.Diet)</p>
                             <p><strong>Employee:</strong> @Html.DisplayFor(modelItem => item.Employee.Name)</p>
+                            @if (item.EnclosureId != null)
+                            {
                             <p><strong>Enclosure:</strong> @Html.DisplayFor(modelItem => item.Enclosure.Name)</p>
+                            }
+                            @if (item.EnclosureId == null)
+                            {
+                                <p><strong>Enclosure:</strong> No Enclosure Assigned Currently</p>
+                            }
                             @if (item.ImageFileName != null)
                             {
                                 <img src="~/images/@item.ImageFileName" alt="@item.Name" class="img-thumbnail" style="max-width: 300px; height: 300px; border-radius: 10px;" />

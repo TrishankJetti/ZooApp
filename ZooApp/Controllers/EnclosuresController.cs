@@ -226,7 +226,6 @@ namespace ZooApp.Controllers
         [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            // Fetch the enclosure with related Employees and Animals
             var enclosure = await _context.Enclosure
                 .Include(e => e.Employees)
                 .Include(e => e.Animals)
@@ -237,11 +236,13 @@ namespace ZooApp.Controllers
                 return NotFound();
             }
 
-            // Remove related animals
+            // Update related animals to disassociate them from the enclosure or handle accordingly
             var relatedAnimals = _context.Animal.Where(a => a.EnclosureId == id);
-            _context.Animal.RemoveRange(relatedAnimals);
-
-            await _context.SaveChangesAsync(); // Save changes after removing animals
+            foreach (var animal in relatedAnimals)
+            {
+                animal.EnclosureId = null; // Optionally handle reassignment here if needed
+            }
+            _context.UpdateRange(relatedAnimals);
 
             // Update related employees to disassociate them from the enclosure
             var relatedEmployees = _context.Employee.Where(e => e.EnclosureId == id);
@@ -251,7 +252,8 @@ namespace ZooApp.Controllers
             }
             _context.UpdateRange(relatedEmployees);
 
-            await _context.SaveChangesAsync(); // Save changes after disassociating employees
+            // Save changes to animals and employees
+            await _context.SaveChangesAsync();
 
             // Remove the enclosure
             _context.Enclosure.Remove(enclosure);

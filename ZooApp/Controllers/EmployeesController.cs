@@ -314,7 +314,6 @@ namespace ZooApp.Controllers
 
             return View(employee);
         }
-        // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -332,11 +331,15 @@ namespace ZooApp.Controllers
             // Sets EmployeeId to null for associated animals
             foreach (var animal in animalsWithEmployee)
             {
-                animal.EmployeeId = null; 
+                animal.EmployeeId = null;
             }
+
+            // Update the animal entities in the database
+            _context.Animal.UpdateRange(animalsWithEmployee);
 
             // Remove the employee
             _context.Employee.Remove(employee);
+
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

@@ -11,9 +11,7 @@
         font-family: Arial, sans-serif;
     }
 
-    h1, h2, h4 {
-        color: #3e2723;
-    }
+   
 
     .card {
         transition: transform 0.2s;
@@ -62,23 +60,52 @@
         animation: fadeFromBlack 2s forwards;
     }
 
-    @@keyframes fadeFromBlack {
-        from {
-            opacity: 0;
-            filter: brightness(0.5);
-        }
-
-        to {
-            opacity: 1;
-            filter: brightness(1);
-        }
-    }
+   
 </style>
+<div id="carouselExampleCaptions" class="carousel slide rounded-carousel" style="max-width: 1000px; margin: auto;">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="~/Images/Home (1).jpg" class="d-block w-100 rounded-carousel-image" alt="First slide" style="border-radius: 15px;">
+            <div class="carousel-caption d-none d-md-block">
+                <h1>Welcome to <strong>Jetti's Zoo!</strong><br />Where dreams come true</h1>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="~/Images/Home (2).jpg" class="d-block w-100 rounded-carousel-image" alt="Second slide" style="border-radius: 15px;" />
+            <div class="carousel-caption d-none d-md-block">
+                <h1>We have<br /><strong> Exotic Animals!</strong></h1>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="~/Images/Home (3).jpg" class="d-block w-100 rounded-carousel-image" alt="Third slide" style="border-radius: 15px;">
+            <div class="carousel-caption d-none d-md-block">
+                <h1><strong>Loving</strong> Staff!</h1>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="~/Images/Home (4).jpg" class="d-block w-100 rounded-carousel-image" alt="Fourth slide" style="border-radius: 15px;">
+            <div class="carousel-caption d-none d-md-block">
+                <h1>And<br />Great Events for <strong>YOU</strong> to Explore!</h1>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
 
+
+
+<br/>
 <div class="container">
-    <header class="header text-center mb-4">
-        <h1><strong>Welcome to Jetti's Zoo</strong></h1>
-        <h2><strong>Where Dreams Come True!</strong></h2>
+    <header class="text-center mb-4">
+        <h2>Explore Our Zoo!</h2>
+        <p class="lead">Navigate through our site to discover the wonders of Jetti's Zoo. From our diverse wildlife to the dedicated team, we've got everything for an unforgettable experience.</p>
     </header>
 
     <div class="row mb-4">
