@@ -10,93 +10,94 @@
         <div class="col-md-12 text-center">
             <h1>Employee Directory</h1>
         </div>
-        <form asp-action="Index" method="get">
-            <div class="form-group">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="searchName" name="searchString" value="@ViewData["EmployeeNameFilter"]" placeholder="Please type an Employee name to search" />
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                            </svg>
-                        </button>
+        @if (Model != null && Model.Count > 0)
+        {
+            <form asp-action="Index" method="get">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchName" name="searchString" value="@ViewData["EmployeeNameFilter"]" placeholder="Please type an Employee name to search" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <br/>
-            <div class="form-group">
-                <label for="roleType">Filter by Role:</label>
-                <select class="form-control" id="roleType" name="RoleType">
-                    <option value="">All</option>
-                    <option value="Zookeeper">Zookeeper</option>
-                    <option value="Veterinarian">Veterinarian</option>
-                    <option value="Admin">Admin</option>
-                    <option value=" Manager"> Manager</option>
-                </select>
-            </div>
+                <br />
+                <div class="form-group">
+                    <label for="roleType">Filter by Role:</label>
+                    <select class="form-control" id="roleType" name="RoleType">
+                        <option value="">All</option>
+                        <option value="Zookeeper">Zookeeper</option>
+                        <option value="Veterinarian">Veterinarian</option>
+                        <option value="Admin">Admin</option>
+                        <option value=" Manager"> Manager</option>
+                    </select>
+                </div>
 
-            <button type="submit" class="btn btn-primary">Apply Filter</button>
-            <a asp-action="Index" class="btn btn-danger">Reset Filters</a>
-        </form>
-
-        <br/>
-
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+                <a asp-action="Index" class="btn btn-danger">Reset Filters</a>
+            </form>
+            <br />
+        }
         @if (User.IsInRole("Admin"))
         {
-                <div class="col-md-12 text-right">
-                    <a asp-action="Create" class="btn btn-primary">Add New Employee</a>
-                </div>
+            <div class="col-md-12 text-right">
+                <a asp-action="Create" class="btn btn-primary">Add New Employee</a>
+            </div>
         }
     </div>
 
     <div class="row">
         @foreach (var item in Model)
         {
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header text-center">
-                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-                        </div>
-                        <div class="card-body text-center">
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header text-center">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                    </div>
+                    <div class="card-body text-center">
                         @if (item.ImageFileName != null)
                         {
-                                    <img src="~/images/@item.ImageFileName" alt="@item.Name" class="img-fluid rounded-circle mb-3" style="max-width: 150px; height: 150px;" />
+                            <img src="~/images/@item.ImageFileName" alt="@item.Name" class="img-fluid rounded-circle mb-3" style="max-width: 150px; height: 150px;" />
                         }
-                            <p class="card-text">
-                                <strong>Role:</strong> @Html.DisplayFor(modelItem => item.Role)<br />
+                        <p class="card-text">
+                            <strong>Role:</strong> @Html.DisplayFor(modelItem => item.Role)<br />
                             @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                             {
-                                        <strong>Phone:</strong> @Html.DisplayFor(modelItem => item.Phone)
-                                        <br />
-                                        <strong>Hire Date:</strong> @Html.DisplayFor(modelItem => item.HireDate)
-                                        <br />
+                                <strong>Phone:</strong> @Html.DisplayFor(modelItem => item.Phone)
+                                <br />
+                                <strong>Hire Date:</strong> @Html.DisplayFor(modelItem => item.HireDate)
+                                <br />
                             }
                             @if (User.IsInRole("Admin"))
                             {
-                                        <strong>Salary:</strong> @Html.DisplayFor(modelItem => item.Salary)
+                                <strong>Salary:</strong> @Html.DisplayFor(modelItem => item.Salary)
                             }
-                                <br/>
-                                <strong>Enclosure:</strong> 
+                            <br />
+                            <strong>Enclosure:</strong>
                             @if (item.Enclosure != null && !string.IsNullOrEmpty(item.Enclosure.Name))
                             {
                                 @Html.DisplayFor(modelItem => item.Enclosure.Name)
                             }
                             else
                             {
-                                        <span>No Enclosure Currently</span>
+                                <span>No Enclosure Currently</span>
                             }
-                            </p>
-                        </div>
+                        </p>
+                    </div>
                     @if (User.IsInRole("Admin"))
                     {
-                                <div class="card-footer text-center">
-                                    <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-primary">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-danger">Delete</a>
-                                </div>
+                        <div class="card-footer text-center">
+                            <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-primary">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-danger">Delete</a>
+                        </div>
                     }
-                        <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-info">Details</a>
-                    </div>
+                    <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-info">Details</a>
                 </div>
+            </div>
         }
     </div>
 
@@ -124,20 +125,20 @@
     </a>
     <br />
 </div>
-<br/>
+<br />
 
 <style>
-.card {
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+    .card {
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-.card-title {
-    font-size: 1.2em;
-    margin-bottom: 0.5em;
-}
+    .card-title {
+        font-size: 1.2em;
+        margin-bottom: 0.5em;
+    }
 
-.card-footer .btn {
-    margin: 0 5px;
-}
+    .card-footer .btn {
+        margin: 0 5px;
+    }
 </style>

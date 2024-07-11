@@ -16,7 +16,7 @@ namespace ZooApp.Models
 
         [Required]
         [EmailAddress(ErrorMessage = "Invalid email format")]
-        public string? Email { get; set; }
+        public string? Email { get; set; } 
 
         // This validaiton ensures that Phone number msut begin with +64 and then have hypen ("-") then 2 digits then another hyphen then 3 digits then another hyphen then another 4 digits..
         [RegularExpression(@"^\+64-\d{2}-\d{3}-\d{4}$", ErrorMessage = "Sorry, only New Zealand phone numbers in the format +64-00-000-0000 are supported currently.")]

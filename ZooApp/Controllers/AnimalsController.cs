@@ -27,14 +27,7 @@ namespace ZooApp.Controllers
 
         // GET: Animals
         public async Task<IActionResult> Index(
-            string searchString,
-            int? searchId,
-            string sortOrder,
-            string dietType,
-            int? age,
-            int? pageNumber,
-            string currentFilter,
-            string currentDietType)
+            string searchString,int? searchId,string sortOrder, string dietType, int? age, int? pageNumber, string currentFilter,string currentDietType)
         {
             // Initialize ViewData for filters and sorting
             ViewData["CurrentSort"] = sortOrder;

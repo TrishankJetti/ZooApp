@@ -130,8 +130,8 @@
             <div class="form-group">
                 <label asp-for="EnclosureId" class="control-label">Enclosure Name:</label>
                 <div class="input-group">
-                    <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId">
-                        <option value="" disabled selected>Select Enclosure from dropdown</option>
+                    <select asp-for="EnclosureId" class="form-control" asp-items="ViewBag.EnclosureId" required title="Please select an Enclosure to assign this Animal to. If the Desired enclosure doesn't appear, you must create it first then assign the Animal to it.">
+                        <option value="" disabled selected>Select Enclosure from dropdown. If </option>
                     </select>
                 </div>
                 <span asp-validation-for="EnclosureId" class="text-danger"></span>

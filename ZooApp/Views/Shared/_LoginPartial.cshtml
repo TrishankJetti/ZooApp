@@ -25,7 +25,7 @@
             <!-- Logout form -->
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" style="display: inline;">
                 <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0 p-0 m-0 d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right logout-icon" viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-box-arrow-right logout-icon" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
                         <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
                     </svg>
@@ -45,31 +45,31 @@
 <style>
     .manage-icon,
     .logout-icon {
-        transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for transform and color */
+        transition: transform 0.3s ease, color 0.3s ease; 
     }
 
         .manage-icon:hover {
-            transform: rotate(360deg); /* Rotate cog icon on hover */
+            transform: rotate(360deg);  
         }
 
     .logout-icon {
-        font-size: 2rem; /* Initial size of logout icon */
-        color: white; /* Initial color of logout icon */
+        font-size: 2rem; 
+        color: white; 
     }
 
         .logout-icon:hover {
-            transform: scale(1.2); /* Enlarge logout icon on hover */
-            color: #ffca28; /* Yellow color on hover */
+            transform: scale(1.2); 
+            color: #ffca28; 
         }
 
     /* Style for the not signed-in message */
     .nav-link.text-light a {
-        color: #ffca28; /* Yellowish text color */
+        color: #ffca28; 
         text-decoration: underline;
         margin: 0 5px;
     }
 
         .nav-link.text-light a:hover {
-            color: #c6950f; /* Darker yellow on hover */
+            color: #c6950f; 
         }
 </style>
