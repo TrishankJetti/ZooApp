@@ -24,17 +24,16 @@ namespace ZooApp.Controllers
         }
 
         // GET: Visitors/Index
-
         // Handles displaying a paginated list of visitors with search and sorting capabilities
         public async Task<IActionResult> Index(string searchString, string sortOrder, int? pageNumber, bool isSearch = false)
         {
-            ViewData["VisitorNameFilter"] = searchString; // Search view 
-            ViewData["CurrentSort"] = sortOrder;   // Current sort view, that tell the pagiantion what type of sort is currently taking palce so the pagination can do its job accordingly.
-            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : ""; //NAme sorting view
+            ViewData["VisitorNameFilter"] = searchString;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 
-            var userId = _userManager.GetUserId(User); // Get the current user's ID
+            var userId = _userManager.GetUserId(User);
 
-            // Only, shows visitors the the user has created.
+            // Only show visitors the user has created
             var visitors = _context.Visitor
                 .Where(v => v.CreatedByUserId == userId)
                 .AsQueryable();
@@ -43,31 +42,34 @@ namespace ZooApp.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 visitors = visitors.Where(v => v.Name.Contains(searchString) || v.Email.Contains(searchString));
-                isSearch = true; // Mark that the user has searched for something. I have created this variable to ensure that the No Results! page only comes up when the User has searcehd for something, not when they haven't created any visitors.
+                isSearch = true;
             }
 
             // Apply sorting based on sortOrder parameter
             switch (sortOrder)
             {
-                case "name_desc": // This case in switch makes sure that the Name is descending .
+                case "name_desc":
                     visitors = visitors.OrderByDescending(v => v.Name);
                     break;
-                default: //This case is default meaning that when the website is launched the visitors wil leb ordered by Name in ascending order.
+                default:
                     visitors = visitors.OrderBy(v => v.Name);
                     break;
             }
 
+            // Get total visitors count
+            int totalVisitors = await visitors.CountAsync();
+            ViewData["TotalVisitors"] = totalVisitors;
+
             // Pagination setup
-            int pageSize = 4; // Number of visitors per page which is 4.
+            int pageSize = 4;
             var paginatedVisitors = await PaginatedList<Visitor>.CreateAsync(visitors.AsNoTracking(), pageNumber ?? 1, pageSize);
 
-            // If it's a search and no visitors match the criteria, redirect to NoVisitors action which basically returns a view telling the user that there isnt any results that that contain their query.
-            if (isSearch== true && !paginatedVisitors.Any())
+            // If it's a search and no visitors match the criteria, redirect to NoVisitors action
+            if (isSearch && !paginatedVisitors.Any())
             {
                 return RedirectToAction("NoVisitors");
             }
 
-            // Show the paginated list of visitors.
             return View(paginatedVisitors);
         }
 
@@ -76,6 +78,7 @@ namespace ZooApp.Controllers
         {
             return View();
         }
+
 
         // GET: Visitors/Details/5
         // Displays details of a specific visitor

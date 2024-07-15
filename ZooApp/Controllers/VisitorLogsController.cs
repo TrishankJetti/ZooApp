@@ -224,7 +224,6 @@ namespace ZooApp.Controllers
         }
 
         // GET: VisitorLogs/Delete/5
-        // Displays confirmation for deleting a VisitorLog
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -243,9 +242,11 @@ namespace ZooApp.Controllers
             }
 
             var userId = _userManager.GetUserId(User); // Get the current user's ID
+            var user = await _userManager.GetUserAsync(User);
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin"); // Check if the user is an admin
 
             // Check authorization to delete the VisitorLog
-            if (visitorLog.Visitor.CreatedByUserId != userId)
+            if (visitorLog.Visitor.CreatedByUserId != userId && !isAdmin)
             {
                 return Forbid(); // Return Forbidden if user is not authorized to delete
             }
@@ -253,19 +254,24 @@ namespace ZooApp.Controllers
             return View(visitorLog); // Return VisitorLog details to view for confirmation
         }
 
+
         // POST: VisitorLogs/Delete/5
-        // Handles deletion of a VisitorLog
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var visitorLog = await _context.VisitorLogs.FindAsync(id);
+            var visitorLog = await _context.VisitorLogs
+                .Include(vl => vl.Visitor) // Include the Visitor entity
+                .FirstOrDefaultAsync(vl => vl.VisitorLogId == id);
+
             if (visitorLog != null)
             {
                 var userId = _userManager.GetUserId(User); // Get the current user's ID
+                var user = await _userManager.GetUserAsync(User);
+                var isAdmin = await _userManager.IsInRoleAsync(user, "Admin"); // Check if the user is an admin
 
                 // Check authorization to delete the VisitorLog
-                if (visitorLog.Visitor.CreatedByUserId != userId)
+                if (visitorLog.Visitor.CreatedByUserId != userId && !isAdmin)
                 {
                     return Forbid(); // Return Forbidden if user is not authorized to delete
                 }
@@ -276,6 +282,7 @@ namespace ZooApp.Controllers
 
             return RedirectToAction(nameof(Index)); // Redirect to VisitorLogs Index after deletion
         }
+
 
         // Checks if a VisitorLog exists based on ID
         private bool VisitorLogExists(int id)
