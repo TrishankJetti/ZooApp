@@ -37,7 +37,7 @@
             </div>
             <div class="col-md-9">
             
-                @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Employee")) // Only user that are in the Admin or Employee roles can see the create button
                 {
                     <div class="text-end mb-3">
                         <a asp-action="Create" class="btn btn-success">Create New</a>
@@ -58,7 +58,7 @@
                                         <p class="card-text"><small class="text-muted">@Html.DisplayFor(modelItem => item.Date)</small></p>
                                         <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
                                         <p class="card-text">Price: $@Html.DisplayFor(modelItem => item.TicketPrice)</p>
-                                        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Employee")) // Only admins and employees may use the edit and delete buttons.
                                         {
                                             <div class="d-flex justify-content-between">
                                                 <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-primary">
@@ -91,7 +91,7 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-        .card:hover {
+        .card:hover { /*When the card is hovered this style will show, depicting a box shadow around the card and a bigger scale enlarging the card.*/
             transform: scale(1.02);
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
         }

@@ -10,14 +10,37 @@
 
 <h1 class="text-center">Visitors</h1>
 
-@if (totalVisitors == 1 && !isFilterApplied)
+@if (totalVisitors == 1 && !isFilterApplied) // what happens when only 1 visitor is created
 {
     <div class="alert alert-info" role="alert">
-        <p>Create more Visitors in order to use the filter and search please.</p>
+        <p>Create more Visitors in order to use the filter and search please.  <a asp-action="Create" class="btn btn-success">Create New</a></p>
+    </div>
+
+    <div class="row">
+        @foreach (var item in Model) // repeats all inside of the "{}" for every record
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        <p class="card-text">
+                            <strong>Email:</strong> @Html.DisplayFor(modelItem => item.Email)<br />
+                            <strong>Phone:</strong> @Html.DisplayFor(modelItem => item.Phone)<br />
+                            <strong>Address:</strong> @Html.DisplayFor(modelItem => item.Address)
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Edit" asp-route-id="@item.VisitorId" class="btn btn-primary btn-sm">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.VisitorId" class="btn btn-info btn-sm">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.VisitorId" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 }
 
-@if (Model != null && Model.Count > 0)
+@if (Model != null && Model.Count > 0 && Model.Count>1) // what happens when more than one visitor is created
 {
     <div class="mb-3 text-center">
         <a asp-action="Create" class="btn btn-success">Create New</a>
@@ -75,7 +98,7 @@
     }
 
     <div class="row">
-        @foreach (var item in Model)
+        @foreach (var item in Model) // repeats all inside of the "{}" for every record
         {
             <div class="col-md-4 mb-3">
                 <div class="card">
@@ -117,7 +140,7 @@
         </ul>
     </nav>
 }
-else if (totalVisitors == 0)
+else if (totalVisitors == 0)// if no visitors are made
 {
 
         <div class="alert alert-warning d-flex flex-column align-items-center" role="alert">

@@ -12,10 +12,10 @@ namespace ZooApp.Models
 
         [Required(ErrorMessage = "Name is required")]
         [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Name must contain only letters and spaces")]
-        public string Name { get; set; }
+        public string Name { get; set; } // Name willk only accept proper words with spaces only no numbers or etc.
 
         [Required]
-        [EmailAddress(ErrorMessage = "Invalid email format")]
+        [EmailAddress(ErrorMessage = "Invalid email format")] // Email field, the vlaidaiton ensures to only accept email adresses.
         public string? Email { get; set; } 
 
         // This validaiton ensures that Phone number msut begin with +64 and then have hypen ("-") then 2 digits then another hyphen then 3 digits then another hyphen then another 4 digits..
