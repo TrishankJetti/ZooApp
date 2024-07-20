@@ -20,9 +20,9 @@ Enjoy :)
 -------------
 ACCOUNT DETAILS
 ---------------
-Admin Account:
+**Admin Account:
 Email - Admin1@example.com
-Password - AdminPassword123
+Password - AdminPassword123**
 
 Employee Account:
 Email - Employee1@exmaple.com 
