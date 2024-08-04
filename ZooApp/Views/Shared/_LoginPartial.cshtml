@@ -36,9 +36,10 @@
     else
     {
         <li class="nav-item">
-            <!-- Message for users not signed in -->
-            <span class="nav-link text-light">You are not signed in currently. Click <a id="loginLink" asp-area="Identity" asp-page="/Account/Login" class="text-white">Login</a> or <a id="registerLink" asp-area="Identity" asp-page="/Account/Register" class="text-white">Register</a> to get started.</span>
+            <!-- Message for users that are not signed in -->
+            <span class="nav-link text-light">Not signed in? <a id="loginLink" asp-area="Identity" asp-page="/Account/Login" class="text-white">Login</a> or <a id="registerLink" asp-area="Identity" asp-page="/Account/Register" class="text-white">Register</a></span>
         </li>
+
     }
 </ul>
 

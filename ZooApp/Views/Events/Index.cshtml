@@ -25,11 +25,11 @@
                     </div>
                     <div class="form-group">
                         <label for="minPrice" style="color: #555;">Min Price:</label>
-                        <input type="number" class="form-control" id="minPrice" name="MinPrice" value="@ViewData["MinPrice"]" placeholder="Enter Min Price" />
+                        <input type="number" class="form-control" id="minPrice" name="MinPrice" value="@ViewData["MinPrice"]" placeholder="Enter Min Price" min="5" />
                     </div>
                     <div class="form-group">
                         <label for="maxPrice" style="color: #555;">Max Price:</label>
-                        <input type="number" class="form-control" id="maxPrice" name="MaxPrice" value="@ViewData["MaxPrice"]" placeholder="Enter Max Price" />
+                        <input type="number" class="form-control" id="maxPrice" name="MaxPrice" value="@ViewData["MaxPrice"]" placeholder="Enter Max Price" min="5" />
                     </div>
                     <button type="submit" class="btn btn-secondary w-100">Apply</button>
                 </form>
