@@ -48,10 +48,10 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Comments" class="control-label">Comments</label>
-                <textarea asp-for="Comments" class="form-control" rows="5"></textarea>
-                <span asp-validation-for="Comments" class="text-danger"></span>
+                <label asp-for="Comments " class="control-label">Comments (Maximum 200 characters allowed.)</label> <span style="color : black">Maximum 200 characters allowed.</span>
+                <textarea asp-for="Comments" class="form-control" rows="5" maxlength="200" placeholder="Enter your comment (max 200 characters)" required></textarea>
             </div>
+
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

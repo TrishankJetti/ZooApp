@@ -15,7 +15,7 @@ namespace ZooApp.Models
         //THis is the foreign key of the visitorid field from the VIsitor tables. It essentially creates a relationship between the log and the vistor intiating a one to many relation.
 
         [Required]
-        [StringLength(500, ErrorMessage = "Comments must be less than 500 characters")]
+        [StringLength(200, ErrorMessage = "Comments must be less than 500 characters")]
         [Display(Name = "Comments")]
         public string Comments { get; set; } // This is the comments field that is a string data type for the comments that the visitors will be adding on my website from other visitors to view and learn from.
 

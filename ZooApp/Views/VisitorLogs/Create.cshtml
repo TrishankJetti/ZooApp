@@ -59,9 +59,11 @@ else
 
                 <div class="form-group">
                     <label asp-for="Comments" class="control-label">Comments</label> <!-- Label for 'Comments' field -->
-                    <textarea asp-for="Comments" class="form-control" rows="5"></textarea> <!-- Textarea for 'Comments' -->
+                    <textarea asp-for="Comments" class="form-control" rows="5" maxlength="200"></textarea>
+                    <!-- Textarea for 'Comments' with a max length of 100 -->
                     <span asp-validation-for="Comments" class="text-danger"></span> <!-- Validation message for 'Comments' -->
                 </div>
+
 
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary" /> <!-- Submit button -->
