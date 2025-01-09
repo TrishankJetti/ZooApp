@@ -34,4 +34,7 @@ Jettis zoo is a friendly and welcoming place that welcomes all people regardless
 Please be respectful posting comments and create appropriate accounts and visitors.
 When booking tickets or posting comments you amy need to create a visitor first inorder to do those actions, as all those actions will be under a specific visitor that you have created NOT your account that you have signed up for. That is crucial for creating visitors, however.
 
+You may also access this website using the website : https://zooapp.bsite.net where I have hosted this website!
+
+
 Thank you, us at Jetti's Zoo hope you enjoy your stay!
